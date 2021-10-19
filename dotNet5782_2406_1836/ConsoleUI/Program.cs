@@ -1,5 +1,6 @@
 ﻿using System;
 using DAL;
+using IDAL.DO;
 
 namespace ConsoleUI
 {
@@ -9,8 +10,7 @@ namespace ConsoleUI
         {
             Console.WriteLine("test2 project");
             DAL.StartApplication apps = new StartApplication();
-            apps.start();
-
+            apps.start(); 
         }
     }
 }

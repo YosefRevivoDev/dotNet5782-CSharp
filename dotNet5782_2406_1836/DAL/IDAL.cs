@@ -1,24 +1,24 @@
-﻿using System;
+﻿using DAL;
+using System;
 
 namespace IDAL
 {
     namespace DO
     {
-      public struct customer
-        {
-            public int Id { get; set; }
-            public string Name { get; set; }
-            public string Phone { get; set; }
-            public double Longtitude { get; set; }
-            public double Latitude { get; set; }
-        }
-
         public struct Parcel
         {
             public int Id { get; set; }
             public int SenderId { get; set; }
             public int TargetId { get; set; }
-            
+            public WeightCategories Parcel_weight { get; internal set; }
+            public priority Parcel_priority { get; internal set; }
+            public DateTime intvation_date { get; internal set; }
+            public int Dronled  { get; set; }
+            public DateTime Schueduled { get; internal set; }
+            public DateTime PickedUp { get; internal set; }
+            public DateTime Delivered { get; internal set; }
+
+
         }
     }
 }
