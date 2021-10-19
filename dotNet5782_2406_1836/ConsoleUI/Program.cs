@@ -7,7 +7,7 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("test1 project");
+            Console.WriteLine("test2 project");
             DAL.StartApplication apps = new StartApplication();
             apps.start();
 
