@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IDAL.DO;
 
 namespace DAL
 {
@@ -10,10 +11,10 @@ namespace DAL
     {
         static class DataSource
         {
-            static IDAL.DO.Drone[] Drones = new IDAL.DO.Drone[10];
-            static IDAL.DO.Station[] Stations = new IDAL.DO.Station[5];
-            static IDAL.DO.customer[] Clients = new IDAL.DO.customer[100];
-            static IDAL.DO.Parcel[] Packages = new IDAL.DO.Parcel[1000];
+            static Drone[] Drones = new Drone[10];
+            static Station[] Stations = new Station[5];
+            static customer[] Clients = new customer[100];
+            static Parcel[] Packages = new Parcel[1000];
             static Random rand = new Random();
             static DataSource()
             {
@@ -28,16 +29,27 @@ namespace DAL
                 internal static int Parcel_RunNum = 0;
 
                 internal static int RunIdStation = 0;
+                internal static int RunIdDrone = 0;
+                internal static int RunIdClient = 0;
             }
 
             public static void Initialize()
             {
                 Random random = new Random(DateTime.Now.Millisecond);
+                string[] DronesModels = new string[5]
+                {
+                    "Alpha1", "Alpha2", "Alpha3", "Beta1", "Beta2"
+                };
                 #region initStation
-                Stations[config.Index_Station++] = new IDAL.DO.Station { Model = "fff", StationID = config.RunIdStation++ };
-                Stations[config.Index_Station++] = new IDAL.DO.Station { Model = "aaa", StationID = config.RunIdStation++ };
+                Stations[config.Index_Station++] = new Station { Model = "fff", StationID = config.RunIdStation++ };
+                Stations[config.Index_Station++] = new Station { Model = "aaa", StationID = config.RunIdStation++ };
                 #endregion 
-
+                for (int i = 0; i < 5; i++)
+                {
+                    Drones[config.Index_Drone++] = new Drone { DroneID = ++config.RunIdDrone , Drone_Model= DronesModels[i],
+                    Drone_weight = (WeightCategories)random.Next(1,3)};
+                }
+          
 
             }
         }
