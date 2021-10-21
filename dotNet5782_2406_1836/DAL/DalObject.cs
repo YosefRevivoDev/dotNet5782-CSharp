@@ -11,7 +11,8 @@ namespace DalObject
 {
     public class DalObject
     {
-        //DataSource.Initialize();//אתחול
+        //  DataSource.Initialize();//אתחול
+        public DalObject() { DataSource.Initialize(); }
 
         /// <summary>
         /// ////////////////////////////////////////////add funcrions
@@ -25,6 +26,7 @@ namespace DalObject
             st.StationID = num;
             Console.WriteLine("Please enter model station: ");
             st.Model= Console.ReadLine();
+            //להוסיף את התחנה למערך 
         }
         public static void Add_Drone()
         {
@@ -36,9 +38,12 @@ namespace DalObject
             Console.WriteLine("Please enter drone model: ");
             dr.Drone_Model = Console.ReadLine();
             Console.WriteLine("Please enter model Drone weight: ");
-          //  dr.Drone_weight = SetWeight(Weight);
-          // להוסיף את התכונות שנותרו
+            //  dr.Drone_weight = SetWeight(Weight);
+            //לבדוק איך מוסיפים משקל 
+            //להוסיף את התכונות שנותרו
+            //להוסיף למערך 
         }
+
         //להוסיף תצוגת רחפן
         public static void Add_Customer()
         {
@@ -60,7 +65,7 @@ namespace DalObject
             cs.Latitude = d2;
         }
         /// <summary>
-        /// ////////////////////////////////////////////////////////////object display
+        /// ////////////////////////////////////////////////////////////objects display
         /// </summary>
         /// <param name="cs"></param>
         /// <returns></returns>
