@@ -88,6 +88,7 @@ namespace DalObject
 
         }
 
+
         public static void SetWeight(WeightCategories Weight)//לבדוק איך עושים השמה למשקל - enum 
         {
             switch (Weight)

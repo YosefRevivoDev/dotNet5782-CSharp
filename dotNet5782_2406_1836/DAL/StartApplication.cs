@@ -12,6 +12,7 @@ namespace DAL
     {
         public void start()
         {
+ 
             CHOICE choice;
             DateTime Applicationstarted = DateTime.Now;
             do

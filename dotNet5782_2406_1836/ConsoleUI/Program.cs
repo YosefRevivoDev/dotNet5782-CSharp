@@ -1,16 +1,15 @@
 ﻿using System;
 using DAL;
-using IDAL.DO;
-
+using DAL.DalObject;
 namespace ConsoleUI
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("test2 project");
+            Console.WriteLine("test project");
             DAL.StartApplication apps = new StartApplication();
-            apps.start(); 
+            apps.start();     
         }
     }
 }
