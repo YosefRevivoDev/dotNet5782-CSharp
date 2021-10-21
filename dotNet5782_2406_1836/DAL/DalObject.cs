@@ -66,10 +66,10 @@ namespace DalObject
         /// <returns></returns>
         /// 
         
-        public static customer display_Customer(customer cs)//לבדוק למה זה אדום
+        public static customer Display_Customer(customer cs)//לבדוק למה זה אדום
         {
             Console.WriteLine("Please enter ID: "+ cs.Id);
-            Console.WriteLine("Please enter name: "+ cs.Name);
+            Console.WriteLine("Please enter name: " + cs.Name);
             Console.WriteLine("Please enter phone number: " + cs.Phone);
             Console.WriteLine("Please enter Longtitude: " + cs.Longtitude);
             Console.WriteLine("Please enter Latitude: " + cs.Latitude);
