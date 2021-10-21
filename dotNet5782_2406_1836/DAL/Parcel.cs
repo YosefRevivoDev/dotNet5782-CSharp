@@ -10,7 +10,6 @@ namespace IDAL
 {
     namespace DO
     {
-
         public struct Parcel
         {
             public int Id { get; set; }
