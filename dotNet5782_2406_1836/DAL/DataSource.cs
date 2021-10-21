@@ -31,6 +31,7 @@ namespace DAL
                 internal static int RunIdStation = 0;
                 internal static int RunIdDrone = 0;
                 internal static int RunIdClient = 0;
+                internal static int RunCustomerId = 0;
             }
 
             public static void Initialize()
@@ -49,8 +50,20 @@ namespace DAL
                     Drones[config.Index_Drone++] = new Drone { DroneID = ++config.RunIdDrone , Drone_Model= DronesModels[i],
                     Drone_weight = (WeightCategories)random.Next(1,3)};
                 }
-          
-
+                string[] NameCustomers = new string[10] { "Tomer", "Yosef", "Yehuda", "Avi", "David", "Adi", "Moria", "Omer", "Ravit", "Eliyahu" };
+                for (int i = 0; i < 10; i++)
+                {
+                    Clients[config.Index_customer++] = new IDAL.DO.customer
+                    {
+                        Id = config.RunCustomerId++,
+                        Name = NameCustomers[i],
+                        Phone = "05" + rand.Next(0, 9) + '-' + rand.Next(1000000, 10000000),
+                        Latitude = rand.Next(0, 180),
+                        Longtitude = rand.Next(0, 180)
+                    };
+                }
+                //(name enum) randon.next(0 , 4)
+                //  DateTime dateTime = new DateTime(2021, rand.Next(1, 13), rand.Next(0, 31));
             }
         }
 
