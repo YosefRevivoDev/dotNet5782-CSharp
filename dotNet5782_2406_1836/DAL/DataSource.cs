@@ -62,6 +62,7 @@ namespace DAL
                         Longtitude = rand.Next(0, 180)
                     };
                 }
+                // לעשות אתחול מהיר למחלקת חבילות ולקוחות
                 //(name enum) randon.next(0 , 4)
                 //  DateTime dateTime = new DateTime(2021, rand.Next(1, 13), rand.Next(0, 31));
             }

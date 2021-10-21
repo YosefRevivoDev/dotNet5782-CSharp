@@ -37,7 +37,7 @@ namespace DalObject
             dr.Drone_Model = Console.ReadLine();
             Console.WriteLine("Please enter model Drone weight: ");
           //  dr.Drone_weight = SetWeight(Weight);
-          //להוסיף את התכונות שנותרו
+          // להוסיף את התכונות שנותרו
         }
         //להוסיף תצוגת רחפן
         public static void Add_Customer()
