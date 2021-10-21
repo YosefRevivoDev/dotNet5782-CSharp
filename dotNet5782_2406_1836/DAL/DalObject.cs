@@ -11,7 +11,8 @@ namespace DalObject
 {
     public class DalObject
     {
-        //DataSource.Initialize();//אתחול
+        //  DataSource.Initialize();//אתחול
+        public DalObject() { DataSource.Initialize(); }
 
         /// <summary>
         /// ////////////////////////////////////////////add funcrions
