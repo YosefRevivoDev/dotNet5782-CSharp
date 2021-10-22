@@ -11,11 +11,11 @@ namespace DAL
     {
         static class DataSource
         {
-            static Drone[] Drones = new Drone[10];
-            static Station[] Stations = new Station[5];
-            static customer[] Clients = new customer[100];
-            static Parcel[] Packages = new Parcel[1000];
-            static Random rand = new Random();
+            internal static Drone[] Drones = new Drone[10];
+            internal static Station[] Stations = new Station[5];
+            internal static customer[] Clients = new customer[100];
+            internal static Parcel[] Packages = new Parcel[1000];
+            internal static Random rand = new Random();
             static DataSource()
             {
 
@@ -42,8 +42,8 @@ namespace DAL
                     "Alpha1", "Alpha2", "Alpha3", "Beta1", "Beta2"
                 };
                 #region initStation
-                Stations[config.Index_Station++] = new Station { Model = "fff", StationID = config.RunIdStation++ };
-                Stations[config.Index_Station++] = new Station { Model = "aaa", StationID = config.RunIdStation++ };
+                Stations[config.Index_Station++] = new Station { Name = "fff", StationID = config.RunIdStation++ };
+                Stations[config.Index_Station++] = new Station { Name = "aaa", StationID = config.RunIdStation++ };
                 #endregion 
                 for (int i = 0; i < 5; i++)
                 {
