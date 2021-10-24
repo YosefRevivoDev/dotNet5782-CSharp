@@ -10,6 +10,6 @@ namespace DAL
     public enum WeightCategories { Easy, Medium, Heavy }
     public enum Priorities { Regular, Fast, Emergency }
     public enum DroneStatus { Active, Passive }
-    public enum priority { emergency, Fast, Regular }
+    public enum Priority { emergency, Fast, Regular }
     
 }

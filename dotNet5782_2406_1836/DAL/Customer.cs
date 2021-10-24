@@ -4,7 +4,7 @@ namespace IDAL
 {
     namespace DO
     {
-        internal struct customer
+        internal struct Customer
         {
             public int Id { get; internal set; }
             public string Name { get; internal set; }

@@ -13,7 +13,7 @@ namespace DAL
         {
             static Drone[] Drones = new Drone[10];
             static Station[] Stations = new Station[5];
-            static customer[] Clients = new customer[100];
+            static Customer[] Clients = new Customer[100];
             static Parcel[] Packages = new Parcel[1000];
             static Random rand = new Random();
             static DataSource()
@@ -53,7 +53,7 @@ namespace DAL
                 string[] NameCustomers = new string[10] { "Tomer", "Yosef", "Yehuda", "Avi", "David", "Adi", "Moria", "Omer", "Ravit", "Eliyahu" };
                 for (int i = 0; i < 10; i++)
                 {
-                    Clients[config.Index_customer++] = new IDAL.DO.customer
+                    Clients[config.Index_customer++] = new IDAL.DO.Customer
                     {
                         Id = config.RunCustomerId++,
                         Name = NameCustomers[i],

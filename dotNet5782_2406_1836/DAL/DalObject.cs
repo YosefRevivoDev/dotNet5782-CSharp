@@ -47,7 +47,7 @@ namespace DalObject
         //להוסיף תצוגת רחפן
         public static void Add_Customer()
         {
-            customer cs = new customer();
+            Customer cs = new Customer();
             int num;
             double d1, d2;
             Console.WriteLine("Please enter ID: ");
@@ -70,8 +70,8 @@ namespace DalObject
         /// <param name="cs"></param>
         /// <returns></returns>
         /// 
-        
-        public static customer Display_Customer(customer cs)//לבדוק למה זה אדום
+
+        public static Customer Display_Customer(Customer cs)//לבדוק למה זה אדום
         {
             Console.WriteLine("Please enter ID: "+ cs.Id);
             Console.WriteLine("Please enter name: " + cs.Name);
@@ -79,7 +79,7 @@ namespace DalObject
             Console.WriteLine("Please enter Longtitude: " + cs.Longtitude);
             Console.WriteLine("Please enter Latitude: " + cs.Latitude);
         }
-        public static Drone display_Drone(Drone dr)//לבדוק למה זה אדום
+        public static Drone display_drone(Drone dr)//לבדוק למה זה אדום
         {
 
         }
@@ -115,7 +115,7 @@ namespace DalObject
                 display_Drone(Drone[i]);
             }
         }
-        public static customer display_Customerlist(customer[] cs_arr)
+        public static Customer display_Customerlist(Customer[] cs_arr)
         { }
         public static Parcel display_Customerlist(Parcel[] pc_arr)
         { }
