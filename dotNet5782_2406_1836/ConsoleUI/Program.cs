@@ -9,7 +9,7 @@ namespace ConsoleUI
         {
             Console.WriteLine("test project");
             DAL.StartApplication apps = new StartApplication();
-            apps.start();     
+            apps.start();
         }
     }
 }

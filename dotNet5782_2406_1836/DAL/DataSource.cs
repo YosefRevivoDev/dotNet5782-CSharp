@@ -42,8 +42,8 @@ namespace DAL
                     "Alpha1", "Alpha2", "Alpha3", "Beta1", "Beta2"
                 };
                 #region initStation
-                Stations[config.Index_Station++] = new Station { Name = "fff", StationID = config.RunIdStation++ };
-                Stations[config.Index_Station++] = new Station { Name = "aaa", StationID = config.RunIdStation++ };
+               // Stations[config.Index_Station++] = new Station (StationID = config.RunIdStation++);
+              //  Stations[config.Index_Station++] = new Station { Name = "aaa", StationID = config.RunIdStation++ };
                 #endregion 
                 for (int i = 0; i < 5; i++)
                 {
