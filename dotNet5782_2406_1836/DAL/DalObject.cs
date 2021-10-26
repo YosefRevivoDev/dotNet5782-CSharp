@@ -6,12 +6,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static DAL.DalObject.DataSource;
 
 namespace DalObject
 {
     public class DalObject
     {
-        //  DataSource.Initialize();//אתחול
         public DalObject() { DataSource.Initialize(); }
 
         /// <summary>
@@ -20,28 +20,45 @@ namespace DalObject
         public static void Add_Station()
         {
             Station st = new Station();
-            int num; 
-            Console.WriteLine("Please enter ID station: ");
-            int.TryParse(Console.ReadLine(), out num);
-            st.StationID = num;
-            Console.WriteLine("Please enter model station: ");
-            st.Model= Console.ReadLine();
-            //להוסיף את התחנה למערך 
+            int num3,num4;
+            double num1, num2;
+            //Console.WriteLine("Please enter ID station: ");
+            //int.TryParse(Console.ReadLine(), out num3);
+            //st.StationID = num3;
+            Console.WriteLine("Please enter name station: ");
+            st.Name= Console.ReadLine();
+            Console.WriteLine("Please enter Longtitude: ");
+            double.TryParse(Console.ReadLine(), out num1);
+            st.Longtitude = num1;
+            Console.WriteLine("Please enter Latitude: ");
+            double.TryParse(Console.ReadLine(), out num2);
+            st.Latitude = num2;
+            Console.WriteLine("Please enter number of ChargeSlots: ");
+            int.TryParse(Console.ReadLine(), out num4);
+            st.ChargeSlots = num4;
+            Stations[config.Index_Station++] = new Station { Name= st.Name , StationID = config.RunIdStation++ };
         }
         public static void Add_Drone()
         {
             Drone dr = new Drone();
-            int num;
+            int num_DroneID, num_weight, num_DroneStatus;
+            double num_battary;
+
             Console.WriteLine("Please enter Drone ID : ");
-            int.TryParse(Console.ReadLine(), out num);
-            dr.DroneID = num;
+            int.TryParse(Console.ReadLine(), out num_DroneID);
+            dr.DroneID = num_DroneID;
             Console.WriteLine("Please enter drone model: ");
             dr.Drone_Model = Console.ReadLine();
-            Console.WriteLine("Please enter model Drone weight: ");
-            //  dr.Drone_weight = SetWeight(Weight);
-            //לבדוק איך מוסיפים משקל 
-            //להוסיף את התכונות שנותרו
-            //להוסיף למערך 
+            Console.WriteLine("Please enter Drone weight: ");
+            int.TryParse(Console.ReadLine(), out num_weight);
+            dr.Drone_weight = (WeightCategories)num_weight;
+            Console.WriteLine("Please enter Drone status: ");
+            int.TryParse(Console.ReadLine(), out num_DroneStatus);
+            dr.status = (DroneStatus)num_DroneStatus;
+            Console.WriteLine("Please enter Drone battary: ");
+            double.TryParse(Console.ReadLine(), out num_battary);
+            dr.Battary = num_battary;
+            Drones[config.Index_Drone++] = new Drone { DroneID = dr.DroneID , StationID = config.RunIdStation++ };
         }
 
         //להוסיף תצוגת רחפן
@@ -70,29 +87,8 @@ namespace DalObject
         /// <param name="cs"></param>
         /// <returns></returns>
         /// 
-
-        public static Customer Display_Customer(Customer cs)//לבדוק למה זה אדום
-        {
-            Console.WriteLine("Please enter ID: "+ cs.Id);
-            Console.WriteLine("Please enter name: " + cs.Name);
-            Console.WriteLine("Please enter phone number: " + cs.Phone);
-            Console.WriteLine("Please enter Longtitude: " + cs.Longtitude);
-            Console.WriteLine("Please enter Latitude: " + cs.Latitude);
-        }
-        public static Drone display_drone(Drone dr)//לבדוק למה זה אדום
-        {
-
-        }
-
-        public static Parcel parcel_display(Parcel pc)//לבדוק למה זה אדום
-        {
-
-        }
-        public static Station station_display(Station st)//לבדוק למה זה אדום
-        {
-
-        }
-
+        
+        
 
         public static void SetWeight(WeightCategories Weight)//לבדוק איך עושים השמה למשקל - enum 
         {
