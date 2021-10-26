@@ -49,6 +49,41 @@ namespace DalObject
             }
             return null;
         }
+        public BaseStation? GetBaseStation (int Id)
+        {
+            for (int i = 0; i < DataSource.Stations.Length; i++)
+            {
+                if (Id == DataSource.Stations[i].StationID)
+                {
+                    return DataSource.Stations[i];
+                }
+            }
+            return null;
+        }
+
+        public Customer? GetCustomer (int Id)
+        {
+            for (int i = 0; i < DataSource.Clients.Length; i++)
+            {
+                if (Id == DataSource.Clients[i].CustomerId)
+                {
+                    return DataSource.Clients[i];
+                }
+            }
+            return null;
+        }
+
+        public Parcel? GetParcel (int Id)
+        {
+            for (int i = 0; i < DataSource.Packages.Length; i++)
+            {
+                if (Id == DataSource.Packages[i].ParcelId)
+                {
+                    return DataSource.Packages[i];
+                }
+            }
+            return null;
+        }
 
 
 
