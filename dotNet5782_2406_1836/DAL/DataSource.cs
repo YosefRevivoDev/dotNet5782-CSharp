@@ -7,7 +7,7 @@ using IDAL.DO;
     {
         internal class DataSource
         {
-            internal static Drone[] Drones = new Drone[10];
+             internal static Drone[] Drones = new Drone[10];
             internal static BaseStation[] Stations = new BaseStation[5];
             internal static Customer[] Clients = new Customer[100];
             internal static Parcel[] Packages = new Parcel[1000];
@@ -59,6 +59,7 @@ using IDAL.DO;
                         Longtitude = rand.Next(0, 180)
                     };
                 }
+
       
                 // לעשות אתחול מהיר למחלקת חבילות ולקוחות
                 //(name enum) randon.next(0 , 4)

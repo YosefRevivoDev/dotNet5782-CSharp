@@ -10,7 +10,7 @@ namespace IDAL
     {
         public struct Parcel
         {
-            public int Id { get; set; }
+            public int ParcelId { get; set; }
             public int SenderId { get; set; }
             public int TargetId { get; set; }
             public WeightCategories Parcel_weight { get; internal set; }
@@ -26,7 +26,7 @@ namespace IDAL
 
             public override string ToString()
             {
-                return $"Parcel: , Id:{Id}, Senderld: {SenderId}" +
+                return $"Parcel: , Id:{ParcelId}, Senderld: {SenderId}" +
                         $", Targetld: {TargetId}" +
                         $", Weight: {Parcel_weight}" +
                         $", Priority: {Parcel_priority}" +
