@@ -16,7 +16,7 @@ namespace IDAL
             public int SenderId { get; set; }
             public int TargetId { get; set; }
             public WeightCategories Parcel_weight { get; internal set; }
-            public priority Parcel_priority { get; internal set; }
+            public Priority Parcel_priority { get; internal set; }
             public DateTime intvation_date { get; internal set; }
             public int Dronled { get; set; }
             public DateTime Schueduled { get; internal set; }

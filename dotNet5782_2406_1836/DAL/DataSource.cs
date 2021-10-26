@@ -13,7 +13,7 @@ namespace DAL
         {
             internal static Drone[] Drones = new Drone[10];
             internal static Station[] Stations = new Station[5];
-            internal static customer[] Clients = new customer[100];
+            internal static Customer[] Clients = new Customer[100];
             internal static Parcel[] Packages = new Parcel[1000];
             internal static Random rand = new Random();
             static DataSource()
@@ -50,6 +50,7 @@ namespace DAL
                     Drones[config.Index_Drone++] = new Drone { DroneID = ++config.RunIdDrone , Drone_Model= DronesModels[i],
                     Drone_weight = (WeightCategories)random.Next(1,3)};
                 }
+
                 string[] NameCustomers = new string[10] { "Tomer", "Yosef", "Yehuda", "Avi", "David", "Adi", "Moria", "Omer", "Ravit", "Eliyahu" };
                 for (int i = 0; i < 10; i++)
                 {
@@ -62,6 +63,10 @@ namespace DAL
                         Longtitude = rand.Next(0, 180)
                     };
                 }
+                string[] Parcels = new string[10]
+                {
+
+                };
                 // לעשות אתחול מהיר למחלקת חבילות ולקוחות
                 //(name enum) randon.next(0 , 4)
                 //  DateTime dateTime = new DateTime(2021, rand.Next(1, 13), rand.Next(0, 31));
