@@ -12,7 +12,9 @@ using IDAL.DO;
             internal static Customer[] Clients = new Customer[100];
             internal static Parcel[] Packages = new Parcel[1000];
             internal static Random rand = new Random();
-            static DataSource()
+            internal static DateTime currentTime = DateTime.Now;
+
+        static DataSource()
             {
 
             }
@@ -26,8 +28,8 @@ using IDAL.DO;
 
                 internal static int RunIdStation = 0;
                 internal static int RunIdDrone = 0;
-                internal static int RunIdClient = 0;
                 internal static int RunCustomerId = 0;
+                internal static int RunParcelId = 0;
             }
 
             public static void Initialize()
@@ -59,13 +61,25 @@ using IDAL.DO;
                         Longtitude = rand.Next(0, 180)
                     };
                 }
-      
-                // לעשות אתחול מהיר למחלקת חבילות ולקוחות
-                //(name enum) randon.next(0 , 4)
-                //  DateTime dateTime = new DateTime(2021, rand.Next(1, 13), rand.Next(0, 31));
+                for (int i = 0; i < 10; i++)
+                {
+                   Packages[config.Index_Parcel++] = new IDAL.DO.Parcel
+                   {
+                      Id = config.RunParcelId++,
+                      SenderId = Clients[i].Id,
+                      TargetId = Clients[i + 1].Id,
+                      Parcel_priority = (Priorities)rand.Next(1, 3),
+                      Parcel_weight = (WeightCategories)rand.Next(1, 3),
+                      DroneId = Drones[i].DroneID,
+                      intvation_date = currentTime,
+                      Delivered = currentTime.AddDays(1),
+                      Requested = currentTime.AddDays(1.5),
+                      PickedUp = currentTime.AddDays(2),
+                      Scheduled = currentTime.AddDays(3),
+                   };
+                }
             }
         }
-
     }
     
-//}
+
