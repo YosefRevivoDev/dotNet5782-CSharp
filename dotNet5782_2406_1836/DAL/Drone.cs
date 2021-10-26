@@ -1,19 +1,19 @@
-﻿using DAL;
+﻿
 
 namespace IDAL
 {
     namespace DO
     {
-        public struct Drone
+        public class Drone
         {
-            public int DroneID { get; internal set; }
-            public string Drone_Model { get; internal set; }
-            public WeightCategories Drone_weight { get; internal set; }
-            public DroneStatus status { get; internal set; }
-            public double Battary  { get; internal set; }
+            public int DroneID { get;  set; }
+            public string Drone_Model { get;  set; }
+            public WeightCategories Drone_weight { get;  set; }
+            public DroneStatus status { get;  set; }
+            public double Battary  { get;  set; }
             public override string ToString()
             {
-                return $"ID:{DroneID}, Model:{Drone_Model}, Weight:{Drone_weight} "+
+                return $"Drone:, ID:{DroneID}, Model:{Drone_Model}, Weight:{Drone_weight} "+
                     $",DroneStatus:{status}, Battary: { Battary}";
             }
         }  

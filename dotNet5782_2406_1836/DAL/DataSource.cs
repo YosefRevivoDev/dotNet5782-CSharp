@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IDAL.DO;
 
-namespace DAL
-{
+//namespace DAL
+//{
     namespace DalObject
     {
-        static class DataSource
+        internal class DataSource
         {
             internal static Drone[] Drones = new Drone[10];
-            internal static Station[] Stations = new Station[5];
+            internal static BaseStation[] Stations = new BaseStation[5];
             internal static Customer[] Clients = new Customer[100];
             internal static Parcel[] Packages = new Parcel[1000];
             internal static Random rand = new Random();
@@ -42,8 +38,8 @@ namespace DAL
                     "Alpha1", "Alpha2", "Alpha3", "Beta1", "Beta2"
                 };
                 #region initStation
-                Stations[config.Index_Station++] = new Station { Name = "fff", StationID = config.RunIdStation++ };
-                Stations[config.Index_Station++] = new Station { Name = "aaa", StationID = config.RunIdStation++ };
+                 Stations[config.Index_Station++] = new BaseStation {Name = "Base_A", StationID = config.RunIdStation++};
+                 Stations[config.Index_Station++] = new BaseStation {Name = "Base_B", StationID = config.RunIdStation++};
                 #endregion 
                 for (int i = 0; i < 5; i++)
                 {
@@ -63,10 +59,7 @@ namespace DAL
                         Longtitude = rand.Next(0, 180)
                     };
                 }
-                string[] Parcels = new string[10]
-                {
-
-                };
+      
                 // לעשות אתחול מהיר למחלקת חבילות ולקוחות
                 //(name enum) randon.next(0 , 4)
                 //  DateTime dateTime = new DateTime(2021, rand.Next(1, 13), rand.Next(0, 31));
@@ -75,4 +68,4 @@ namespace DAL
 
     }
     
-}
+//}

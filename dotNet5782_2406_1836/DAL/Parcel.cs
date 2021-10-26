@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using DAL;
-
 namespace IDAL
 {
     namespace DO
@@ -16,13 +14,28 @@ namespace IDAL
             public int SenderId { get; set; }
             public int TargetId { get; set; }
             public WeightCategories Parcel_weight { get; internal set; }
-            public Priority Parcel_priority { get; internal set; }
+            public Priorities Parcel_priority { get; internal set; }
             public DateTime intvation_date { get; internal set; }
-            public int Dronled { get; set; }
-            public DateTime Schueduled { get; internal set; }
+            public int DroneId { get; set; }
+            public DateTime Scheduled { get; internal set; }
             public DateTime PickedUp { get; internal set; }
             public DateTime Delivered { get; internal set; }
+            public DateTime Requested { get; internal set; }
 
+
+
+            public override string ToString()
+            {
+                return $"Parcel: , Id:{Id}, Senderld: {SenderId}" +
+                        $", Targetld: {TargetId}" +
+                        $", Weight: {Parcel_weight}" +
+                        $", Priority: {Parcel_priority}" +
+                        $", Requested: {Requested}" +
+                        $", Droneld: {DroneId}" +
+                        $", Scheduled: {Scheduled}" +
+                        $", PickedUp: {PickedUp}" +
+                        $", Delivered: {Delivered}";
+            }
         }
-    }
+    }  
 }
