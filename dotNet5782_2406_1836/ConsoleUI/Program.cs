@@ -49,7 +49,8 @@ namespace ConsoleUI
                                             3 = Package delivery to customer
                                             4 = Sending a Drone for charging at the base station
                                             5 = Release Drone from charging at base station ");
-                        UpdateOptions(8, dal);
+                        int.TryParse(Console.ReadLine(), out SubOptions);
+                        UpdateOptions(SubOptions, dal);
                         break;
                     case 3:
                         Console.WriteLine("Enter your Option please:\n");
@@ -57,7 +58,8 @@ namespace ConsoleUI
                                              2 = Drone Display
                                              3 = Customer Display
                                              4 = Parcel Display");
-                        ViewOptions(0, dal);
+                        int.TryParse(Console.ReadLine(), out SubOptions);
+                        ViewOptions(SubOptions, dal);
                         break;
                     case 4:
                         Console.WriteLine("Enter your Option please:\n");
@@ -67,7 +69,8 @@ namespace ConsoleUI
                                             4 = Displays a list Parcels
                                             5 = Displays a list of packages that have not yet been assigned to the Drone
                                             6 = Display of base stations with available charging stations");
-                        viewOptionsList(0, dal);
+                        int.TryParse(Console.ReadLine(), out SubOptions);
+                        viewOptionsList(SubOptions, dal);
                         break;
                     case 5:
                         break;
@@ -75,7 +78,8 @@ namespace ConsoleUI
                         Console.WriteLine("WRONG!,Please enter another choice again");
                         break;
                 }
-            } while (Options < 0 || Options > 5);        
+
+            } while (Options != 5);        
         }
 
         //--------------------------------------------ADD FUNCTIONS---------------------------------------------//
@@ -308,25 +312,17 @@ namespace ConsoleUI
 
         private static void ReleaseDroneFromCharged(DalObject.DalObject dal)
         {
-            throw new NotImplementedException();
+            int pacel_id_associate, drone_id_associate;
+
+            Console.WriteLine("Please enter parcel ID that you what to associate with your drone");
+            int.TryParse(Console.ReadLine(), out pacel_id_associate);
+
+            Console.WriteLine("Please enter drone ID that you what to associate with your parcel");
+            int.TryParse(Console.ReadLine(), out drone_id_associate);
+            dal.PackageCollectionByDrone(pacel_id_associate, drone_id_associate);
         }
 
         private static void SendingDroneToCharge(DalObject.DalObject dal)
-        {
-            throw new NotImplementedException();
-        }
-
-        private static void DeliveredParcel(DalObject.DalObject dal)
-        {
-            throw new NotImplementedException();
-        }
-
-        private static void packageCollectByDrone(DalObject.DalObject dal)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static void AssociateParcel(DalObject.DalObject dal)
         {
             int pacel_id_associate, drone_id_associate;
 
@@ -335,9 +331,43 @@ namespace ConsoleUI
 
             Console.WriteLine("Please enter drone ID that you what to associate with your parcel");
             int.TryParse(Console.ReadLine(), out drone_id_associate);
+            dal.DliveredPackageToCustumer(pacel_id_associate, drone_id_associate);
+        }
 
-            //Associat func. between pacel_id_associate to drone_id_associate
-           dal.SetDroneForParcel(pacel_id_associate, drone_id_associate);
+        private static void DeliveredParcel(DalObject.DalObject dal)
+        {
+            int baseStationId, drone_id_associate;
+
+            Console.WriteLine("Please enter parcel ID that you what to associate with your drone");
+            int.TryParse(Console.ReadLine(), out baseStationId);
+
+            Console.WriteLine("Please enter drone ID that you what to associate with your parcel");
+            int.TryParse(Console.ReadLine(), out drone_id_associate);
+            dal.ChargeDrone(drone_id_associate, baseStationId);
+        }
+
+        private static void packageCollectByDrone(DalObject.DalObject dal)
+        {
+            int baseStationId, drone_id_associate;
+
+            Console.WriteLine("Please enter parcel ID that you what to associate with your drone");
+            int.TryParse(Console.ReadLine(), out baseStationId);
+
+            Console.WriteLine("Please enter drone ID that you what to associate with your parcel");
+            int.TryParse(Console.ReadLine(), out drone_id_associate);
+            dal.ChargeDrone(drone_id_associate, baseStationId);
+        }
+
+        public static void AssociateParcel(DalObject.DalObject dal)
+        {
+            int baseStationId, drone_id_associate;
+
+            Console.WriteLine("Please enter parcel ID that you what to associate with your drone");
+            int.TryParse(Console.ReadLine(), out baseStationId);
+
+            Console.WriteLine("Please enter drone ID that you what to associate with your parcel");
+            int.TryParse(Console.ReadLine(), out drone_id_associate);
+            dal.ReleasingChargeDrone(drone_id_associate, baseStationId);
         }
 
 
@@ -361,6 +391,14 @@ namespace ConsoleUI
                 case 4:
                     Console.WriteLine("All Packages Data: ");
                     DisplayList(dal, dal.GetPackages());
+                    break;
+                case 5:
+                    Console.WriteLine("Free Packages: ");
+                    DisplayList(dal, dal.GetPackagesByPredicate());
+                    break;
+                case 6:
+                    Console.WriteLine("Free Charge Slots: ");
+                    DisplayList(dal, dal.GetBaseStationByPredicate());
                     break;
             }
         }

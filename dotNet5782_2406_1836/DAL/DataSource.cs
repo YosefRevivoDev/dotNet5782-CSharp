@@ -57,7 +57,7 @@ using IDAL.DO;
                 {
                     Clients[config.Index_customer++] = new IDAL.DO.Customer
                     {
-                        Id = config.RunCustomerId++,
+                        CustomerId = config.RunCustomerId++,
                         Name = NameCustomers[i],
                         Phone = "05" + rand.Next(0, 9) + '-' + rand.Next(1000000, 10000000),
                         Latitude = rand.Next(0, 180),
@@ -69,8 +69,8 @@ using IDAL.DO;
                    Packages[config.Index_Parcel++] = new IDAL.DO.Parcel
                    {
                       ParcelId = config.RunParcelId++,
-                      SenderId = Clients[i].Id,
-                      TargetId = Clients[i + 1].Id,
+                      SenderId = Clients[i].CustomerId,
+                      TargetId = Clients[i + 1].CustomerId,
                       Parcel_priority = (Priorities)rand.Next(1, 3),
                       Parcel_weight = (WeightCategories)rand.Next(1, 3),
                       DroneId = Drones[i].DroneID,

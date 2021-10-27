@@ -113,7 +113,7 @@ namespace DalObject
              FindIndex(i => i.DroneID == droneId)].status = DroneStatus.busy;
         }
 
-        public void DliveredPackageTOCustumer(int parcelId, int droneId)
+        public void DliveredPackageToCustumer(int parcelId, int droneId)
         {
             int index = DataSource.Packages.ToList().
               FindIndex(i => i.ParcelId == parcelId);
@@ -129,8 +129,24 @@ namespace DalObject
             DataSource.Drones[DataSource.Drones.ToList().
               FindIndex(i => i.DroneID == droneId)].status = DroneStatus.maintenance;
 
+            DataSource.Stations[DataSource.Stations.ToList().
+           FindIndex(i => i.StationID == baseStationId)].ChargeSlots--; 
             Add_DroneCharge(new DroneCharge { DroneID = droneId, StationID = baseStationId });
         }
+
+        public void ReleasingChargeDrone(int droneId, int baseStationId)
+        {
+            DataSource.DroneCharges.RemoveAt(DataSource.DroneCharges.
+                FindIndex(i => i.DroneID == droneId
+                && i.StationID == baseStationId));
+
+            DataSource.Drones[DataSource.Drones.ToList().
+              FindIndex(i => i.DroneID == droneId)].status = DroneStatus.available;
+
+            DataSource.Stations[DataSource.Stations.ToList().
+           FindIndex(i => i.StationID == baseStationId)].ChargeSlots++;
+        }
+
         //--------------------------------------------------DISPLAY FUNCTION---------------------------------------//
 
         public BaseStation[] GetBaseStation()
@@ -148,6 +164,16 @@ namespace DalObject
         public Customer[] GetCustomers()
         {
             return DataSource.Clients.Take(DataSource.Clients.Length).ToArray();
+        }
+
+        public Parcel[] GetPackagesByPredicate()
+        {
+            return DataSource.Packages.TakeWhile(i => i.DroneId == 0).ToArray();
+        }
+
+        public BaseStation[] GetBaseStationByPredicate()
+        {
+            return DataSource.Stations.TakeWhile(i => i.ChargeSlots > 0).ToArray();
         }
     }
 }
