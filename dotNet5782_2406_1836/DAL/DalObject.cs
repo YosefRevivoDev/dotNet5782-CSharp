@@ -6,7 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IDAL.DO;
-//using static DAL.DalObject.DataSource;
+using DalObject;
+using static DalObject.DataSource;
 
 
 namespace DalObject
@@ -18,27 +19,33 @@ namespace DalObject
         /// <summary>
         /// ////////////////////////////////////////////add funcrions
         /// </summary>
-        public void Add_BaseStation(BaseStation new_baseStation)
+        /// 
+
+        //---------------------------------------------------ADD FUNCTIONS---------------------------------------//
+        public static void Add_BaseStation(BaseStation new_baseStation)
         {
             DataSource.Stations[DataSource.config.Index_Station++] = new_baseStation;
         }
 
-        public void Add_Drone(Drone new_drone)
+        public static void Add_Drone(Drone new_drone)
         {
             DataSource.Drones[DataSource.config.Index_Drone++] = new_drone;
         }
 
-        public void Add_Customer(Customer new_customer)
+        public static void Add_Customer(Customer new_customer)
         {
             DataSource.Clients[DataSource.config.Index_customer++] = new_customer;
         }
 
-        public void Add_Parcel(Parcel new_parcel)
+        public static void Add_Parcel(Parcel new_parcel)
         {
             DataSource.Packages[DataSource.config.Index_Parcel] = new_parcel;
         }
         
-        public Drone? GetDrone (int Id)
+
+        //-------------------------------------------RETURN OBJ BY ID (GET FUNCTION)----------------------------------------//
+
+        public static Drone? GetDrone (int Id)
         {
             for (int i = 0; i < DataSource.Drones.Length ; i++)
             {
@@ -49,7 +56,7 @@ namespace DalObject
             }
             return null;
         }
-        public BaseStation? GetBaseStation (int Id)
+        public static BaseStation? GetBaseStation (int Id)
         {
             for (int i = 0; i < DataSource.Stations.Length; i++)
             {
@@ -61,7 +68,7 @@ namespace DalObject
             return null;
         }
 
-        public Customer? GetCustomer (int Id)
+        public static Customer? GetCustomer (int Id)
         {
             for (int i = 0; i < DataSource.Clients.Length; i++)
             {
@@ -73,7 +80,7 @@ namespace DalObject
             return null;
         }
 
-        public Parcel? GetParcel (int Id)
+        public static Parcel? GetParcel (int Id)
         {
             for (int i = 0; i < DataSource.Packages.Length; i++)
             {
@@ -85,11 +92,39 @@ namespace DalObject
             return null;
         }
 
+        //--------------------------------------------------UPDATE FUNCTION---------------------------------------//
+
+        public static void SetDroneForParcel(int parcelId, int droneId)
+        {
+            for (int i = 0; i < Packages.Length ; i++)
+            {
+                if(Packages[i].ParcelId== parcelId)
+                {
+                    Packages[i].DroneId = droneId;
+                }
+            }
+        }
 
 
 
 
-        public void Display(Display display)
+
+
+
+
+
+
+
+
+        //--------------------------------------------------DISPLAY FUNCTION---------------------------------------//
+        public static BaseStation[] copyArray()
+        {
+            BaseStation[] copyArr = new BaseStation[Stations.lenght];
+            Array.copy(Stations, copyArr, Stations.lenght);
+            return copyArr;
+        }
+
+        public static void Display(Display display)
         {
             switch (display)
             {
@@ -99,7 +134,7 @@ namespace DalObject
                         Console.WriteLine(DataSource.Stations[i]);
                     }
                     break;
-                case IDAL.DO.Display.Drons:
+                case IDAL.DO.Display.Drones:
                     for (int i = 0; i < DataSource.Drones.Length; i++)
                     {
                         Console.WriteLine(DataSource.Drones[i]);
