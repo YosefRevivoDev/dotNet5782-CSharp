@@ -65,7 +65,7 @@ using IDAL.DO;
                 {
                    Packages[config.Index_Parcel++] = new IDAL.DO.Parcel
                    {
-                      Id = config.RunParcelId++,
+                      ParcelId = config.RunParcelId++,
                       SenderId = Clients[i].Id,
                       TargetId = Clients[i + 1].Id,
                       Parcel_priority = (Priorities)rand.Next(1, 3),
