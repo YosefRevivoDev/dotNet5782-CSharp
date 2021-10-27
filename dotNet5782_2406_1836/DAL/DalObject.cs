@@ -15,7 +15,7 @@ namespace DalObject
     public class DalObject
     {
         public DalObject() { DataSource.Initialize(); }
-        //---------------------------------------------------ADD FUNCTIONS---------------------------------------//
+        //----------------------------------------ADD FUNCTIONS---------------------------------------//
         public void Add_BaseStation(BaseStation new_baseStation)
         {
             DataSource.Stations[DataSource.config.Index_Station++] = new_baseStation;
