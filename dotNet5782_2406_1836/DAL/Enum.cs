@@ -12,5 +12,7 @@ namespace IDAL
         public enum WeightCategories { light, medium, heavy }
         public enum Priorities { regular, fast, emergency }
         public enum DroneStatus { available, maintenance, shipping}
+        public enum Options {ADD = 1, UPDATE = 2 , DISPLAY = 3, LIST_VIEW = 4, EXIT = 0 }
+        
     }
 }

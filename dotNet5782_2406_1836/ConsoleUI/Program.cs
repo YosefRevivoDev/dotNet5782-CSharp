@@ -7,6 +7,35 @@ namespace ConsoleUI
         static void Main(string[] args)
         {
 
+            int choice;
+            int.TryParse(Console.ReadLine(), out choice);
+            Console.WriteLine(
+            "Enter option number:\n" +
+            "1. Add options\n" +
+            "2. Update options\n" +
+            "3. View options\n" +
+            "4. View lists options\n" +
+            "5. Exit");
+
+            do
+            {
+                switch (choice)
+                {
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        break;
+                    default:
+                        break;
+                }
+            }while (choice < 0 || choice > 5);
+
 
 
 
