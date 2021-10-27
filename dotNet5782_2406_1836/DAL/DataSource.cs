@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using IDAL.DO;
 
 //namespace DAL
@@ -13,8 +14,10 @@ using IDAL.DO;
             internal static Parcel[] Packages = new Parcel[1000];
             internal static Random rand = new Random();
             internal static DateTime currentTime = DateTime.Now;
+            internal static List<DroneCharge> DroneCharges
+            = new List<DroneCharge>();
 
-        static DataSource()
+       static DataSource()
             {
 
             }

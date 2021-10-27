@@ -13,17 +13,14 @@ namespace IDAL
             public int ParcelId { get; set; }
             public int SenderId { get; set; }
             public int TargetId { get; set; }
-            public WeightCategories Parcel_weight { get; internal set; }
-            public Priorities Parcel_priority { get; internal set; }
-            public DateTime intvation_date { get; internal set; }
+            public WeightCategories Parcel_weight { get;  set; }
+            public Priorities Parcel_priority { get;  set; }
+            public DateTime intvation_date { get;  set; }
             public int DroneId { get; set; }
-            public DateTime Scheduled { get; internal set; }
-            public DateTime PickedUp { get; internal set; }
-            public DateTime Delivered { get; internal set; }
-            public DateTime Requested { get; internal set; }
-
-
-
+            public DateTime Scheduled { get; set; }
+            public DateTime PickedUp { get;  set; }
+            public DateTime Delivered { get;  set; }
+            public DateTime Requested { get;  set; }
             public override string ToString()
             {
                 return $"Parcel: , Id:{ParcelId}, Senderld: {SenderId}" +

@@ -15,37 +15,35 @@ namespace DalObject
     public class DalObject
     {
         public DalObject() { DataSource.Initialize(); }
-
-        /// <summary>
-        /// ////////////////////////////////////////////add funcrions
-        /// </summary>
-        /// 
-
         //---------------------------------------------------ADD FUNCTIONS---------------------------------------//
-        public static void Add_BaseStation(BaseStation new_baseStation)
+        public void Add_BaseStation(BaseStation new_baseStation)
         {
             DataSource.Stations[DataSource.config.Index_Station++] = new_baseStation;
         }
 
-        public static void Add_Drone(Drone new_drone)
+        public void Add_Drone(Drone new_drone)
         {
             DataSource.Drones[DataSource.config.Index_Drone++] = new_drone;
         }
 
-        public static void Add_Customer(Customer new_customer)
+        public  void Add_Customer(Customer new_customer)
         {
             DataSource.Clients[DataSource.config.Index_customer++] = new_customer;
         }
 
-        public static void Add_Parcel(Parcel new_parcel)
+        public void Add_Parcel(Parcel new_parcel)
         {
             DataSource.Packages[DataSource.config.Index_Parcel] = new_parcel;
         }
-        
+
+        public void Add_DroneCharge(DroneCharge droneCharge)
+        {
+            DataSource.DroneCharges.Add(droneCharge);
+        }
 
         //-------------------------------------------RETURN OBJ BY ID (GET FUNCTION)----------------------------------------//
 
-        public static Drone? GetDrone (int Id)
+        public Drone GetDrone (int Id)
         {
             for (int i = 0; i < DataSource.Drones.Length ; i++)
             {
@@ -54,9 +52,9 @@ namespace DalObject
                     return DataSource.Drones[i];
                 }
             }
-            return null;
+            return default;
         }
-        public static BaseStation? GetBaseStation (int Id)
+        public BaseStation GetBaseStation (int Id)
         {
             for (int i = 0; i < DataSource.Stations.Length; i++)
             {
@@ -65,10 +63,9 @@ namespace DalObject
                     return DataSource.Stations[i];
                 }
             }
-            return null;
+            return default;
         }
-
-        public static Customer? GetCustomer (int Id)
+        public Customer GetCustomer(int Id)
         {
             for (int i = 0; i < DataSource.Clients.Length; i++)
             {
@@ -77,10 +74,9 @@ namespace DalObject
                     return DataSource.Clients[i];
                 }
             }
-            return null;
+            return default;
         }
-
-        public static Parcel? GetParcel (int Id)
+        public Parcel GetParcel (int Id)
         {
             for (int i = 0; i < DataSource.Packages.Length; i++)
             {
@@ -89,74 +85,69 @@ namespace DalObject
                     return DataSource.Packages[i];
                 }
             }
-            return null;
+            return default;
         }
 
         //--------------------------------------------------UPDATE FUNCTION---------------------------------------//
 
-        public static void SetDroneForParcel(int parcelId, int droneId)
+        public void SetDroneForParcel(int parcelId, int droneId)
         {
             for (int i = 0; i < Packages.Length ; i++)
             {
-                if(Packages[i].ParcelId== parcelId)
+                if(Packages[i].ParcelId == parcelId)
                 {
                     Packages[i].DroneId = droneId;
+                    return;
                 }
             }
         }
 
+        public void PackageCollectionByDrone(int parcelId, int droneId)
+        { 
+            int index = DataSource.Packages.ToList().
+                FindIndex(i => i.ParcelId == parcelId);
+            DataSource.Packages[index].DroneId = droneId;
+            DataSource.Packages[index].PickedUp = DateTime.Now;
 
-
-
-
-
-
-
-
-
-
-
-        //--------------------------------------------------DISPLAY FUNCTION---------------------------------------//
-        public static BaseStation[] copyArray()
-        {
-            BaseStation[] copyArr = new BaseStation[Stations.lenght];
-            Array.copy(Stations, copyArr, Stations.lenght);
-            return copyArr;
+            DataSource.Drones[DataSource.Drones.ToList().
+             FindIndex(i => i.DroneID == droneId)].status = DroneStatus.busy;
         }
 
-        public static void Display(Display display)
+        public void DliveredPackageTOCustumer(int parcelId, int droneId)
         {
-            switch (display)
-            {
-                case IDAL.DO.Display.BaseStation:
-                    for (int i = 0; i < DataSource.Stations.Length; i++)
-                    {
-                        Console.WriteLine(DataSource.Stations[i]);
-                    }
-                    break;
-                case IDAL.DO.Display.Drones:
-                    for (int i = 0; i < DataSource.Drones.Length; i++)
-                    {
-                        Console.WriteLine(DataSource.Drones[i]);
-                    }
-                    break;
-                case IDAL.DO.Display.Customers:
-                    for (int i = 0; i < DataSource.Clients.Length; i++)
-                    {
-                        Console.WriteLine(DataSource.Clients[i]);
-                    }
-                    break;
-                case IDAL.DO.Display.Parcels:
-                    for (int i = 0; i <DataSource.Packages.Length; i++)
-                    {
-                        Console.WriteLine(DataSource.Packages[i]);
-                    }
-                    break;
-                case IDAL.DO.Display.EXIT:
-                    break;
-                default:
-                    break;
-            }
+            int index = DataSource.Packages.ToList().
+              FindIndex(i => i.ParcelId == parcelId);
+            DataSource.Packages[index].DroneId = 0;
+            DataSource.Packages[index].Delivered = DateTime.Now;
+
+            DataSource.Drones[DataSource.Drones.ToList().
+             FindIndex(i => i.DroneID == droneId)].status = DroneStatus.available;
+        }
+
+        public void ChargeDrone(int droneId, int baseStationId)
+        {
+            DataSource.Drones[DataSource.Drones.ToList().
+              FindIndex(i => i.DroneID == droneId)].status = DroneStatus.maintenance;
+
+            Add_DroneCharge(new DroneCharge { DroneID = droneId, StationID = baseStationId });
+        }
+        //--------------------------------------------------DISPLAY FUNCTION---------------------------------------//
+
+        public BaseStation[] GetBaseStation()
+        {
+            return DataSource.Stations.Take(DataSource.Stations.Length).ToArray();
+        }
+        public Drone[] GetDrones()
+        {
+            return DataSource.Drones.Take(DataSource.Drones.Length).ToArray();
+        }
+        public Parcel[] GetPackages()
+        {
+            return DataSource.Packages.Take(DataSource.Packages.Length).ToArray();
+        }
+        public Customer[] GetCustomers()
+        {
+            return DataSource.Clients.Take(DataSource.Clients.Length).ToArray();
         }
     }
 }

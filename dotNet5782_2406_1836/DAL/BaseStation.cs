@@ -10,14 +10,14 @@ namespace IDAL
     {
         public struct BaseStation
         { 
-            /*public Station(int id, string name, double longitude, double latitude, int chargeSlots)
+            public BaseStation(int id, string name, double longitude, double latitude, int chargeSlots)
             {
                 this.StationID = id;
                 this.Name = name;
                 this.Longtitude = longitude;
                 this.Latitude = latitude;
                 this.ChargeSlots = chargeSlots;
-            }*/
+            }
 
             public int StationID { get;  set; }
             public string Name { get;  set; }
