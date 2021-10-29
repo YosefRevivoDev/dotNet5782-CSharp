@@ -1,4 +1,5 @@
-﻿using System;
+﻿//Yosef Revivo
+using System;
 using DalObject;
 using System.Linq;
 using System.Text;
@@ -17,7 +18,6 @@ namespace ConsoleUI
             MenuStartAplication(dal);
         }
 
-        //----------------------------------------  step 1: choice option, step 2: choice SubOption by switch case  -------------------//
         public static void MenuStartAplication(DalObject.DalObject dal)
         {
             int Options;
@@ -25,10 +25,10 @@ namespace ConsoleUI
 
             Console.WriteLine(@"Please Enter your choice: 
                                 1 = ADD
-                                2= UPDATE
-                                3= DISPLAY
-                                4= WIEW_LIST
-                                5 = EXIT ");
+                                2 = UPDATE
+                                3 = DISPLAY
+                                4 = WIEW_LIST
+                                5 = EXIT");
 
             do
             {
@@ -37,35 +37,39 @@ namespace ConsoleUI
                 {
                     case 1:
                         Console.WriteLine("Enter your Option please:\n");
-                        Console.WriteLine(@"1 = add BaseStation
+                        Console.WriteLine(@"
+                                            1 = add BaseStation
                                             2 = add Drone
                                             3 = add Customer
-                                            4 = add Parcel ");
+                                            4 = add Parcel");
                         int.TryParse(Console.ReadLine(), out SubOptions);
                         AddOptions(SubOptions, dal);
                         break;
                     case 2:
                         Console.WriteLine("Enter your Option please:\n");
-                        Console.WriteLine(@"1 = Associate parcel to drone
+                        Console.WriteLine(@"
+                                            1 = Associate parcel to drone
                                             2 = Collect package by drone
                                             3 = Package delivery to customer
                                             4 = Sending a Drone for charging at the base station
-                                            5 = Release Drone from charging at base station ");
+                                            5 = Release Drone from charging at base station");
                         int.TryParse(Console.ReadLine(), out SubOptions);
                         UpdateOptions(SubOptions, dal);
                         break;
                     case 3:
                         Console.WriteLine("Enter your Option please:\n");
-                        Console.WriteLine(@"1 = Base Station Display
-                                             2 = Drone Display
-                                             3 = Customer Display
-                                             4 = Parcel Display");
+                        Console.WriteLine(@"
+                                            1 = Base Station Display
+                                            2 = Drone Display
+                                            3 = Customer Display
+                                            4 = Parcel Display");
                         int.TryParse(Console.ReadLine(), out SubOptions);
                         ViewOptions(SubOptions, dal);
                         break;
                     case 4:
                         Console.WriteLine("Enter your Option please:\n");
-                        Console.WriteLine(@"1 = Displays a base station list
+                        Console.WriteLine(@"
+                                            1 = Displays a base station list
                                             2 = Displays a list of Drone
                                             3 = Displays a list Customers
                                             4 = Displays a list Parcels
@@ -81,7 +85,7 @@ namespace ConsoleUI
                         break;
                 }
 
-            } while (Options != 5);        
+            } while (Options != 5);
         }
 
         //--------------------------------------------ADD FUNCTIONS---------------------------------------------//
@@ -140,45 +144,44 @@ namespace ConsoleUI
 
             Parcel parcel = new Parcel();
             DateTime currentDate = DateTime.Now;
-            Console.WriteLine(" ");
+            Console.WriteLine("Please Add a new Parcel");
             int.TryParse(Console.ReadLine(), out ParcelId);
             parcel.ParcelId = ParcelId;
 
-            Console.WriteLine(" ");
+            Console.WriteLine("Please Enter SenderId ");
             int.TryParse(Console.ReadLine(), out SenderId);
             parcel.SenderId = SenderId;
 
-            Console.WriteLine(" ");
+            Console.WriteLine("Please Enter Target");
             int.TryParse(Console.ReadLine(), out TargetId);
             parcel.TargetId = TargetId;
 
-            Console.WriteLine(" ");
+            Console.WriteLine("Please Enter DroneId");
             int.TryParse(Console.ReadLine(), out DroneId);
             parcel.DroneId = DroneId;
 
-            Console.WriteLine(" ");
-            
+            Console.WriteLine("Please Enter your Choice Weight: 1 = light, 2 = medium, 3 = heavy");
             int.TryParse(Console.ReadLine(), out int temp);
             parcel.Parcel_weight = (WeightCategories)temp;
 
-            Console.WriteLine(" ");
+            Console.WriteLine("Please Enter your Choice Parcel: 1 = regular,2 =  fast, 3= emergency");
             int.TryParse(Console.ReadLine(), out temp);
             parcel.Parcel_priority = (Priorities)temp;
 
-            Console.WriteLine(" ");
+            Console.WriteLine("The Time Requested is: ");
             DateTime dateTime = new DateTime();
             DateTime.TryParse(Console.ReadLine(), out dateTime);
             parcel.Requested = dateTime;
 
-            Console.WriteLine(" ");
+            Console.WriteLine("The Time Scheduled is: ");
             DateTime.TryParse(Console.ReadLine(), out dateTime);
             parcel.Scheduled = dateTime;
 
-            Console.WriteLine(" ");
+            Console.WriteLine("The Time PickedUp is: ");
             DateTime.TryParse(Console.ReadLine(), out dateTime);
             parcel.PickedUp = dateTime;
 
-            Console.WriteLine(" ");
+            Console.WriteLine("The Time Delivered is: ");
             DateTime.TryParse(Console.ReadLine(), out dateTime);
             parcel.Delivered = dateTime;
 
@@ -192,21 +195,21 @@ namespace ConsoleUI
             double Longtitude, Latitude;
             Customer customer = new();
 
-            Console.WriteLine("please enter id:");
+            Console.WriteLine("Please enter id:");
             int.TryParse(Console.ReadLine(), out CustomerId);
             customer.CustomerId = CustomerId;
 
-            Console.WriteLine("please enter phone number:");
+            Console.WriteLine("Please enter phone number:");
             customer.Phone = Console.ReadLine();
 
-            Console.WriteLine("please enter name:");
+            Console.WriteLine("Please enter name:");
             customer.Name = Console.ReadLine();
 
-            Console.WriteLine("please enter longitude:");
+            Console.WriteLine("Please enter longitude:");
             double.TryParse(Console.ReadLine(), out Longtitude);
             customer.Longtitude = Longtitude;
 
-            Console.WriteLine("please enter latitude:");
+            Console.WriteLine("Please enter latitude:");
             double.TryParse(Console.ReadLine(), out Latitude);
             customer.Latitude = Latitude;
 
@@ -222,7 +225,7 @@ namespace ConsoleUI
             int.TryParse(Console.ReadLine(), out int DroneID);
             drone.DroneID = DroneID;
 
-            Console.WriteLine("please enter phone number:");
+            Console.WriteLine("Please enter phone number:");
             drone.Drone_Model = Console.ReadLine();
 
 
@@ -271,7 +274,7 @@ namespace ConsoleUI
             Console.WriteLine("Please enter Drone ID");
             int.TryParse(Console.ReadLine(), out DroneID);
             Drone new_drone = dal.GetDrone(DroneID);
-          
+
             Console.WriteLine(string.Format("Drone Details: {0}", new_drone));
         }
         //Print Customer by string.Format
@@ -299,7 +302,7 @@ namespace ConsoleUI
             switch (SubOptions)
             {
                 case 1:
-                   AssociateParcel(dal);
+                    AssociateParcel(dal);
                     break;
                 case 2:
                     packageCollectByDrone(dal);
@@ -421,6 +424,6 @@ namespace ConsoleUI
             {
                 Console.WriteLine(s);
             }
-        }    
+        }
     }
 }
