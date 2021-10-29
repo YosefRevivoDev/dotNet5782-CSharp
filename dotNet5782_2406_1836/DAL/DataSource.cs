@@ -17,7 +17,9 @@ using IDAL.DO;
             internal static List<DroneCharge> DroneCharges
             = new List<DroneCharge>();
 
-       static DataSource()
+
+        // Empty Constractor for Default
+        static DataSource()
             {
 
             }

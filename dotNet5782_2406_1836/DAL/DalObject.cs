@@ -16,6 +16,10 @@ namespace DalObject
     {
         public DalObject() { DataSource.Initialize(); }
         //----------------------------------------ADD FUNCTIONS---------------------------------------//
+        /// <summary>
+        /// הוספת אובייקט למערך וקידום המספר הרץ במערך לפי בקשה
+        /// </summary>
+        /// <param name="new_baseStation"></param>
         public void Add_BaseStation(BaseStation new_baseStation)
         {
             DataSource.Stations[DataSource.config.Index_Station++] = new_baseStation;
@@ -89,7 +93,16 @@ namespace DalObject
         }
 
         //--------------------------------------------------UPDATE FUNCTION---------------------------------------//
-
+        /// <summary>
+        ///  הגדרת הפונקציות העדכון הבאות לפי הסדר:
+        ///  שיוך חבילה לרחפן
+        /// איסוף החבילה על ידי רחפן    
+        /// שליחת החבילה ללקוח
+        /// טעינת רחפן 
+        /// שחרור רחפן מטעינה
+        /// </summary>
+        /// <param name="parcelId"></param>
+        /// <param name="droneId"></param>
         public void SetDroneForParcel(int parcelId, int droneId)
         {
             for (int i = 0; i < Packages.Length ; i++)
@@ -101,7 +114,7 @@ namespace DalObject
                 }
             }
         }
-
+               
         public void PackageCollectionByDrone(int parcelId, int droneId)
         { 
             int index = DataSource.Packages.ToList().
