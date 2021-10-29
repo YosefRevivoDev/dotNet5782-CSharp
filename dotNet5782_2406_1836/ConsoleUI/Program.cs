@@ -16,6 +16,8 @@ namespace ConsoleUI
             DalObject.DalObject dal = new DalObject.DalObject();
             MenuStartAplication(dal);
         }
+
+        //----------------------------------------  step 1: choice option, step 2: choice SubOption by switch case  -------------------//
         public static void MenuStartAplication(DalObject.DalObject dal)
         {
             int Options;
@@ -253,6 +255,7 @@ namespace ConsoleUI
                     break;
             }
         }
+        //Print BaseStation by string.Format
         public static void DisplayBaseStation(DalObject.DalObject dal)
         {
             int stationID;
@@ -261,6 +264,7 @@ namespace ConsoleUI
             BaseStation? station = dal.GetBaseStation(stationID);
             Console.WriteLine(string.Format("Station Details: {0}", station));
         }
+        //Print Drone by string.Format
         public static void DisplayDrone(DalObject.DalObject dal)
         {
             int DroneID;
@@ -270,6 +274,7 @@ namespace ConsoleUI
           
             Console.WriteLine(string.Format("Drone Details: {0}", new_drone));
         }
+        //Print Customer by string.Format
         public static void DisplayCustomer(DalObject.DalObject dal)
         {
             int CustomerID;
@@ -278,6 +283,7 @@ namespace ConsoleUI
             Customer? new_customer = dal.GetCustomer(CustomerID);
             Console.WriteLine(string.Format("Customer Details: {0}", new_customer));
         }
+        //Print Parcel by string.Format
         public static void DisplayParcel(DalObject.DalObject dal)
         {
             int ParcelID;
@@ -310,6 +316,7 @@ namespace ConsoleUI
             }
         }
 
+        // Call PackageCollectionByDrone function by parcel ID & drone ID paramters
         private static void ReleaseDroneFromCharged(DalObject.DalObject dal)
         {
             int pacel_id_associate, drone_id_associate;
@@ -322,6 +329,7 @@ namespace ConsoleUI
             dal.PackageCollectionByDrone(pacel_id_associate, drone_id_associate);
         }
 
+        //Call DliveredPackageToCustumer function by parcel ID & drone ID paramters
         private static void SendingDroneToCharge(DalObject.DalObject dal)
         {
             int pacel_id_associate, drone_id_associate;
@@ -334,6 +342,7 @@ namespace ConsoleUI
             dal.DliveredPackageToCustumer(pacel_id_associate, drone_id_associate);
         }
 
+        //Call ChargeDrone function by parcel ID & drone ID paramters
         private static void DeliveredParcel(DalObject.DalObject dal)
         {
             int baseStationId, drone_id_associate;
@@ -346,6 +355,7 @@ namespace ConsoleUI
             dal.ChargeDrone(drone_id_associate, baseStationId);
         }
 
+        //Call ChargeDrone function by baseStationId & drone ID paramters
         private static void packageCollectByDrone(DalObject.DalObject dal)
         {
             int baseStationId, drone_id_associate;
@@ -358,6 +368,7 @@ namespace ConsoleUI
             dal.ChargeDrone(drone_id_associate, baseStationId);
         }
 
+        //Call ReleasingChargeDrone function by drone_id & baseStationId paramters
         public static void AssociateParcel(DalObject.DalObject dal)
         {
             int baseStationId, drone_id_associate;
@@ -374,6 +385,7 @@ namespace ConsoleUI
         //--------------------------------------------DISPLAY  LIST OBJ FUNCTIONS---------------------------------------------//
         public static void viewOptionsList(int SubOptions, DalObject.DalObject dal)
         {
+            //Print list by choice (switch)
             switch (SubOptions)
             {
                 case 1:
@@ -402,6 +414,7 @@ namespace ConsoleUI
                     break;
             }
         }
+        //Print a generic list by oblect 
         public static void DisplayList<T>(DalObject.DalObject dal, T[] t) where T : struct
         {
             foreach (T s in t)

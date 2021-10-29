@@ -101,7 +101,7 @@ namespace DalObject
                 }
             }
         }
-
+        
         public void PackageCollectionByDrone(int parcelId, int droneId)
         { 
             int index = DataSource.Packages.ToList().
@@ -148,7 +148,8 @@ namespace DalObject
         }
 
         //--------------------------------------------------DISPLAY FUNCTION---------------------------------------//
-
+     
+        // Gets a list and sends a copy to  generic func in Main prog.
         public BaseStation[] GetBaseStation()
         {
             return DataSource.Stations.Take(DataSource.Stations.Length).ToArray();
@@ -165,16 +166,14 @@ namespace DalObject
         {
             return DataSource.Clients.Take(DataSource.Clients.Length).ToArray();
         }
-
         public Parcel[] GetPackagesByPredicate()
         {
             return DataSource.Packages.TakeWhile(i => i.DroneId == 0).ToArray();
         }
-
         public BaseStation[] GetBaseStationByPredicate()
         {
             return DataSource.Stations.TakeWhile(i => i.ChargeSlots > 0).ToArray();
-        }
+        } 
     }
 }
 
