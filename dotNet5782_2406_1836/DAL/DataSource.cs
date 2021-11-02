@@ -44,8 +44,8 @@ namespace DalObject
                     "Alpha1", "Alpha2", "Alpha3", "Beta1", "Beta2"
             };
             #region initStation
-            Stations[config.Index_Station++] = new BaseStation { Name = "Base_A", StationID = config.RunIdStation++ };
-            Stations[config.Index_Station++] = new BaseStation { Name = "Base_B", StationID = config.RunIdStation++ };
+            Stations.Add(new BaseStation { Name = "Base_A", StationID = config.RunIdStation++ });
+            Stations.Add(new BaseStation { Name = "Base_B", StationID = config.RunIdStation++ });
             #endregion
             for (int i = 0; i < 5; i++)
             {
