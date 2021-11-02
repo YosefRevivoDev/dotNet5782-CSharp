@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Runtime.Serialization;
 //Throw Exception Classes 
-namespace IDAL.DO
+namespace IDAL
 {
-    [Serializable]
     namespace DO
     {
         public class DroneException : Exception { public DroneException(string message) : base(message) { } }

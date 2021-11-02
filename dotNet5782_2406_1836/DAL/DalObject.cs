@@ -1,6 +1,4 @@
-﻿//using DAL;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,15 +29,15 @@ namespace DalObject
                 new_drone : throw new Exception($"This id {new_drone.DroneID} already exist"));
         }
 
-        public  void Add_Customer(Customer new_customer)
+        public void Add_Customer(Customer new_customer)
         {
-            DataSource.Clients.Add(DataSource.Clients.FindIndex (i => i.CustomerId == new_customer.CustomerId) == -1 ?
+            DataSource.Clients.Add(DataSource.Clients.FindIndex(i => i.CustomerId == new_customer.CustomerId) == -1 ?
             new_customer : throw new Exception($"This id {new_customer.CustomerId} already exist"));
         }
 
         public void Add_Parcel(Parcel new_parcel)
         {
-            DataSource.Packages.Add( DataSource.Packages.FindIndex(i => i.ParcelId == new_parcel.ParcelId) == -1 ?
+            DataSource.Packages.Add(DataSource.Packages.FindIndex(i => i.ParcelId == new_parcel.ParcelId) == -1 ?
             new_parcel : throw new Exception($"This id {new_parcel.ParcelId} already exist"));
         }
         public void Add_DroneCharge(DroneCharge droneCharge)
@@ -50,9 +48,9 @@ namespace DalObject
 
         //-------------------------------------------RETURN OBJ BY ID (GET FUNCTION)----------------------------------------//
 
-        public Drone GetDrone (int Id)
+        public Drone GetDrone(int Id)
         {
-            for (int i = 0; i < DataSource.Drones.Count ; i++)
+            for (int i = 0; i < DataSource.Drones.Count; i++)
             {
                 if (Id == DataSource.Drones[i].DroneID)
                 {
@@ -61,7 +59,7 @@ namespace DalObject
             }
             return default;
         }
-        public BaseStation GetBaseStation (int Id)
+        public BaseStation GetBaseStation(int Id)
         {
             for (int i = 0; i < DataSource.Stations.Count; i++)
             {
@@ -83,7 +81,7 @@ namespace DalObject
             }
             return default;
         }
-        public Parcel GetParcel (int Id)
+        public Parcel GetParcel(int Id)
         {
             for (int i = 0; i < DataSource.Packages.Count; i++)
             {
@@ -108,82 +106,153 @@ namespace DalObject
         /// <param name="droneId"></param>
         public void SetDroneForParcel(int parcelId, int droneId)
         {
-            for (int i = 0; i < Packages.Count; i++)
-            {
-                if(Packages[i].ParcelId == parcelId)
-                {
-                    Packages[i].DroneId = droneId;
-                    return;
-                }
-            }
+            int index = DataSource.Packages.ToList().FindIndex(i => i.ParcelId == parcelId);
+            Parcel parcel = DataSource.Packages[index];
+            parcel.DroneId = droneId;
+            DataSource.Packages[index] = parcel;
         }
-               
-        public void PackageCollectionByDrone(int parcelId, int droneId)
-        { 
-            int index = DataSource.Packages.ToList().
-                FindIndex(i => i.ParcelId == parcelId);
-            DataSource.Packages[index].DroneId = droneId;
-            DataSource.Packages[index].PickedUp = DateTime.Now;
 
-            DataSource.Drones[DataSource.Drones.
-             FindIndex(i => i.DroneID == droneId)].status = DroneStatus.busy;
+        public void PackageCollectionByDrone(int parcelId, int droneId)
+        {
+            int index = DataSource.Packages.ToList().FindIndex(i => i.ParcelId == parcelId);
+            Parcel parcel = DataSource.Packages[index];
+            parcel.DroneId = droneId;
+            parcel.PickedUp = DateTime.Now;
+            DataSource.Packages[index] = parcel;
         }
 
         public void DeliveredPackageToCustumer(int parcelId, int droneId)
         {
-            int index = DataSource.Packages.ToList().
-              FindIndex(i => i.ParcelId == parcelId);
-            DataSource.Packages[index].DroneId = 0;
-            DataSource.Packages[index].Delivered = DateTime.Now;
 
-            DataSource.Drones[DataSource.Drones.ToList().
-             FindIndex(i => i.DroneID == droneId)].status = DroneStatus.available;
+            int index = DataSource.Packages.ToList().FindIndex(i => i.ParcelId == parcelId);
+            Parcel parcel = DataSource.Packages[index];
+            parcel.DroneId = droneId;
+            parcel.Delivered = DateTime.Now;
+            DataSource.Packages[index] = parcel;
         }
+
 
         public void ChargeDrone(int droneId, int baseStationId)
         {
-            DataSource.Drones[DataSource.Drones.ToList().
-              FindIndex(i => i.DroneID == droneId)].status = DroneStatus.maintenance;
+            //DataSource.Drones[DataSource.Drones.ToList().
+            //FindIndex(i => i.DroneID == droneId)].status = DroneStatus.maintenance;
 
-            DataSource.Stations[DataSource.Stations.ToList().
-           FindIndex(i => i.StationID == baseStationId)].ChargeSlots--; 
-            Add_DroneCharge(new DroneCharge { DroneID = droneId, StationID = baseStationId });
+            int index = DataSource.DroneCharges.ToList().FindIndex(i => i.StationID == baseStationId);
+            DroneCharge droneCharge = DataSource.DroneCharges[index];
+            droneCharge.DroneID = droneId;
+            DataSource.DroneCharges[index] = droneCharge;
+
+            //Add_DroneCharge(new DroneCharge { DroneID = droneId, StationID = baseStationId });
         }
 
         public void ReleasingChargeDrone(int droneId, int baseStationId)
         {
-            DataSource.DroneCharges.RemoveAt(DataSource.DroneCharges.
-                FindIndex(i => i.DroneID == droneId
-                && i.StationID == baseStationId));
 
-            DataSource.Drones[DataSource.Drones.ToList().
-              FindIndex(i => i.DroneID == droneId)].status = DroneStatus.available;
+            DataSource.DroneCharges.RemoveAt(DataSource.DroneCharges.FindIndex(i => i.DroneID == droneId
+                        && i.StationID == baseStationId));
 
-            DataSource.Stations[DataSource.Stations.ToList().
-           FindIndex(i => i.StationID == baseStationId)].ChargeSlots++;
+            //FindIndex(i => i.DroneID == droneId)].status = DroneStatus.available;
+            //DataSource.Stations[DataSource.Stations.ToList().
+            //FindIndex(i => i.StationID == baseStationId)].ChargeSlots++;
         }
-         
+
+
+        ///////////////////// Remove Object From Function //////////////////
+
+
+        public void RemoveDrone(int droneID)
+        {
+            DataSource.Drones.RemoveAt(DataSource.Drones.FindIndex(i => i.DroneID == droneID));
+        }
+
+        public void RemoveCustomer(int customerId)
+        {
+            DataSource.Clients.RemoveAt(DataSource.Clients.FindIndex(i => i.CustomerId == customerId));
+        }
+
+        public void RemoveParcel(int parcelId)
+        {
+            DataSource.Packages.RemoveAt(DataSource.Packages.FindIndex(i => i.ParcelId == parcelId));
+        }
+
+        public void RemoveBaseStation(int stationID)
+        {
+            DataSource.Stations.RemoveAt(DataSource.Stations.FindIndex(i => i.StationID == stationID));
+        }
+
+        // ------------------------ Update Object in Function -------------------------------//
+        public void UpdateBaseStation(BaseStation baseStation)
+        {
+            int index = DataSource.Stations.FindIndex(i => i.StationID == baseStation.StationID);
+            if (index == -1)
+            {
+                throw new Exception($"This BaseStation have not exist, Please Try again.");
+            }
+            DataSource.Stations[index] = baseStation;
+
+        }
+
+        public void UpdateDrone(Drone drone)
+        {
+            int index = DataSource.Drones.FindIndex(i => i.DroneID == drone.DroneID);
+            if (index == -1)
+            {
+                throw new Exception($"This Drone have not exist, Please try again.");
+            }
+            DataSource.Drones[index] = drone;
+        }
+
+        public void UpdateCustomer(Customer customer)
+        {
+            int index = DataSource.Clients.FindIndex(i => i.CustomerId == customer.CustomerId);
+            if (index == -1)
+            {
+                throw new Exception($"This Customer have not exist, Please try again.");
+            }
+            DataSource.Clients[index] = customer;
+        }
+
+        public void UpdateParcel(Parcel parcrl)
+        {
+            int index = DataSource.Packages.FindIndex(i => i.ParcelId == parcrl.ParcelId);
+            if (index == -1)
+            {
+                throw new Exception($"This Parcel have not exist, Please try again.");
+            }
+            DataSource.Packages[index] = parcrl;
+        }
+
+        public void UpdateDroneCharge(DroneCharge droneCharge)
+        {
+            int index = DataSource.DroneCharges.FindIndex(i => i.DroneID == droneCharge.DroneID);
+            if (index == -1)
+            {
+                throw new Exception($"This DroneCharge have not exist, Please try again.");
+            }
+            DataSource.DroneCharges[index] = droneCharge;
+        }
+
+
 
         //--------------------------------------------------DISPLAY FUNCTION---------------------------------------//
-     
+
         // Gets a list and sends a copy to  generic func in Main prog.
 
-        public IEnumerable<Drone> GetDronesByPredicate(Predicate<Drone> predicate)
+        public IEnumerable<Drone> GetDronesByPredicate(Predicate<Drone> predicate = null)
         {
-            return DataSource.Drones.TakeWhile(i => predicate(i));
+            return DataSource.Drones.TakeWhile(i => predicate == null ? true : predicate(i));
         }
-        public IEnumerable<Customer> GetCustomersByPredicate(Predicate<Customer>predicate)
+        public IEnumerable<Customer> GetCustomersByPredicate(Predicate<Customer> predicate = null)
         {
-            return DataSource.Clients.TakeWhile(i => predicate(i));
+            return DataSource.Clients.TakeWhile(i => predicate == null ? true : predicate(i));
         }
-        public IEnumerable<Parcel> GetPackagesByPredicate(Predicate<Parcel> predicate)
+        public IEnumerable<Parcel> GetPackagesByPredicate(Predicate<Parcel> predicate = null)
         {
-            return DataSource.Packages.TakeWhile(i => predicate(i));
+            return DataSource.Packages.TakeWhile(i => predicate == null ? true : predicate(i));
         }
-        public IEnumerable<BaseStation> GetBaseStationByPredicate(Predicate<BaseStation> predicate)
+        public IEnumerable<BaseStation> GetBaseStationByPredicate(Predicate<BaseStation> predicate = null)
         {
-            return DataSource.Stations.TakeWhile(i => predicate(i));
-            // dal.GetBaseStationByPredicate(i => i.state == free)
+            return DataSource.Stations.TakeWhile(i => predicate == null ? true : predicate(i));
         }
     }
 }
