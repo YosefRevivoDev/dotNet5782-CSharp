@@ -27,8 +27,8 @@ namespace DalObject
 
         public void Add_Drone(Drone new_drone)
         {
-            DataSource.Drones.Add(DataSource.Drones.FindIndex(i => i.DroneID == new_drone.DroneID) == -1 ? new_drone :
-                throw new DroneException($"This id {new_drone.DroneID} already exist"));
+            DataSource.Drones.Add(DataSource.Drones.FindIndex(i => i.DroneID == new_drone.DroneID) == -1 ?
+                new_drone : throw new DroneException($"This id {new_drone.DroneID} already exist"));
         }
 
         public  void Add_Customer(Customer new_customer)
@@ -129,7 +129,7 @@ namespace DalObject
              FindIndex(i => i.DroneID == droneId)].status = DroneStatus.busy;
         }
 
-        public void DliveredPackageToCustumer(int parcelId, int droneId)
+        public void DeliveredPackageToCustumer(int parcelId, int droneId)
         {
             int index = DataSource.Packages.ToList().
               FindIndex(i => i.ParcelId == parcelId);
@@ -167,31 +167,19 @@ namespace DalObject
         //--------------------------------------------------DISPLAY FUNCTION---------------------------------------//
      
         // Gets a list and sends a copy to  generic func in Main prog.
-        public IEnumerable<BaseStation> GetBaseStation()
-        {
-            return DataSource.Stations.Take(DataSource.Stations.Count);
-        }
-        public Drone[] GetDrones()
-        {
-            return DataSource.Drones.Take(DataSource.Drones.Length).ToArray();
-        }
-        public Parcel[] GetPackages()
-        {
-            return DataSource.Packages.Take(DataSource.Packages.Length).ToArray();
-        }
-        public Customer[] GetCustomers()
-        {
-            return DataSource.Clients.Take(DataSource.Clients.Length).ToArray();
-        }
-        public Parcel[] GetPackagesByPredicate()
-        {
-            return DataSource.Packages.TakeWhile(i => i.DroneId == 0).ToArray();
-        }
-        public BaseStation[] GetBaseStationByPredicate()
-        {
-            return DataSource.Stations.TakeWhile(i => i.ChargeSlots > 0).ToArray();
-        }
 
+        public IEnumerable<Drone> GetDronesByPredicate(Predicate<Drone> predicate)
+        {
+            return DataSource.Drones.TakeWhile(i => predicate(i));
+        }
+        public IEnumerable<Customer> GetCustomersByPredicate(Predicate<Customer>predicate)
+        {
+            return DataSource.Clients.TakeWhile(i => predicate(i));
+        }
+        public IEnumerable<Parcel> GetPackagesByPredicate(Predicate<Parcel> predicate)
+        {
+            return DataSource.Packages.TakeWhile(i => predicate(i));
+        }
         public IEnumerable<BaseStation> GetBaseStationByPredicate(Predicate<BaseStation> predicate)
         {
             return DataSource.Stations.TakeWhile(i => predicate(i));
