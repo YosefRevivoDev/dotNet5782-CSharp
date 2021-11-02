@@ -9,7 +9,6 @@ using IDAL.DO;
 using DalObject;
 using static DalObject.DataSource;
 
-
 namespace DalObject
 {
     public class DalObject
@@ -22,22 +21,24 @@ namespace DalObject
         /// <param name="new_baseStation"></param>
         public void Add_BaseStation(BaseStation new_baseStation)
         {
-            DataSource.Stations[DataSource.config.Index_Station++] = new_baseStation;
+
+            DataSource.Stations.Add(new_baseStation);
         }
 
         public void Add_Drone(Drone new_drone)
         {
-            DataSource.Drones[DataSource.config.Index_Drone++] = new_drone;
+            DataSource.Drones.Add(DataSource.Drones.FindIndex(i => i.DroneID == new_drone.DroneID) == -1 ? new_drone :
+                throw new DroneException($"This id {new_drone.DroneID} already exist"));
         }
 
         public  void Add_Customer(Customer new_customer)
         {
-            DataSource.Clients[DataSource.config.Index_customer++] = new_customer;
+            DataSource.Clients.Add(new_customer);
         }
 
         public void Add_Parcel(Parcel new_parcel)
         {
-            DataSource.Packages[DataSource.config.Index_Parcel] = new_parcel;
+            DataSource.Packages.Add(new_parcel);
         }
 
         public void Add_DroneCharge(DroneCharge droneCharge)
@@ -49,7 +50,7 @@ namespace DalObject
 
         public Drone GetDrone (int Id)
         {
-            for (int i = 0; i < DataSource.Drones.Length ; i++)
+            for (int i = 0; i < DataSource.Drones.Count ; i++)
             {
                 if (Id == DataSource.Drones[i].DroneID)
                 {
@@ -60,7 +61,7 @@ namespace DalObject
         }
         public BaseStation GetBaseStation (int Id)
         {
-            for (int i = 0; i < DataSource.Stations.Length; i++)
+            for (int i = 0; i < DataSource.Stations.Count; i++)
             {
                 if (Id == DataSource.Stations[i].StationID)
                 {
@@ -71,7 +72,7 @@ namespace DalObject
         }
         public Customer GetCustomer(int Id)
         {
-            for (int i = 0; i < DataSource.Clients.Length; i++)
+            for (int i = 0; i < DataSource.Clients.Count; i++)
             {
                 if (Id == DataSource.Clients[i].CustomerId)
                 {
@@ -82,7 +83,7 @@ namespace DalObject
         }
         public Parcel GetParcel (int Id)
         {
-            for (int i = 0; i < DataSource.Packages.Length; i++)
+            for (int i = 0; i < DataSource.Packages.Count; i++)
             {
                 if (Id == DataSource.Packages[i].ParcelId)
                 {
@@ -105,7 +106,7 @@ namespace DalObject
         /// <param name="droneId"></param>
         public void SetDroneForParcel(int parcelId, int droneId)
         {
-            for (int i = 0; i < Packages.Length ; i++)
+            for (int i = 0; i < Packages.Count; i++)
             {
                 if(Packages[i].ParcelId == parcelId)
                 {
@@ -122,7 +123,7 @@ namespace DalObject
             DataSource.Packages[index].DroneId = droneId;
             DataSource.Packages[index].PickedUp = DateTime.Now;
 
-            DataSource.Drones[DataSource.Drones.ToList().
+            DataSource.Drones[DataSource.Drones.
              FindIndex(i => i.DroneID == droneId)].status = DroneStatus.busy;
         }
 
@@ -159,13 +160,14 @@ namespace DalObject
             DataSource.Stations[DataSource.Stations.ToList().
            FindIndex(i => i.StationID == baseStationId)].ChargeSlots++;
         }
+         
 
         //--------------------------------------------------DISPLAY FUNCTION---------------------------------------//
      
         // Gets a list and sends a copy to  generic func in Main prog.
-        public BaseStation[] GetBaseStation()
+        public IEnumerable<BaseStation> GetBaseStation()
         {
-            return DataSource.Stations.Take(DataSource.Stations.Length).ToArray();
+            return DataSource.Stations.Take(DataSource.Stations.Length);
         }
         public Drone[] GetDrones()
         {
@@ -186,7 +188,13 @@ namespace DalObject
         public BaseStation[] GetBaseStationByPredicate()
         {
             return DataSource.Stations.TakeWhile(i => i.ChargeSlots > 0).ToArray();
-        } 
+        }
+
+        public IEnumerable<BaseStation> GetBaseStationByPredicate(Predicate<BaseStation> predicate)
+        {
+            return DataSource.Stations.TakeWhile(i => predicate(i));
+            // dal.GetBaseStationByPredicate(i => i.state == free)
+        }
     }
 }
 

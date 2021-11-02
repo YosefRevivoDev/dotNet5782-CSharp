@@ -417,7 +417,7 @@ namespace ConsoleUI
                     break;
             }
         }
-        //Print a generic list by oblect 
+        //Print a generic list by object 
         public static void DisplayList<T>(DalObject.DalObject dal, T[] t) where T : struct
         {
             foreach (T s in t)
