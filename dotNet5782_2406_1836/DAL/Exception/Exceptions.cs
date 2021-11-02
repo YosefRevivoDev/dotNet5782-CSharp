@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 //Throw Exception Classes 
-namespace IDAL.DO
+namespace IDAL
 {
-    [Serializable]
+   // [Serializable]
     namespace DO
     {
         public class DroneException : Exception { public DroneException(string message) : base(message) { } }

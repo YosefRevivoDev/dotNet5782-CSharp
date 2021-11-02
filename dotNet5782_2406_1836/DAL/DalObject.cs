@@ -27,25 +27,25 @@ namespace DalObject
 
         public void Add_Drone(Drone new_drone)
         {
-            DataSource.Drones.Add(DataSource.Drones.FindIndex(i => i.DroneID == new_drone.DroneID) == -1 ?
-                new_drone : throw new Exception($"This id {new_drone.DroneID} already exist"));
+            DataSource.Drones.Add((Drone)(DataSource.Drones.FindIndex(i => i.DroneID == new_drone.DroneID) == -1 ?
+                new_drone : throw new Exception($"This id {new_drone.DroneID} already exist")));
         }
 
         public  void Add_Customer(Customer new_customer)
         {
-            DataSource.Clients.Add(DataSource.Clients.FindIndex (i => i.CustomerId == new_customer.CustomerId) == -1 ?
-            new_customer : throw new Exception($"This id {new_customer.CustomerId} already exist"));
+            DataSource.Clients.Add((Customer)(DataSource.Clients.FindIndex (i => i.CustomerId == new_customer.CustomerId) == -1 ?
+            new_customer : throw new Exception($"This id {new_customer.CustomerId} already exist")));
         }
 
         public void Add_Parcel(Parcel new_parcel)
         {
-            DataSource.Packages.Add( DataSource.Packages.FindIndex(i => i.ParcelId == new_parcel.ParcelId) == -1 ?
-            new_parcel : throw new Exception($"This id {new_parcel.ParcelId} already exist"));
+            DataSource.Packages.Add( (Parcel)(DataSource.Packages.FindIndex(i => i.ParcelId == new_parcel.ParcelId) == -1 ?
+            new_parcel : throw new Exception($"This id {new_parcel.ParcelId} already exist")));
         }
         public void Add_DroneCharge(DroneCharge droneCharge)
         {
-            DataSource.DroneCharges.Add(DataSource.DroneCharges.FindIndex(i => i.StationID == droneCharge.StationID) == -1 ?
-            droneCharge : throw new Exception($"This id {droneCharge.StationID} already exist"));
+            DataSource.DroneCharges.Add((DroneCharge)(DataSource.DroneCharges.FindIndex(i => i.StationID == droneCharge.StationID) == -1 ?
+            droneCharge : throw new Exception($"This id {droneCharge.StationID} already exist")));
         }
 
         //-------------------------------------------RETURN OBJ BY ID (GET FUNCTION)----------------------------------------//
