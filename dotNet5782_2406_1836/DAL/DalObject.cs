@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using IDAL.DO;
 using DalObject;
-using static DalObject.DataSource;
+using IDAL;
 
 namespace DalObject
 {
-    public class DalObject
+    public class DalObject : IDal, IDalObject
     {
         public DalObject() { DataSource.Initialize(); }
         //----------------------------------------ADD FUNCTIONS---------------------------------------//
@@ -277,7 +277,22 @@ namespace DalObject
         {
             return DataSource.Stations.TakeWhile(i => predicate == null ? true : predicate(i));
         }
+
+
+        public static double[] RequetPowerConsumption()
+        {
+            double[] arr =
+           {
+                DataSource.config.PowerConsumption_Available ,
+                DataSource.config.PowerConsumption_HeavyWeight ,
+                DataSource.config.PowerConsumption_MediumWeight ,
+                DataSource.config.PowerConsumption_HeavyWeight,
+                DataSource.config.LoadingDrone
+            };
+            return arr;
+        }
     }
+
 }
 
 
