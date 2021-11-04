@@ -95,12 +95,12 @@ namespace DalObject
 
         //--------------------------------------------------UPDATE FUNCTION---------------------------------------//
         /// <summary>
-        ///  הגדרת הפונקציות העדכון הבאות לפי הסדר:
-        ///  שיוך חבילה לרחפן
-        /// איסוף החבילה על ידי רחפן    
-        /// שליחת החבילה ללקוח
-        /// טעינת רחפן 
-        /// שחרור רחפן מטעינה
+        /// Set the following update functions in order:
+        /// Assigning a package to a glider
+        /// Picking up the package by skimmer
+        /// Sending the package to the customer
+        /// Charging skimmer
+        /// Release skimmer from charging
         /// </summary>
         /// <param name="parcelId"></param>
         /// <param name="droneId"></param>
@@ -162,22 +162,46 @@ namespace DalObject
 
         public void RemoveDrone(int droneID)
         {
-            DataSource.Drones.RemoveAt(DataSource.Drones.FindIndex(i => i.DroneID == droneID));
+            int index = DataSource.DroneCharges.FindIndex(i => i.DroneID == droneID);
+            DataSource.DroneCharges.RemoveAt(DataSource.DroneCharges.FindIndex(i => i.DroneID == droneID));
+            if (index == -1)
+            {
+                throw new Exception($"This drone have not exist, Please try again.");
+            }
+            DataSource.Drones.RemoveAt(index);
+            //DataSource.Drones.RemoveAt(DataSource.Drones.FindIndex(i => i.DroneID == droneID));
         }
 
         public void RemoveCustomer(int customerId)
         {
+            int index = DataSource.Clients.FindIndex(i => i.CustomerId == customerId);
             DataSource.Clients.RemoveAt(DataSource.Clients.FindIndex(i => i.CustomerId == customerId));
+            if (index == -1)
+            {
+                throw new Exception($"This customer have not exist, Please try again.");
+            }
+            DataSource.Clients.RemoveAt(index);
         }
 
         public void RemoveParcel(int parcelId)
         {
+            int index = DataSource.Packages.FindIndex(i => i.ParcelId == parcelId);
             DataSource.Packages.RemoveAt(DataSource.Packages.FindIndex(i => i.ParcelId == parcelId));
+            if (index == -1)
+            {
+                throw new Exception($"This parcel have not exist, Please try again.");
+            }
+            DataSource.Packages.RemoveAt(index);
         }
 
         public void RemoveBaseStation(int stationID)
         {
-            DataSource.Stations.RemoveAt(DataSource.Stations.FindIndex(i => i.StationID == stationID));
+            int index = DataSource.Stations.FindIndex(i => i.StationID == stationID);
+            if (index == -1)
+            {
+                throw new Exception($"This station have not exist, Please try again.");
+            }
+            DataSource.Stations.RemoveAt(index);
         }
 
         // ------------------------ Update Object in Function -------------------------------//
@@ -189,7 +213,6 @@ namespace DalObject
                 throw new Exception($"This BaseStation have not exist, Please Try again.");
             }
             DataSource.Stations[index] = baseStation;
-
         }
 
         public void UpdateDrone(Drone drone)
