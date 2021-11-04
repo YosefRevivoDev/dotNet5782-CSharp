@@ -34,6 +34,11 @@ namespace DalObject
             internal static int RunIdDrone = 0;
             internal static int RunCustomerId = 0;
             internal static int RunParcelId = 0;
+
+            //---------------------static attributes--------------------
+
+
+
         }
 
         public static void Initialize()
