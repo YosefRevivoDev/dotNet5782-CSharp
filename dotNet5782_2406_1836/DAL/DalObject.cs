@@ -9,7 +9,7 @@ using IDAL;
 
 namespace DalObject
 {
-    public class DalObject : IDal, IDalObject
+    public class DalObject : IDal
     {
         public DalObject() { DataSource.Initialize(); }
         //----------------------------------------ADD FUNCTIONS---------------------------------------//
@@ -279,7 +279,7 @@ namespace DalObject
         }
 
 
-        public static double[] RequetPowerConsumption()
+        public double[] RequetPowerConsumption()
         {
             double[] arr =
            {

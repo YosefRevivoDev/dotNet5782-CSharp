@@ -13,6 +13,7 @@ namespace ConsoleUI
 {
     class Program
     {
+        static IDAL.IDal DeliversByDroneCompany = new DalObject.DalObject();
         static void Main(string[] args)
         {
             DalObject.DalObject dal = new DalObject.DalObject();
@@ -233,8 +234,8 @@ namespace ConsoleUI
             int.TryParse(Console.ReadLine(), out int temp);
             drone.Drone_weight = (WeightCategories)temp;
 
-            double.TryParse(Console.ReadLine(), out double Battary);
-            drone.Battary = Battary;
+            //double.TryParse(Console.ReadLine(), out double Battary);
+            //drone.Battary = Battary;
 
             dal.Add_Drone(drone);
         }
@@ -343,7 +344,7 @@ namespace ConsoleUI
 
             Console.WriteLine("Please enter drone ID that you what to associate with your parcel");
             int.TryParse(Console.ReadLine(), out drone_id_associate);
-            dal.DliveredPackageToCustumer(pacel_id_associate, drone_id_associate);
+            dal.DeliveredPackageToCustumer(pacel_id_associate, drone_id_associate);
         }
 
         //Call ChargeDrone function by parcel ID & drone ID paramters
@@ -398,7 +399,7 @@ namespace ConsoleUI
                     break;
                 case 2:
                     Console.WriteLine("All Customers Data: ");
-                    DisplayList(dal, dal.GetCustomers());
+                    DisplayList(dal, dal.GetCustomer());
                     break;
                 case 3:
                     Console.WriteLine("All Drones Data: ");
