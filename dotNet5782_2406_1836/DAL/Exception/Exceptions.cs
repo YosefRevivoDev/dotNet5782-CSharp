@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 //Throw Exception Classes 
 namespace IDAL
 {
+   // [Serializable]
     namespace DO
     {
         public class DroneException : Exception { public DroneException(string message) : base(message) { } }
