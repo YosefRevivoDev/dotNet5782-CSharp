@@ -24,18 +24,21 @@ namespace DalObject
         }
         internal class config
         {
-            //internal static int Index_Drone = 0;
-            //internal static int Index_Station = 0;
-            //internal static int Index_customer = 0;
-            //internal static int Index_Parcel = 0;
-            
+            // ------------- PowerConsumption by Drone -----------------//
+            internal static double PowerConsumption_Available = 0;
+            internal static double PowerConsumption_LightWeight = 0;
+            internal static double PowerConsumption_MediumWeight = 0;
+            internal static double PowerConsumption_HeavyWeight = 0;
+            internal static double LoadingDrone = 0;
+
+            //------------------RunID---------------------------//
 
             internal static int RunIdStation = 0;
             internal static int RunIdDrone = 0;
             internal static int RunCustomerId = 0;
             internal static int RunParcelId = 0;
         }
-
+        
         public static void Initialize()
         {
             Random random = new Random(DateTime.Now.Millisecond);
