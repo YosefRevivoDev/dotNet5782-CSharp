@@ -19,31 +19,31 @@ namespace DalObject
         /// <param name="new_baseStation"></param>
         public void Add_BaseStation(BaseStation new_baseStation)
         {
-
-            DataSource.Stations.Add(new_baseStation);
+            DataSource.Stations.Add(DataSource.Stations.FindIndex(i => i.StationID == new_baseStation.StationID) == -1 ?
+                new_baseStation : throw new BaseStationException($"This id{new_baseStation.StationID}already exist"));
         }
 
         public void Add_Drone(Drone new_drone)
         {
             DataSource.Drones.Add((Drone)(DataSource.Drones.FindIndex(i => i.DroneID == new_drone.DroneID) == -1 ?
-                new_drone : throw new Exception($"This id {new_drone.DroneID} already exist")));
+                new_drone : throw new DroneException($"This id {new_drone.DroneID} already exist")));
         }
 
         public void Add_Customer(Customer new_customer)
         {
             DataSource.Clients.Add(DataSource.Clients.FindIndex(i => i.CustomerId == new_customer.CustomerId) == -1 ?
-            new_customer : throw new Exception($"This id {new_customer.CustomerId} already exist"));
+            new_customer : throw new CustumerException($"This id {new_customer.CustomerId} already exist"));
         }
 
         public void Add_Parcel(Parcel new_parcel)
         {
             DataSource.Packages.Add(DataSource.Packages.FindIndex(i => i.ParcelId == new_parcel.ParcelId) == -1 ?
-            new_parcel : throw new Exception($"This id {new_parcel.ParcelId} already exist"));
+            new_parcel : throw new ParcelException($"This id {new_parcel.ParcelId} already exist"));
         }
         public void Add_DroneCharge(DroneCharge droneCharge)
         {
             DataSource.DroneCharges.Add((DroneCharge)(DataSource.DroneCharges.FindIndex(i => i.StationID == droneCharge.StationID) == -1 ?
-            droneCharge : throw new Exception($"This id {droneCharge.StationID} already exist")));
+            droneCharge : throw new DroneChargeException($"This id {droneCharge.StationID} already exist")));
         }
 
         //-------------------------------------------RETURN OBJ BY ID (GET FUNCTION)----------------------------------------//
