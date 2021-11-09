@@ -8,5 +8,6 @@ namespace BO
 {
     public enum DroneStatus { available, maintenance, busy }
     public enum WeightCategories { light, medium, heavy }
-
+    public enum Priorities { regular, fast, emergency }
+    public enum ParcelStatus { Defined, associated, collected, provided }
 }
