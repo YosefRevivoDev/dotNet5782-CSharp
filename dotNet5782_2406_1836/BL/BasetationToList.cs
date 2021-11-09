@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace BL
 {
-    public class DroneInParcel : DroneCharge
+    class BasetationToList : BasestationPolymorphism
     {
+
     }
 }
