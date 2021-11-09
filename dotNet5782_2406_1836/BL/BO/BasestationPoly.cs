@@ -11,6 +11,11 @@ namespace BO
         public int ID { get; set; }
         public string Name { get; set; }
         public int AvailableChargingStations { get; set; }
+        public override string ToString()
+        {
+            return  $" Basestation ID:{ID} ,Basestation name: {Name} , " +
+                $"AvailableChargingStations: {AvailableChargingStations}";
+        }
 
     }
 }

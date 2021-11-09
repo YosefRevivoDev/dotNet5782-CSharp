@@ -9,11 +9,12 @@ namespace BO
     class BaseStation : BasestationPoly
     {
         public Location location { get; set; }
-        
         List<DroneCharge> DroneCharge = new List<DroneCharge>();
+
         public override string ToString()
         {
-            return base.ToString();
+            return base.ToString() + $" Location:{location}, DroneCharge:{DroneCharge}" + 
+                string.Join("/t", DroneCharge);
         }
     }
 }

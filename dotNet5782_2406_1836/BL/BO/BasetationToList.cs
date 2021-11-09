@@ -8,6 +8,10 @@ namespace BO
 {
     class BasetationToList : BasestationPoly
     {
-
+     public int NotAvailableChargingStations { get; set; }
+        public override string ToString()
+        {
+            return base.ToString() + $" Not available charging stations:{NotAvailableChargingStations}";
+        }
     }
 }
