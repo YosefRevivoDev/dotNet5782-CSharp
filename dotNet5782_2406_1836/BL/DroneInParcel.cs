@@ -8,5 +8,12 @@ namespace BL
 {
     public class DroneInParcel : DroneCharge
     {
+        public Location CorrentLocation { get; set; }
+        
+
+        public override string ToString()
+        {         
+            return base.ToString() + $"Location:{CorrentLocation}";
+        }
     }
 }

@@ -6,15 +6,14 @@ using System.Threading.Tasks;
 
 namespace BL
 {
-    public class DroneCharge
+    class CustomerInParcel
     {
-        public int DroneID { get; set; }
-        public double BattaryStatus  { get;  set; }
+        public int CustomerId { get; set; }
+        public string NameCustomer { get; set; }
 
         public override string ToString()
         {
-            return $"DroneCharge: ID:{DroneID}, BattaryStatus:{BattaryStatus}";
+            return $"CustomerId{CustomerId}, NameCustomer{NameCustomer}";
         }
-
     }
 }
