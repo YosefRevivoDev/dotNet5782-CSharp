@@ -6,12 +6,19 @@ using System.Threading.Tasks;
 
 namespace BL
 {
-    public class DroneToList
+    public class DroneToList : DroneCharge
     {
-        public int DroneID { get; set; }
         public string Drone_Model { get; set; }
         public WeightCategories Drone_weight { get; set; }
-        public DroneStatus Status { get; set; }
-        public Location Location { get; set; }
+        public Location CurrentLocation { get; set; }
+        public int PackageDelivered { get; set; }
+        public  DroneStatus Status { get; set; }
+
+        public override string ToString()
+        {
+            return base.ToString() + $"DroneToList: {Drone_Model},WeightCategories:{Drone_weight}," +
+                $"Location: {CurrentLocation},PackageDelivered: {PackageDelivered}, DroneStatus:{Status}";
+        }
+
     }
 }
