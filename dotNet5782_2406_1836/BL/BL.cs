@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BL
+namespace BO
 {
-    public class BL
+    public class BL : IBL.IBL
     {
         IDAL.IDal dal;
         public List<DroneToList> DroneToLists;
