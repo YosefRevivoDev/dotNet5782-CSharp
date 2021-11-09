@@ -263,19 +263,19 @@ namespace DalObject
 
         public IEnumerable<Drone> GetDronesByPredicate(Predicate<Drone> predicate = null)
         {
-            return DataSource.Drones.TakeWhile(i => predicate == null ? true : predicate(i));
+            return DataSource.Drones.FindAll(i => predicate == null ? true : predicate(i));
         }
         public IEnumerable<Customer> GetCustomersByPredicate(Predicate<Customer> predicate = null)
         {
-            return DataSource.Clients.TakeWhile(i => predicate == null ? true : predicate(i));
+            return DataSource.Clients.FindAll(i => predicate == null ? true : predicate(i));
         }
         public IEnumerable<Parcel> GetPackagesByPredicate(Predicate<Parcel> predicate = null)
         {
-            return DataSource.Packages.TakeWhile(i => predicate == null ? true : predicate(i));
+            return DataSource.Packages.FindAll(i => predicate == null ? true : predicate(i));
         }
         public IEnumerable<BaseStation> GetBaseStationByPredicate(Predicate<BaseStation> predicate = null)
         {
-            return DataSource.Stations.TakeWhile(i => predicate == null ? true : predicate(i));
+            return DataSource.Stations.FindAll(i => predicate == null ? true : predicate(i));
         }
 
 
