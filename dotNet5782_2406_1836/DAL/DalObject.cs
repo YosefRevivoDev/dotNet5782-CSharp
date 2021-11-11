@@ -278,7 +278,7 @@ namespace DalObject
             return DataSource.Stations.FindAll(i => predicate == null ? true : predicate(i));
         }
 
-
+        // Returns an array of power consumption per mile
         public double[] RequetPowerConsumption()
         {
             double[] arr =
