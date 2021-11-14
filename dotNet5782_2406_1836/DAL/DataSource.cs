@@ -22,7 +22,7 @@ namespace DalObject
         {
 
         }
-        internal class config
+        internal class Config
         {
             // ------------- PowerConsumption by Drone -----------------//
             internal static double PowerConsumption_Available = 0;
@@ -59,7 +59,7 @@ namespace DalObject
             {
                 Drones.Add(new Drone
                 {
-                    DroneID = ++config.RunIdDrone,
+                    DroneID = ++Config.RunIdDrone,
                     Drone_Model = DronesModels[i],
                     Drone_weight = (WeightCategories)random.Next(1, 3)
                 }
@@ -71,7 +71,7 @@ namespace DalObject
             {
                 Clients.Add(new Customer
                 {
-                    CustomerId = config.RunCustomerId++,
+                    CustomerId = Config.RunCustomerId++,
                     Name = NameCustomers[i],
                     Phone = "05" + rand.Next(0, 9) + '-' + rand.Next(1000000, 10000000),
                     Latitude = rand.Next(0, 180),
@@ -83,7 +83,7 @@ namespace DalObject
             {
                 Packages.Add(new Parcel
                 {
-                    ParcelId = config.RunParcelId++,
+                    ParcelId = Config.RunParcelId++,
                     SenderId = Clients[i].CustomerId,
                     TargetId = Clients[i + 1].CustomerId,
                     Parcel_priority = (Priorities)rand.Next(1, 3),
