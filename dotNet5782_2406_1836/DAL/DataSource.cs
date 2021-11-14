@@ -25,10 +25,10 @@ namespace DalObject
         internal class Config
         {
             // ------------- PowerConsumption by Drone -----------------//
-            internal static double PowerConsumption_Available = 0;
-            internal static double PowerConsumption_LightWeight = 0;
-            internal static double PowerConsumption_MediumWeight = 0;
-            internal static double PowerConsumption_HeavyWeight = 0;
+            internal static double PowerConsumption_Available = 0.01;
+            internal static double PowerConsumption_LightWeight = 0.04;
+            internal static double PowerConsumption_MediumWeight = 0.07;
+            internal static double PowerConsumption_HeavyWeight = 0.1;
             internal static double LoadingDrone = 0;
 
             //------------------RunID---------------------------//

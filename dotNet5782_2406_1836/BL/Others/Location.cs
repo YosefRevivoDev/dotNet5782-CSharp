@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IBL.BO
+namespace BO
 {
     public class Location
     {
-        public double Longtitude { get; init; }
-        public double Latitude { get; init; }
+        public double Longtitude { get; set; }
+        public double Latitude { get; set; }
 
         public override string ToString()
         {
