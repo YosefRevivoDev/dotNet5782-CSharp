@@ -31,11 +31,10 @@ namespace BO
             List<BaseStation> baseStations = new();
 
             
-            List<IDAL.DO.Parcel> parcels =
-                dal.GetPackagesByPredicate(x => x.DroneId != 0 && x.Delivered == DateTime.MinValue).ToList();// Sorts packages that belong to the drone but are not provided
+            List<IDAL.DO.Parcel> parcels = dal.GetPackagesByPredicate(x => x.DroneId != 0).ToList();// Sorts packages that belong to the drone but are not provided
             foreach (var item in DroneToLists)
             {
-                int index = parcels.FindIndex(x => x.DroneId == item.DroneID);
+                int index = parcels.FindIndex(x => x.DroneId == item.DroneID && x.Delivered == DateTime.MinValue);
                 if (index != -1)
                 {
                     item.Status = DroneStatus.busy;
