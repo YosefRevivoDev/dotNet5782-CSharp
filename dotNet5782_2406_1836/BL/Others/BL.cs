@@ -9,7 +9,7 @@ namespace BO
 {
     public class BL : IBL.IBL
     {
-        IDAL.IDal dal;
+        readonly IDAL.IDal dal;
         public List<DroneToList> DroneToLists;
 
         internal static double PowerConsumption_Available = 0;
@@ -20,7 +20,7 @@ namespace BO
 
         public BL()
         {
-             
+
             dal = new DalObject.DalObject(); // Access to summon methods from Datasource
             DroneToLists = new List<DroneToList>();
             double[] temp = dal.RequetPowerConsumption();
@@ -30,8 +30,9 @@ namespace BO
             List<IDAL.DO.Drone> DroneList = dal.GetDronesByPredicate().ToList();
             List<BaseStation> baseStations = new();
 
-            
-            List<IDAL.DO.Parcel> parcels = dal.GetPackagesByPredicate(x => x.DroneId != 0).ToList();// Sorts packages that belong to the drone but are not provided
+
+            List<IDAL.DO.Parcel> parcels =
+                dal.GetPackagesByPredicate(x => x.DroneId != 0).ToList();// Sorts packages that belong to the drone but are not provided
             foreach (var item in DroneToLists)
             {
                 int index = parcels.FindIndex(x => x.DroneId == item.DroneID && x.Delivered == DateTime.MinValue);
@@ -63,14 +64,22 @@ namespace BO
                         item.CurrentLocation.Latitude = customer.Latitude;
                         item.CurrentLocation.Longtitude = customer.Longtitude;
                     }
-                    
-                    // מתחילים מצב סוללה 
+
+                    // מתחילים מצב סוללה    
+                    List<IDAL.DO.Parcel> parcel = dal.GetPackagesByPredicate(x => x.Delivered == DateTime.Now).ToList();
+                    int i = parcel.FindIndex(x => x.DroneId == item.DroneID);
+                    Random random = new();
+
+                    if (true)
+                    {
+
+                    }
 
 
                 }
-               
-            }
+            }    
         }
+        
 
     }
 }
