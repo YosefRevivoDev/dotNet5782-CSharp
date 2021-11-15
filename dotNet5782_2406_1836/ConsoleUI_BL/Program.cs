@@ -1,19 +1,28 @@
 ﻿using System;
 using IBL;
+using IDAL.DO;
+using DalObject;
+using System.Collections.Generic;
+using BO;
+
 
 namespace ConsoleUI_BL
 {
     class Program
     {
+        IBL.IBL bl = new BO.BL();
+
         static void Main(string[] args)
         {
             IBL.IBL objBl = new BO.BL();
             IDAL.IDal DeliversByDroneCompany = new DalObject.DalObject();
+            
+        }
+          //   Random random = new(DateTime.Now.Millisecond);
 
-            /*
-            public static void MenuStartAplication(DalObject.DalObject dal)
+             static void MenuStartAplication(BO.BL bl)
             {
-                int Options;
+            int Options;
                 int SubOptions;
 
                 Console.WriteLine(@"Please Enter your choice: 
@@ -36,7 +45,7 @@ namespace ConsoleUI_BL
                                                 3 = add Customer
                                                 4 = add Parcel");
                             int.TryParse(Console.ReadLine(), out SubOptions);
-                            AddOptions(SubOptions, dal);
+                            AddOptions(SubOptions, bl);
                             break;
                         case 2:
                             Console.WriteLine("Enter your Option please:\n");
@@ -47,7 +56,7 @@ namespace ConsoleUI_BL
                                                 4 = Sending a Drone for charging at the base station
                                                 5 = Release Drone from charging at base station");
                             int.TryParse(Console.ReadLine(), out SubOptions);
-                            UpdateOptions(SubOptions, dal);
+                            UpdateOptions(SubOptions, bl);
                             break;
                         case 3:
                             Console.WriteLine("Enter your Option please:\n");
@@ -57,7 +66,7 @@ namespace ConsoleUI_BL
                                                 3 = Customer Display
                                                 4 = Parcel Display");
                             int.TryParse(Console.ReadLine(), out SubOptions);
-                            ViewOptions(SubOptions, dal);
+                            ViewOptions(SubOptions, bl);
                             break;
                         case 4:
                             Console.WriteLine("Enter your Option please:\n");
@@ -69,7 +78,7 @@ namespace ConsoleUI_BL
                                                 5 = Displays a list of packages that have not yet been assigned to the Drone
                                                 6 = Display of base stations with available charging stations");
                             int.TryParse(Console.ReadLine(), out SubOptions);
-                            viewOptionsList(SubOptions, dal);
+                            viewOptionsList(SubOptions, bl);
                             break;
                         case 5:
                             break;
@@ -82,15 +91,15 @@ namespace ConsoleUI_BL
             }
 
             //--------------------------------------------ADD FUNCTIONS---------------------------------------------//
-            public static void AddOptions(int SubOptions, DalObject.DalObject dal)
+            public static void AddOptions(int SubOptions, BO.BL bl)
             {
                 switch (SubOptions)
                 {
                     case 1:
-                        AddBaseStation(dal);
+                        AddBaseStation(bl);
                         break;
                     case 2:
-                        AddNewParcel(dal);
+                        AddNewParcel(bl);
                         break;
                     case 3:
                         AddNewCustomer(dal);
@@ -102,36 +111,41 @@ namespace ConsoleUI_BL
                         break;
                 }
             }
-            public static void AddBaseStation(IBL.IBL bL)
+
+             void AddBaseStation(BO.BL bl)
             {
+            
                 int StationID, ChargeSlots;
                 double Longtitude, Latitude;
-                BaseStation station = new();
+                BO.BaseStation station = new();
 
                 Console.WriteLine("Please enter baseStation Id:");
                 int.TryParse(Console.ReadLine(), out StationID);
-                station.StationID = StationID;
+                station.ID = StationID;
 
                 Console.WriteLine("Please enter baseStation name:");
                 station.Name = Console.ReadLine();
 
-                Console.WriteLine("Please enter number of charging station:");
+                Console.WriteLine("Please enter number of available charge slots station:");
                 int.TryParse(Console.ReadLine(), out ChargeSlots);
-                station.ChargeSlots = ChargeSlots;
+                station.AvailableChargingStations = ChargeSlots;
 
                 Console.WriteLine("Please enter the longitude:");
                 double.TryParse(Console.ReadLine(), out Longtitude);
-                station.Longtitude = Longtitude;
+                station.Location.Longtitude = Longtitude;
 
                 Console.WriteLine("Please enter the latitude:");
                 double.TryParse(Console.ReadLine(), out Latitude);
-                station.Latitude = Latitude;
+                station.Location.Latitude = Latitude;
 
-                IBL.Add_BaseStation(station);
+                // list of DroneCharge & initiolize the list to empty list 
+                List<BO.DroneCharge> droneCharge = new();
+
+                bl.AddBaseStation(station);
 
                 Console.WriteLine("A new base station has been added");
             }
-            public static void AddNewParcel(DalObject.DalObject dal)
+            static void AddNewParcel(DalObject.DalObject dal)
             {
                 int ParcelId, SenderId, TargetId, DroneId;
 
@@ -210,44 +224,53 @@ namespace ConsoleUI_BL
 
                 Console.WriteLine("A new base customer has been added");
             }
-            public static void AddDrone(DalObject.DalObject dal)
+            static void AddDrone(DalObject.DalObject dal)
             {
-                Drone drone = new();
-                Console.WriteLine();
 
+                // IDAL.DO.Drone drone = new();
+                BO.Drone drone = new();
+                BaseStation AvailableStation = new();
+
+
+                Console.WriteLine("Please enter number DroneID");
                 int.TryParse(Console.ReadLine(), out int DroneID);
                 drone.DroneID = DroneID;
 
                 Console.WriteLine("Please enter phone number:");
                 drone.Drone_Model = Console.ReadLine();
 
-
+                Console.WriteLine("Please enter drone weight: 1 to light ,2 to medium,3 to heavy");//לבדוק חריגה אם הוזן מספר גדול מ 3 
                 int.TryParse(Console.ReadLine(), out int temp);
                 drone.Drone_weight = (WeightCategories)temp;
 
-                //double.TryParse(Console.ReadLine(), out double Battary);
-                //drone.Battary = Battary;
+                //לבדוק את זה
+                Console.WriteLine("Please enter number of stations to put the drone for initial charging");
+                / int.TryParse(Console.ReadLine(), out int AvailableChargingStations);
+                AvailableStation.StationID = AvailableChargingStations;
+
+                Random random = new(DateTime.Now.Millisecond);
+                drone.BattaryStatus = random.Next(20, 41);
 
                 dal.Add_Drone(drone);
             }
 
             //--------------------------------------------Display OBJ FUNCTIONS---------------------------------------------//
 
-            public static void ViewOptions(int SubOptions, DalObject.DalObject dal)
+            public static void ViewOptions(int SubOptions, BO.BL bl)
             {
                 switch (SubOptions)
                 {
                     case 1:
-                        DisplayBaseStation(dal);
+                        DisplayBaseStation(bl);
                         break;
                     case 2:
-                        DisplayDrone(dal);
+                        DisplayDrone(bl);
                         break;
                     case 3:
-                        DisplayCustomer(dal);
+                        DisplayCustomer(bl);
                         break;
                     case 4:
-                        DisplayParcel(dal);
+                        DisplayParcel(bl);
                         break;
                 }
             }
@@ -419,8 +442,8 @@ namespace ConsoleUI_BL
                 }
             }
         }
-            }
-        }*/
+    }
+}
         }
     }
 }

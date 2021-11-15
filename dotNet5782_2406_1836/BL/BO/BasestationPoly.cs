@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BO
 {
-    class BasestationPoly
+   public class BasestationPoly
     {
         public int ID { get; set; }
         public string Name { get; set; }

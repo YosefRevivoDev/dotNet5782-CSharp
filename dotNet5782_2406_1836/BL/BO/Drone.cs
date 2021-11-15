@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BO
 {
-    class Drone : DroneCharge
+    public class Drone : DroneCharge
     {
         public string Drone_Model { get; set; }
         public WeightCategories Drone_weight { get; set; }
