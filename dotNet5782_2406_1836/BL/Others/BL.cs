@@ -24,7 +24,7 @@ namespace BO
             dal = new DalObject.DalObject(); // Access to summon methods from Datasource
             DroneToLists = new List<DroneToList>();
             double[] temp = dal.RequetPowerConsumption();
-            PowerConsumption_Available = temp[0];
+            PowerConsumption_Available = temp[0];// להמשיך את שאר המשתנים
 
 
             List<IDAL.DO.Drone> DroneList = dal.GetDronesByPredicate().ToList();

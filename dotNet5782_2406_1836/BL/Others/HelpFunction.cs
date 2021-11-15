@@ -60,6 +60,7 @@ namespace BO
             // calculate the result
             return (c * r);
         }
+        
     }
 }
 
