@@ -7,8 +7,9 @@ namespace BO
 {
     public class BL : IBL.IBL
     {
+       static DalObject.DalObject dalobj = new();
         readonly IDAL.IDal dal;
-        public List<DroneToList> DroneToLists;
+        public List<DroneToList> DroneToLists { get; }
         static Random random = new(DateTime.Now.Millisecond);
         static double PowerConsumption_Available;
         static double PowerConsumption_LightWeight;
@@ -106,9 +107,33 @@ namespace BO
 
 
                 }
+
             }    
         }
+        //-------------------------------------bl functions------------------------//
+        static public void AddBaseStation(BO.BaseStation newBaseStation)
+        {
+            IDAL.DO.BaseStation baseStation = new IDAL.DO.BaseStation()
+            {
+                StationID = newBaseStation.ID,
+                Name = newBaseStation.Name,
+                Longtitude = newBaseStation.Location.Longtitude,
+                Latitude = newBaseStation.Location.Latitude,
+            };
+            try
+            {
+                dalobj.Add_BaseStation(baseStation);
+            }
+            catch { }
+            try
+            {
+                
+            }
+            catch { }
+        }
         
+       
 
+      
     }
 }
