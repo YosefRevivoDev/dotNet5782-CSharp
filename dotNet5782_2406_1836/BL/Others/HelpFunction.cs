@@ -17,7 +17,6 @@ namespace BO
                 if (shortDistance > Dtemp)
                 {
                     shortDistance = Dtemp;
-
                 }
             return shortDistance;
         }
@@ -59,8 +58,20 @@ namespace BO
 
             // calculate the result
             return (c * r);
+        } 
+
+        public static (int, double) IndexOfMinDistancesBetweenLocations(List<IDAL.DO.BaseStation> baseStations, Location location)
+        {
+            List<double> distances = new List<double>();
+            foreach (var b in baseStations)
+            {
+                distances.Add(BO.HelpFunction.Distance(b.Latitude, location.Latitude,
+                    b.Longtitude, location.Longtitude));
+            }
+            return (distances.FindIndex(i => i == distances.Min()), distances.Min());
         }
-        
+
+ 
     }
 }
 
