@@ -11,6 +11,8 @@ namespace BO
         
         public int PhoneCustomer { get; set; }
         public Location LocationCustomer { get; set; }
+        public string Phone { get; set; }
+        public string Name { get; set; }
 
         internal static List<Parcel> PackagesToCustomer = new List<Parcel>();
         internal static List<Parcel> PackagesFromCustomer = new List<Parcel>();

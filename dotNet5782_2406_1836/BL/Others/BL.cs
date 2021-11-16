@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-
 namespace BO
 {
     public class BL : IBL.IBL
@@ -108,7 +107,8 @@ namespace BO
                 }
             }    
         }
-        
 
+       
     }
+
 }
