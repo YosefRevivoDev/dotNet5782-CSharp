@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace BO
 {
-    class BaseStation : BasestationPoly
+   public class BaseStation : BasestationPoly
     {
         public Location Location { get; set; }
-        List<DroneCharge> droneCharge = new List<DroneCharge>();
+        public List<DroneCharge> droneCharge = new List<DroneCharge>();
 
         public override string ToString()
         {
