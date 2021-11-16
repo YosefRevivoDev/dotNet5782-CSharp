@@ -112,125 +112,42 @@ namespace ConsoleUI_BL
             }
         }
 
-        void AddBaseStation()
+        public static void AddBaseStation()
         {
-
-            int StationID, ChargeSlots;
-            double Longtitude, Latitude;
             BO.BaseStation station = new();
 
             Console.WriteLine("Please enter baseStation Id:");
-            int.TryParse(Console.ReadLine(), out StationID);
-            station.ID = StationID;
+            int.TryParse(Console.ReadLine(), out int stationID);
+            station.ID = stationID;
 
             Console.WriteLine("Please enter baseStation name:");
             station.Name = Console.ReadLine();
 
             Console.WriteLine("Please enter number of available charge slots station:");
-            int.TryParse(Console.ReadLine(), out ChargeSlots);
-            station.AvailableChargingStations = ChargeSlots;
+            int.TryParse(Console.ReadLine(), out int chargeSlots);
+            station.AvailableChargingStations = chargeSlots;
 
             Console.WriteLine("Please enter the longitude:");
-            double.TryParse(Console.ReadLine(), out Longtitude);
-            station.Location.Longtitude = Longtitude;
+            double.TryParse(Console.ReadLine(), out double longtitude);
+            station.Location.Longtitude = longtitude;
 
             Console.WriteLine("Please enter the latitude:");
-            double.TryParse(Console.ReadLine(), out Latitude);
-            station.Location.Latitude = Latitude;
+            double.TryParse(Console.ReadLine(), out double latitude);
+            station.Location.Latitude = latitude;
 
             // list of DroneCharge & initiolize the list to empty list 
             station.droneCharge = new List<BO.DroneCharge>();
 
-            bl.AddBaseStation(station);
+            BL.AddBaseStation(station);
 
-            Console.WriteLine("A new base station has been added");
+            Console.WriteLine("A new basestation has been added");
         }
-        static void AddNewParcel(DalObject.DalObject dal)
-        {
-            int ParcelId, SenderId, TargetId, DroneId;
 
-            Parcel parcel = new Parcel();
-            DateTime currentDate = DateTime.Now;
-            Console.WriteLine("Please Add a new Parcel");
-            int.TryParse(Console.ReadLine(), out ParcelId);
-            parcel.ParcelId = ParcelId;
-
-            Console.WriteLine("Please Enter SenderId ");
-            int.TryParse(Console.ReadLine(), out SenderId);
-            parcel.SenderId = SenderId;
-
-            Console.WriteLine("Please Enter Target");
-            int.TryParse(Console.ReadLine(), out TargetId);
-            parcel.TargetId = TargetId;
-
-            Console.WriteLine("Please Enter DroneId");
-            int.TryParse(Console.ReadLine(), out DroneId);
-            parcel.DroneId = DroneId;
-
-            Console.WriteLine("Please Enter your Choice Weight: 1 = light, 2 = medium, 3 = heavy");
-            int.TryParse(Console.ReadLine(), out int temp);
-            parcel.Parcel_weight = (WeightCategories)temp;
-
-            Console.WriteLine("Please Enter your Choice Parcel: 1 = regular,2 =  fast, 3= emergency");
-            int.TryParse(Console.ReadLine(), out temp);
-            parcel.Parcel_priority = (Priorities)temp;
-
-            Console.WriteLine("The Time Requested is: ");
-            DateTime dateTime = new DateTime();
-            DateTime.TryParse(Console.ReadLine(), out dateTime);
-            parcel.Requested = dateTime;
-
-            Console.WriteLine("The Time Scheduled is: ");
-            DateTime.TryParse(Console.ReadLine(), out dateTime);
-            parcel.Scheduled = dateTime;
-
-            Console.WriteLine("The Time PickedUp is: ");
-            DateTime.TryParse(Console.ReadLine(), out dateTime);
-            parcel.PickedUp = dateTime;
-
-            Console.WriteLine("The Time Delivered is: ");
-            DateTime.TryParse(Console.ReadLine(), out dateTime);
-            parcel.Delivered = dateTime;
-
-            dal.Add_Parcel(parcel);
-
-            Console.WriteLine("A new parcel has been added");
-        }
-        public static void AddNewCustomer(DalObject.DalObject dal)
-        {
-            int CustomerId;
-            double Longtitude, Latitude;
-            Customer customer = new();
-
-            Console.WriteLine("Please enter id:");
-            int.TryParse(Console.ReadLine(), out CustomerId);
-            customer.CustomerId = CustomerId;
-
-            Console.WriteLine("Please enter phone number:");
-            customer.Phone = Console.ReadLine();
-
-            Console.WriteLine("Please enter name:");
-            customer.Name = Console.ReadLine();
-
-            Console.WriteLine("Please enter longitude:");
-            double.TryParse(Console.ReadLine(), out Longtitude);
-            customer.Longtitude = Longtitude;
-
-            Console.WriteLine("Please enter latitude:");
-            double.TryParse(Console.ReadLine(), out Latitude);
-            customer.Latitude = Latitude;
-
-            dal.Add_Customer(customer);
-
-            Console.WriteLine("A new base customer has been added");
-        }
-        static void AddDrone(DalObject.DalObject dal)
+        public static void AddDrone()
         {
 
             // IDAL.DO.Drone drone = new();
             BO.Drone drone = new();
-            BaseStation AvailableStation = new();
-
 
             Console.WriteLine("Please enter number DroneID");
             int.TryParse(Console.ReadLine(), out int DroneID);
@@ -241,19 +158,88 @@ namespace ConsoleUI_BL
 
             Console.WriteLine("Please enter drone weight: 1 to light ,2 to medium,3 to heavy");//לבדוק חריגה אם הוזן מספר גדול מ 3 
             int.TryParse(Console.ReadLine(), out int temp);
-            drone.Drone_weight = (WeightCategories)temp;
+            drone.Drone_weight = (BO.WeightCategories)temp;// MaxWeight
 
-            //לבדוק את זה
-            Console.WriteLine("Please enter number of stations to put the drone for initial charging");
-    / int.TryParse(Console.ReadLine(), out int AvailableChargingStations);
-            AvailableStation.StationID = AvailableChargingStations;
+            Console.WriteLine("Please enter number DroneID");
+            int.TryParse(Console.ReadLine(), out int firstChargeStation);
 
-            Random random = new(DateTime.Now.Millisecond);
-            drone.BattaryStatus = random.Next(20, 41);
-
-            dal.Add_Drone(drone);
+            BL.AddNewDrone(drone, firstChargeStation);
         }
 
+        public static void AddNewCustomer()
+        {
+            int CustomerId;
+            double Longtitude, Latitude;
+            BO.Customer customer = new();
+
+            Console.WriteLine("Please enter id:");
+            int.TryParse(Console.ReadLine(), out CustomerId);
+            customer.CustomerId = CustomerId;
+
+            Console.WriteLine("Please enter name:");
+            customer.Name = Console.ReadLine();
+
+            Console.WriteLine("Please enter phone number:");
+            customer.Phone = Console.ReadLine();
+
+            Console.WriteLine("Please enter longitude:");
+            double.TryParse(Console.ReadLine(), out Longtitude);
+            customer.LocationCustomer.Longtitude = Longtitude;
+
+            Console.WriteLine("Please enter latitude:");
+            double.TryParse(Console.ReadLine(), out Latitude);
+            customer.LocationCustomer.Latitude = Latitude;
+
+            BL.AddNewCustomer(customer);
+
+            Console.WriteLine("A new base customer has been added");
+        }
+
+        static void AddNewParcel(DalObject.DalObject dal)
+        {
+
+            BO.Parcel parcel = new();
+
+            DateTime currentDate = DateTime.Now;
+
+            Console.WriteLine("Please Enter SenderId ");
+            int.TryParse(Console.ReadLine(), out int senderId);
+            parcel.SenderId = senderId;
+
+            Console.WriteLine("Please Enter Target");
+            int.TryParse(Console.ReadLine(), out int targetId);
+            parcel.TargetId = targetId;
+
+            Console.WriteLine("Please Enter your Choice Weight: 1 = light, 2 = medium, 3 = heavy");
+            int.TryParse(Console.ReadLine(), out int WeightParcel);
+            parcel.weight = (BO.WeightCategories) WeightParcel;
+
+            Console.WriteLine("Please Enter your Choice Parcel: 1 = regular,2 =  fast, 3= emergency");
+            int.TryParse(Console.ReadLine(), out int priority);
+            parcel.Priority = (BO.Priorities) priority;
+
+            Console.WriteLine("The Time Requested is: ");
+            DateTime.TryParse(Console.ReadLine(), out DateTime requested);
+            
+
+            Console.WriteLine("The Time Scheduled is: ");
+            DateTime.TryParse(Console.ReadLine(), out DateTime createTime);
+            
+
+            Console.WriteLine("The Time PickedUp is: ");
+            DateTime.TryParse(Console.ReadLine(), out DateTime pickedUp);
+            
+
+            Console.WriteLine("The Time Delivered is: ");
+            DateTime.TryParse(Console.ReadLine(), out DateTime delivered);
+            
+
+            BL.AddNewParcel(parcel , requested, createTime, pickedUp, delivered);
+
+            Console.WriteLine("A new parcel has been added");
+        }
+        
+        
         //--------------------------------------------Display OBJ FUNCTIONS---------------------------------------------//
 
         public static void ViewOptions(int SubOptions, BO.BL bl)

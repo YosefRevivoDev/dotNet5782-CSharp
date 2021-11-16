@@ -110,30 +110,93 @@ namespace BO
             }    
         }
         //-------------------------------------bl functions------------------------//
-        static public void AddBaseStation(BO.BaseStation newBaseStation)
+        static public void AddBaseStation(BaseStation newBaseStation)
         {
-            IDAL.DO.BaseStation baseStation = new IDAL.DO.BaseStation()
+            IDAL.DO.BaseStation baseStation = new()
             {
                 StationID = newBaseStation.ID,
                 Name = newBaseStation.Name,
                 Longtitude = newBaseStation.Location.Longtitude,
                 Latitude = newBaseStation.Location.Latitude,
+                ChargeSlots = newBaseStation.AvailableChargingStations,
             };
             try
             {
                 dalobj.Add_BaseStation(baseStation);
             }
             catch { }
+        }
+        public static void AddNewDrone(Drone newDrone, int chargingStationFree)// 
+        {
+            IDAL.DO.Drone drone = new()
+            {
+                DroneID = newDrone.DroneID,
+                Drone_Model = newDrone.Drone_Model,
+                Drone_weight = (IDAL.DO.WeightCategories)newDrone.Drone_weight,
+            };
             try
             {
+                dalobj.Add_Drone(drone);
+            }
+            catch { }
+            try
+            {
+                newDrone.BattaryStatus = random.Next(20, 41);
+                newDrone.Status = DroneStatus.maintenance;
+                newDrone.CurrentLocation.Latitude = dalobj.GetBaseStation(chargingStationFree).Latitude;
+                newDrone.CurrentLocation.Longtitude = dalobj.GetBaseStation(chargingStationFree).Longtitude;
+
+
+            }
+            catch { }
+                   
+        }
+        
+        public static void AddNewCustomer (Customer newCustomer)
+        {
+            IDAL.DO.Customer customer = new()
+            {
+                CustomerId = newCustomer.CustomerId,
+                Name = newCustomer.Name,
+                Phone = newCustomer.Phone,
+                Latitude = newCustomer.LocationCustomer.Latitude,
+                Longtitude = newCustomer.LocationCustomer.Longtitude
+            };
+            try
+            {
+                dalobj.Add_Customer(customer);
+            }
+            catch { }
+            
+        }
+        public static void AddNewParcel(Parcel newParcel, DateTime requested, DateTime CreateTime, DateTime pickedUp, DateTime delivered )
+        {
+            IDAL.DO.Parcel parcel = new()
+            {
+                SenderId = newParcel.SenderId,
+                TargetId = newParcel.TargetId,
+                Parcel_weight = (IDAL.DO.WeightCategories)newParcel.weight,
+                Parcel_priority = (IDAL.DO.Priorities)newParcel.Priority
+            };
+            try
+            {
+                dalobj.Add_Parcel(parcel);
+            }
+            catch { }
+            try
+            {
+                newParcel.CreateTime = DateTime.Now;
+                newParcel.Requested = DateTime.MinValue;
+                newParcel.PickedUp = DateTime.MinValue;
+                newParcel.Delivered = DateTime.MinValue;
+
+                IDAL.DO.Drone? dronetest=null;
+                newParcel.Drone = (IDAL.DO.Drone)dronetest;
                 
             }
             catch { }
+            
         }
-        
-       
-
-      
     }
 
 }
