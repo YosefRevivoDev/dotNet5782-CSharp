@@ -6,7 +6,7 @@ namespace BO
     {
         public int SenderId { get; set; }
         public int TargetId { get; set; }
-        public IDAL.DO.Drone Drone { get; set; }
+        public Drone Drone { get; set; }
         public DateTime CreateTime { get; set; }
         public DateTime PickedUp { get; set; }
         public DateTime Delivered { get; set; }

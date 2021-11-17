@@ -169,33 +169,26 @@ namespace BO
             catch { }
             
         }
-        public static void AddNewParcel(Parcel newParcel, DateTime requested, DateTime CreateTime, DateTime pickedUp, DateTime delivered )
+        public static void AddNewParcel(Parcel newParcel)
         {
-            IDAL.DO.Parcel parcel = new()
-            {
-                SenderId = newParcel.SenderId,
-                TargetId = newParcel.TargetId,
-                Parcel_weight = (IDAL.DO.WeightCategories)newParcel.weight,
-                Parcel_priority = (IDAL.DO.Priorities)newParcel.Priority
-            };
             try
             {
-                dalobj.Add_Parcel(parcel);
-            }
-            catch { }
-            try
-            {
-                newParcel.CreateTime = DateTime.Now;
-                newParcel.Requested = DateTime.MinValue;
-                newParcel.PickedUp = DateTime.MinValue;
-                newParcel.Delivered = DateTime.MinValue;
-
-                IDAL.DO.Drone? dronetest=null;
-                newParcel.Drone = (IDAL.DO.Drone)dronetest;
+                newParcel.Drone = null;
+                IDAL.DO.Parcel parcel = new()
+                {
+                    SenderId = newParcel.SenderId,
+                    TargetId = newParcel.TargetId,
+                    Parcel_weight = (IDAL.DO.WeightCategories)newParcel.weight,
+                    Parcel_priority = (IDAL.DO.Priorities)newParcel.Priority,
+                    intvation_date = DateTime.Now,
+                    Requested = DateTime.MinValue,
+                    PickedUp = DateTime.MinValue,
+                    Delivered = DateTime.MinValue
+                };
                 
+          
             }
-            catch { }
-            
+            catch { }        
         }
     }
 

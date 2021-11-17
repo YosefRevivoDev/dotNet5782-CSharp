@@ -218,23 +218,10 @@ namespace ConsoleUI_BL
             int.TryParse(Console.ReadLine(), out int priority);
             parcel.Priority = (BO.Priorities) priority;
 
-            Console.WriteLine("The Time Requested is: ");
-            DateTime.TryParse(Console.ReadLine(), out DateTime requested);
-            
+        
+           
 
-            Console.WriteLine("The Time Scheduled is: ");
-            DateTime.TryParse(Console.ReadLine(), out DateTime createTime);
-            
-
-            Console.WriteLine("The Time PickedUp is: ");
-            DateTime.TryParse(Console.ReadLine(), out DateTime pickedUp);
-            
-
-            Console.WriteLine("The Time Delivered is: ");
-            DateTime.TryParse(Console.ReadLine(), out DateTime delivered);
-            
-
-            BL.AddNewParcel(parcel , requested, createTime, pickedUp, delivered);
+            BL.AddNewParcel(parcel);
 
             Console.WriteLine("A new parcel has been added");
         }
