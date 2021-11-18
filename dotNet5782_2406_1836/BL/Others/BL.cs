@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using IBL;
 
 namespace BO
 {
     public class BL : IBL.IBL
     {
-       static DalObject.DalObject dalobj = new();
+        static DalObject.DalObject dalobj = new();
         readonly IDAL.IDal dal;
-        public List<DroneToList> DroneToLists { get; }
+        public List<DroneToList> DroneToList { get; }
         static Random random = new(DateTime.Now.Millisecond);
         static double PowerConsumption_Available;
         static double PowerConsumption_LightWeight;
@@ -20,7 +21,7 @@ namespace BO
         {
 
             dal = new DalObject.DalObject(); // Access to summon methods from Datasource
-            DroneToLists = new List<DroneToList>();
+            DroneToList = new List<DroneToList>();
             double[] temp = dal.RequetPowerConsumption();//לשים את שאר המשתנים
             PowerConsumption_Available = temp[0];
 
@@ -30,7 +31,7 @@ namespace BO
 
             List<IDAL.DO.Parcel> parcels =
                 dal.GetPackagesByPredicate(x => x.DroneId != 0).ToList();// Sorts packages that belong to the drone but are not provided
-            foreach (var item in DroneToLists)
+            foreach (var item in DroneToList)
             {
                 int index = parcels.FindIndex(x => x.DroneId == item.DroneID && x.Delivered == DateTime.MinValue);
                 if (index != -1)
@@ -90,24 +91,11 @@ namespace BO
                         item.CurrentLocation.Latitude = SenderCustomer.Latitude;
                         item.CurrentLocation.Longtitude = SenderCustomer.Longtitude;
                     }
-                    item.BattaryStatus =  (random.NextDouble() * (100 - battarySenderToTarget)) + battarySenderToTarget;
-
-                    // מתחילים מצב סוללה
-                    
-
-                    List<IDAL.DO.Parcel> parcel = dal.GetPackagesByPredicate(x => x.Delivered == DateTime.Now).ToList();
-                    int i = parcel.FindIndex(x => x.DroneId == item.DroneID);
-                  
-
-                    if (true)
-                    {
-
-                    }
-
+                    item.BattaryStatus = (random.NextDouble() * (100 - battarySenderToTarget)) + battarySenderToTarget;// לשאול את יהודה
 
                 }
 
-            }    
+            }
         }
         //------------------------------------- Add functions------------------------//
         public static void AddBaseStation(BaseStation newBaseStation)
@@ -118,7 +106,7 @@ namespace BO
                 Name = newBaseStation.Name,
                 Longtitude = newBaseStation.Location.Longtitude,
                 Latitude = newBaseStation.Location.Latitude,
-                ChargeSlots = newBaseStation.AvailableChargingStations,
+                ChargeSlots = newBaseStation.AvailableChargingStations,// charge stations
             };
             try
             {
@@ -131,8 +119,8 @@ namespace BO
             IDAL.DO.Drone drone = new()
             {
                 DroneID = newDrone.DroneID,
-                Drone_Model = newDrone.Drone_Model,
-                Drone_weight = (IDAL.DO.WeightCategories)newDrone.Drone_weight,
+                DroneModel = newDrone.Drone_Model,
+                DroneWeight = (IDAL.DO.WeightCategories)newDrone.Drone_weight,
             };
             try
             {
@@ -144,10 +132,10 @@ namespace BO
                 newDrone.CurrentLocation.Longtitude = dalobj.GetBaseStation(chargingStationFree).Longtitude;
             }
             catch { }
-                         
+
         }
-        
-        public static void AddNewCustomer (Customer newCustomer)
+
+        public static void AddNewCustomer(Customer newCustomer)
         {
             IDAL.DO.Customer customer = new()
             {
@@ -162,7 +150,7 @@ namespace BO
                 dalobj.Add_Customer(customer);
             }
             catch { }
-            
+
         }
         public static void AddNewParcel(Parcel newParcel)
         {
@@ -180,18 +168,16 @@ namespace BO
                     PickedUp = DateTime.MinValue,
                     Delivered = DateTime.MinValue
                 };
-                
-          
             }
-            catch { }        
+            catch { }
         }
 
         //-----------------------Display list optaions------------------//
 
-        public IEnumerable<BasetationToList> GetBasetationToLists (Predicate<BasetationToList> predicate = null)
+        public IEnumerable<BasetationToList> GetBasetationToLists(Predicate<BasetationToList> predicate = null)
         {
             List<BasetationToList> BLStation = new List<BasetationToList>();
-            List <IDAL.DO.BaseStation> DalStation = dalobj.GetBaseStationByPredicate().ToList(); 
+            List<IDAL.DO.BaseStation> DalStation = dalobj.GetBaseStationByPredicate().ToList();
 
             foreach (var item in DalStation)
             {
@@ -200,12 +186,31 @@ namespace BO
                     ID = item.StationID,
                     Name = item.Name,
                     AvailableChargingStations = item.ChargeSlots,
-                    NotAvailableChargingStations = dalobj.GetDroneChargesByPredicate(x=> x.StationID == item.StationID).ToList().Count
+                    NotAvailableChargingStations = dalobj.GetDroneChargesByPredicate(x => x.StationID == item.StationID).ToList().Count
                 });
 
-                return BLStation.FindAll (x => predicate == null ? true : predicate(x));
+                return BLStation.FindAll(x => predicate == null ? true : predicate(x));
             }
-         
+        }
+        public IEnumerable<DroneToList> GetDroneToLists(Predicate<DroneToList> predicate = null)
+        {
+            List<DroneToList> BLdrone = new List<DroneToList>();
+            List<IDAL.DO.Drone> DalDrone = dalobj.GetDronesByPredicate().ToList();
+            foreach (var item in DalDrone)
+            {
+                BLdrone.Add(new DroneToList
+                {
+                    DroneID = item.DroneID,
+                    DroneModel = item.DroneModel,
+                    DroneWeight = (BO.WeightCategories)item.DroneWeight,
+                    //-------- method of BO-------//
+
+                    NumOfPackageDelivered = dalobj.GetPackagesByPredicate(x => x.ParcelId == item.DroneID).ToList().Count(),
+                    Status = (BO.DroneStatus)item.status,
+                    BattaryStatus = 
+                    Location = dalobj.
+                });
+            }
         }
     }
 

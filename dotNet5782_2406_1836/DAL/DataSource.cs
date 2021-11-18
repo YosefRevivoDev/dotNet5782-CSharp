@@ -60,8 +60,8 @@ namespace DalObject
                 Drones.Add(new Drone
                 {
                     DroneID = ++Config.RunIdDrone,
-                    Drone_Model = DronesModels[i],
-                    Drone_weight = (WeightCategories)random.Next(1, 3)
+                    DroneModel = DronesModels[i],
+                    DroneWeight = (WeightCategories)random.Next(1, 3)
                 }
                 );
             }

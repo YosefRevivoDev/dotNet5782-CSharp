@@ -14,7 +14,7 @@ namespace ConsoleUI_BL
 
         static void Main(string[] args)
         {
-            bl.DroneToLists.ForEach(i => Console.WriteLine(i));
+            bl.DroneToList.ForEach(i => Console.WriteLine(i));
         }
 
 
@@ -267,7 +267,7 @@ namespace ConsoleUI_BL
             Console.WriteLine(string.Format("Drone Details: {0}", new_drone));
         }
         //Print Customer by string.Format
-        public static void DisplayCustomer(BO.BL bL)
+        public static void DisplayCustomer(BO.BL bl)
         {
             int CustomerID;
             Console.WriteLine("Please enter Customer ID");

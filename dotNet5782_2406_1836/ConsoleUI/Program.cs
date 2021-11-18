@@ -228,11 +228,11 @@ namespace ConsoleUI
             drone.DroneID = DroneID;
 
             Console.WriteLine("Please enter phone number:");
-            drone.Drone_Model = Console.ReadLine();
+            drone.DroneModel = Console.ReadLine();
 
 
             int.TryParse(Console.ReadLine(), out int temp);
-            drone.Drone_weight = (WeightCategories)temp;
+            drone.DroneWeight = (WeightCategories)temp;
 
             //double.TryParse(Console.ReadLine(), out double Battary);
             //drone.Battary = Battary;
