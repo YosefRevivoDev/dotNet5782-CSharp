@@ -12,22 +12,21 @@ namespace IDAL.DO
         public int SenderId { get; set; }
         public int TargetId { get; set; }
         public WeightCategories Parcel_weight { get; set; }
-        public Priorities Parcel_priority { get; set; }
-        public DateTime intvation_date { get; set; }
+        public Priorities ParcelPriority { get; set; }
         public int DroneId { get; set; }
-        public DateTime Scheduled { get; set; }
+        public DateTime Created { get; set; }
         public DateTime PickedUp { get; set; }
         public DateTime Delivered { get; set; }
-        public DateTime Requested { get; set; }
+        public DateTime Assignment { get; set; }
         public override string ToString()
         {
             return $"Parcel: , Id:{ParcelId}, Senderld: {SenderId}" +
                     $", Targetld: {TargetId}" +
                     $", Weight: {Parcel_weight}" +
-                    $", Priority: {Parcel_priority}" +
-                    $", Requested: {Requested}" +
+                    $", Priority: {ParcelPriority}" +
+                    $", Assignment: {Assignment}" +
                     $", Droneld: {DroneId}" +
-                    $", Scheduled: {Scheduled}" +
+                    $", Scheduled: {Created}" +
                     $", PickedUp: {PickedUp}" +
                     $", Delivered: {Delivered}";
         }

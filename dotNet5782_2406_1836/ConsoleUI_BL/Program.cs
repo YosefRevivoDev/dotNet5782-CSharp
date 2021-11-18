@@ -1,8 +1,8 @@
 ﻿using System;
 using IBL;
-using IDAL.DO;
-using DalObject;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using BO;
 
 
@@ -10,7 +10,7 @@ namespace ConsoleUI_BL
 {
     class Program
     {
-        static IBL.IBL bl = new BL();
+        static readonly IBL.IBL bl = new BL();
 
         static void Main(string[] args)
         {
@@ -96,16 +96,16 @@ namespace ConsoleUI_BL
             switch (SubOptions)
             {
                 case 1:
-                    AddBaseStation(bl);
+                    AddBaseStation();
                     break;
                 case 2:
-                    AddNewParcel(bl);
+                    AddNewParcel();
                     break;
                 case 3:
-                    AddNewCustomer(dal);
+                    AddNewCustomer();
                     break;
                 case 4:
-                    AddDrone(dal);
+                    AddDrone(bl);
                     break;
                 default:
                     break;
@@ -143,7 +143,7 @@ namespace ConsoleUI_BL
             Console.WriteLine("A new basestation has been added");
         }
 
-        public static void AddDrone()
+        public static void AddDrone(IBL.IBL bl)
         {
 
             // IDAL.DO.Drone drone = new();
@@ -195,7 +195,7 @@ namespace ConsoleUI_BL
             Console.WriteLine("A new base customer has been added");
         }
 
-        static void AddNewParcel(DalObject.DalObject dal)
+        public static void AddNewParcel()
         {
 
             BO.Parcel parcel = new();
@@ -248,68 +248,68 @@ namespace ConsoleUI_BL
             }
         }
         //Print BaseStation by string.Format
-        public static void DisplayBaseStation(DalObject.DalObject dal)
+        public static void DisplayBaseStation(BO.BL bL)
         {
             int stationID;
             Console.WriteLine("Please enter station ID");
             int.TryParse(Console.ReadLine(), out stationID);
-            BaseStation? station = dal.GetBaseStation(stationID);
+            BaseStation? station = bl.GetBaseStation(stationID);
             Console.WriteLine(string.Format("Station Details: {0}", station));
         }
         //Print Drone by string.Format
-        public static void DisplayDrone(DalObject.DalObject dal)
+        public static void DisplayDrone(IBL.IBL bL)
         {
             int DroneID;
             Console.WriteLine("Please enter Drone ID");
             int.TryParse(Console.ReadLine(), out DroneID);
-            Drone new_drone = dal.GetDrone(DroneID);
+            Drone new_drone = bl.GetDrone(DroneID);
 
             Console.WriteLine(string.Format("Drone Details: {0}", new_drone));
         }
         //Print Customer by string.Format
-        public static void DisplayCustomer(DalObject.DalObject dal)
+        public static void DisplayCustomer(BO.BL bL)
         {
             int CustomerID;
             Console.WriteLine("Please enter Customer ID");
             int.TryParse(Console.ReadLine(), out CustomerID);
-            Customer? new_customer = dal.GetCustomer(CustomerID);
+            Customer? new_customer = bl.GetCustomer(CustomerID);
             Console.WriteLine(string.Format("Customer Details: {0}", new_customer));
         }
         //Print Parcel by string.Format
-        public static void DisplayParcel(DalObject.DalObject dal)
+        public static void DisplayParcel(BO.BL bL)
         {
             int ParcelID;
             Console.WriteLine("Please enter Parcel ID");
             int.TryParse(Console.ReadLine(), out ParcelID);
-            Parcel? new_Parcel = dal.GetParcel(ParcelID);
+            Parcel? new_Parcel = bl.GetParcel(ParcelID);
             Console.WriteLine(string.Format("Parcel Details: {0}", new_Parcel));
         }
 
         //--------------------------------------------UPDATE OBJ FUNCTIONS---------------------------------------------//
-        static void UpdateOptions(int SubOptions, DalObject.DalObject dal)
+        public static void UpdateOptions(int SubOptions, IBL.IBL bl)
         {
             switch (SubOptions)
             {
                 case 1:
-                    AssociateParcel(dal);
+                    AssociateParcel(bl);
                     break;
                 case 2:
-                    packageCollectByDrone(dal);
+                    packageCollectByDrone(bl);
                     break;
                 case 3:
-                    DeliveredParcel(dal);
+                    DeliveredParcel(bl);
                     break;
                 case 4:
-                    SendingDroneToCharge(dal);
+                    SendingDroneToCharge(bl);
                     break;
                 case 5:
-                    ReleaseDroneFromCharged(dal);
+                    ReleaseDroneFromCharged(bl);
                     break;
             }
         }
 
         // Call PackageCollectionByDrone function by parcel ID & drone ID paramters
-        private static void ReleaseDroneFromCharged(DalObject.DalObject dal)
+        private static void ReleaseDroneFromCharged(BO.BL bL)
         {
             int pacel_id_associate, drone_id_associate;
 
@@ -318,20 +318,20 @@ namespace ConsoleUI_BL
 
             Console.WriteLine("Please enter drone ID that you what to associate with your parcel");
             int.TryParse(Console.ReadLine(), out drone_id_associate);
-            dal.PackageCollectionByDrone(pacel_id_associate, drone_id_associate);
+            bl.PackageCollectionByDrone(pacel_id_associate, drone_id_associate);
         }
 
         //Call DliveredPackageToCustumer function by parcel ID & drone ID paramters
-        private static void SendingDroneToCharge(DalObject.DalObject dal)
+        public static void SendingDroneToCharge(BO.BL bL)
         {
-            int pacel_id_associate, drone_id_associate;
+            int Pacel_id_associate, Prone_id_associate;
 
             Console.WriteLine("Please enter parcel ID that you what to associate with your drone");
-            int.TryParse(Console.ReadLine(), out pacel_id_associate);
+            int.TryParse(Console.ReadLine(), out Pacel_id_associate);
 
             Console.WriteLine("Please enter drone ID that you what to associate with your parcel");
             int.TryParse(Console.ReadLine(), out drone_id_associate);
-            dal.DeliveredPackageToCustumer(pacel_id_associate, drone_id_associate);
+            bl.DeliveredPackageToCustumer(pacel_id_associate, drone_id_associate);
         }
 
         //Call ChargeDrone function by parcel ID & drone ID paramters
@@ -375,39 +375,39 @@ namespace ConsoleUI_BL
 
 
         //--------------------------------------------DISPLAY  LIST OBJ FUNCTIONS---------------------------------------------//
-        public static void viewOptionsList(int SubOptions, DalObject.DalObject dal)
+        public static void ViewOptionsList(int SubOptions, BO.BL bl)
         {
             //Print list by choice (switch)
             switch (SubOptions)
             {
                 case 1:
                     Console.WriteLine("All Station Data: ");
-                    DisplayList(dal, dal.GetBaseStation());
+                    DisplayList(bl, bl.GetBaseStation());
                     break;
                 case 2:
                     Console.WriteLine("All Customers Data: ");
-                    DisplayList(dal, dal.GetCustomer());
+                    DisplayList(bl, bl.GetCustomer());
                     break;
                 case 3:
                     Console.WriteLine("All Drones Data: ");
-                    DisplayList(dal, dal.GetDrones());
+                    DisplayList(bl, bl.GetDrones());
                     break;
                 case 4:
                     Console.WriteLine("All Packages Data: ");
-                    DisplayList(dal, dal.GetPackages());
+                    DisplayList(bl, bl.GetPackages());
                     break;
                 case 5:
                     Console.WriteLine("Free Packages: ");
-                    DisplayList(dal, dal.GetPackagesByPredicate());
+                    DisplayList(bl, bl.GetPackagesByPredicate());
                     break;
                 case 6:
                     Console.WriteLine("Free Charge Slots: ");
-                    DisplayList(dal, dal.GetBaseStationByPredicate());
+                    DisplayList(bl, bl.GetBaseStationByPredicate());
                     break;
             }
         }
         //Print a generic list by object 
-        public static void DisplayList<T>(DalObject.DalObject dal, T[] t) where T : struct
+        public static void DisplayList<T>(BO.BL bl, T[] t)
         {
             foreach (T s in t)
             {

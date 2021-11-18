@@ -93,7 +93,7 @@ namespace DalObject
                     Delivered = currentTime.AddDays(1),
                     Requested = currentTime.AddDays(1.5),
                     PickedUp = currentTime.AddDays(2),
-                    Scheduled = currentTime.AddDays(3),
+                    Created = currentTime.AddDays(3),
                 }
                 );
             }

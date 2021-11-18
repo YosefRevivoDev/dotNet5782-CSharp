@@ -177,7 +177,7 @@ namespace ConsoleUI
 
             Console.WriteLine("The Time Scheduled is: ");
             DateTime.TryParse(Console.ReadLine(), out dateTime);
-            parcel.Scheduled = dateTime;
+            parcel.Created = dateTime;
 
             Console.WriteLine("The Time PickedUp is: ");
             DateTime.TryParse(Console.ReadLine(), out dateTime);

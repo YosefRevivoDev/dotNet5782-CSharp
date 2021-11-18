@@ -277,6 +277,11 @@ namespace DalObject
         {
             return DataSource.Stations.FindAll(i => predicate == null ? true : predicate(i));
         }
+        public IEnumerable<DroneCharge> GetDroneChargesByPredicate(Predicate<DroneCharge>predicate = null)
+        {
+            return DataSource.DroneCharges.FindAll(i => predicate == null ? true : predicate(i));
+        }
+       
 
         // Returns an array of power consumption per mile
         public double[] RequetPowerConsumption()

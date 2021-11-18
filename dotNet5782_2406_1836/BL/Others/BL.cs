@@ -109,8 +109,8 @@ namespace BO
 
             }    
         }
-        //-------------------------------------bl functions------------------------//
-        static public void AddBaseStation(BaseStation newBaseStation)
+        //------------------------------------- Add functions------------------------//
+        public static void AddBaseStation(BaseStation newBaseStation)
         {
             IDAL.DO.BaseStation baseStation = new()
             {
@@ -137,19 +137,14 @@ namespace BO
             try
             {
                 dalobj.Add_Drone(drone);
-            }
-            catch { }
-            try
-            {
+
                 newDrone.BattaryStatus = random.Next(20, 41);
                 newDrone.Status = DroneStatus.maintenance;
                 newDrone.CurrentLocation.Latitude = dalobj.GetBaseStation(chargingStationFree).Latitude;
                 newDrone.CurrentLocation.Longtitude = dalobj.GetBaseStation(chargingStationFree).Longtitude;
-
-
             }
             catch { }
-                   
+                         
         }
         
         public static void AddNewCustomer (Customer newCustomer)
@@ -179,9 +174,9 @@ namespace BO
                     SenderId = newParcel.SenderId,
                     TargetId = newParcel.TargetId,
                     Parcel_weight = (IDAL.DO.WeightCategories)newParcel.weight,
-                    Parcel_priority = (IDAL.DO.Priorities)newParcel.Priority,
-                    intvation_date = DateTime.Now,
-                    Requested = DateTime.MinValue,
+                    ParcelPriority = (IDAL.DO.Priorities)newParcel.Priority,
+                    Created = DateTime.Now,
+                    Assignment = DateTime.MinValue,
                     PickedUp = DateTime.MinValue,
                     Delivered = DateTime.MinValue
                 };
@@ -189,6 +184,28 @@ namespace BO
           
             }
             catch { }        
+        }
+
+        //-----------------------Display list optaions------------------//
+
+        public IEnumerable<BasetationToList> GetBasetationToLists (Predicate<BasetationToList> predicate = null)
+        {
+            List<BasetationToList> BLStation = new List<BasetationToList>();
+            List <IDAL.DO.BaseStation> DalStation = dalobj.GetBaseStationByPredicate().ToList(); 
+
+            foreach (var item in DalStation)
+            {
+                BLStation.Add(new BasetationToList
+                {
+                    ID = item.StationID,
+                    Name = item.Name,
+                    AvailableChargingStations = item.ChargeSlots,
+                    NotAvailableChargingStations = dalobj.GetDroneChargesByPredicate(x=> x.StationID == item.StationID).ToList().Count
+                });
+
+                return BLStation.FindAll (x => predicate == null ? true : predicate(x));
+            }
+         
         }
     }
 

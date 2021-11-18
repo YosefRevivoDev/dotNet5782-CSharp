@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IDAL.DO
 {
-        public struct BaseStation
+    public struct BaseStation
     {
         public BaseStation(int id, string name, double longitude, double latitude, int chargeSlots)
         {
