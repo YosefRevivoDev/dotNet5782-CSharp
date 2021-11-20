@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BO
 {
-    class CustomerToList: CustomerInParcel
+    public class CustomerToList: CustomerInParcel
     {
         public int Phone { get; set; }
         public int SendParcelAndSupplied { get; set; }

@@ -20,6 +20,7 @@ namespace IDAL
         Drone GetDrone(int Id);
         IEnumerable<Drone> GetDronesByPredicate(Predicate<Drone> predicate = null);
         IEnumerable<Parcel> GetPackagesByPredicate(Predicate<Parcel> predicate = null);
+        IEnumerable<DroneCharge> GetDroneChargesByPredicate(Predicate<DroneCharge> predicate = null);
         Parcel GetParcel(int Id);
         void PackageCollectionByDrone(int parcelId, int droneId);
         void ReleasingChargeDrone(int droneId, int baseStationId);

@@ -47,21 +47,21 @@ namespace DalObject
         public static void Initialize()
         {
             Random random = new Random(DateTime.Now.Millisecond);
-            string[] DronesModels = new string[5]
+            string[] DronesModels = new string[]
             {
-                    "Alpha1", "Alpha2", "Alpha3", "Beta1", "Beta2"
+                    "Alpha1", "Alpha2", "Alpha3", "Beta1", "Beta2", "Beta3", "Beta4", "Beta5", "Beta6", "Beta7"
             };
             #region initStation
-            Stations.Add(new BaseStation { Name = "Base_A", StationID = config.RunIdStation++ });
-            Stations.Add(new BaseStation { Name = "Base_B", StationID = config.RunIdStation++ });
+            Stations.Add(new BaseStation { Name = "Base_A", StationID = Config.RunIdStation++ });
+            Stations.Add(new BaseStation { Name = "Base_B", StationID = Config.RunIdStation++ });
             #endregion
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 10; i++)
             {
                 Drones.Add(new Drone
                 {
                     DroneID = ++Config.RunIdDrone,
                     DroneModel = DronesModels[i],
-                    DroneWeight = (WeightCategories)random.Next(1, 3)
+                    DroneWeight = (WeightCategories)random.Next(0, 3)
                 }
                 );
             }
@@ -79,19 +79,18 @@ namespace DalObject
                 }
                  );
             }
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 7; i++)
             {
                 Packages.Add(new Parcel
                 {
                     ParcelId = Config.RunParcelId++,
                     SenderId = Clients[i].CustomerId,
                     TargetId = Clients[i + 1].CustomerId,
-                    Parcel_priority = (Priorities)rand.Next(1, 3),
+                    ParcelPriority = (Priorities)rand.Next(1, 3),
                     Parcel_weight = (WeightCategories)rand.Next(1, 3),
                     DroneId = Drones[i].DroneID,
-                    intvation_date = currentTime,
+                    Assignment = currentTime,
                     Delivered = currentTime.AddDays(1),
-                    Requested = currentTime.AddDays(1.5),
                     PickedUp = currentTime.AddDays(2),
                     Created = currentTime.AddDays(3),
                 }

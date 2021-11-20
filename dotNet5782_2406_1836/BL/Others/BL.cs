@@ -7,9 +7,8 @@ namespace BO
 {
     public class BL : IBL.IBL
     {
-        static DalObject.DalObject dalobj = new();
         readonly IDAL.IDal dal;
-        public List<DroneToList> DroneToList { get; }
+        public List<DroneToList> DroneToList { get; set; }
         static Random random = new(DateTime.Now.Millisecond);
         static double PowerConsumption_Available;
         static double PowerConsumption_LightWeight;
@@ -19,32 +18,161 @@ namespace BO
 
         public BL()
         {
-
-            dal = new DalObject.DalObject(); // Access to summon methods from Datasource
+           dal = new DalObject.DalObject(); // Access to summon methods from Datasource
             DroneToList = new List<DroneToList>();
+           GetDroneToLists();
+        }
+        //------------------------------------- Add functions------------------------//
+        public void AddBaseStation(BaseStation newBaseStation)
+        {
+            IDAL.DO.BaseStation baseStation = new()
+            {
+                StationID = newBaseStation.ID,
+                Name = newBaseStation.Name,
+                Longtitude = newBaseStation.Location.Longtitude,
+                Latitude = newBaseStation.Location.Latitude,
+                ChargeSlots = newBaseStation.AvailableChargingStations,// charge stations
+            };
+            try
+            {
+                dal.Add_BaseStation(baseStation);
+            }
+            catch { }
+        }
+        public void AddNewDrone(DroneToList newDrone, int NumberOfStation)// 
+        {
+            try
+            {
+                IDAL.DO.BaseStation baseStation = dal.GetBaseStation(NumberOfStation);
+                if (baseStation.ChargeSlots > 0)
+                {
+                    IDAL.DO.DroneCharge droneCharge = new IDAL.DO.DroneCharge
+                    {
+                        DroneID = newDrone.DroneID,
+                        StationID = baseStation.StationID
+                    };
+                    newDrone.Status = DroneStatus.maintenance;
+                    baseStation.ChargeSlots--;
+                    newDrone.CurrentLocation.Latitude = baseStation.Latitude;
+                    newDrone.CurrentLocation.Longtitude = baseStation.Longtitude;
+                    dal.UpdateBaseStation(baseStation);
+                    dal.Add_DroneCharge(droneCharge);
+                }
+                IDAL.DO.Drone drone = new()
+                {
+                    DroneID = newDrone.DroneID,
+                    DroneModel = newDrone.DroneModel,
+                    DroneWeight = (IDAL.DO.WeightCategories)newDrone.DroneWeight,
+                };
+                newDrone.BattaryStatus = random.Next(20, 41);
+                dal.Add_Drone(drone);
+                DroneToList.Add(newDrone);
+            }
+            catch { }
+
+        }
+
+        public void AddNewCustomer(Customer newCustomer)
+        {
+            IDAL.DO.Customer customer = new()
+            {
+                CustomerId = newCustomer.CustomerId,
+                Name = newCustomer.Name,
+                Phone = newCustomer.Phone,
+                Latitude = newCustomer.LocationCustomer.Latitude,
+                Longtitude = newCustomer.LocationCustomer.Longtitude
+            };
+            try
+            {
+                dal.Add_Customer(customer);
+            }
+            catch { }
+
+        }
+        public void AddNewParcel(Parcel newParcel)
+        {
+            try
+            {
+                newParcel.Drone = null;
+                IDAL.DO.Parcel parcel = new()
+                {
+                    SenderId = newParcel.SenderId,
+                    TargetId = newParcel.TargetId,
+                    Parcel_weight = (IDAL.DO.WeightCategories)newParcel.weight,
+                    ParcelPriority = (IDAL.DO.Priorities)newParcel.Priority,
+                    Created = DateTime.Now,
+                    Assignment = DateTime.MinValue,
+                    PickedUp = DateTime.MinValue,
+                    Delivered = DateTime.MinValue
+                };
+            }
+            catch { }
+        }
+
+        //-----------------------Display list optaions------------------//
+
+        public IEnumerable<BasetationToList> GetBasetationToLists()
+        {
+            List<BasetationToList> BLStation = new List<BasetationToList>();
+            List<IDAL.DO.BaseStation> DalStation = dal.GetBaseStationByPredicate().ToList();
+
+            foreach (var item in DalStation)
+            {
+                BLStation.Add(new BasetationToList
+                {
+                    ID = item.StationID,
+                    Name = item.Name,
+                    AvailableChargingStations = item.ChargeSlots,
+                    NotAvailableChargingStations = dal.GetDroneChargesByPredicate(x => x.StationID == item.StationID).ToList().Count
+
+                });
+            }
+            return BLStation;
+        }
+        public void GetDroneToLists()
+        {
+            List<IDAL.DO.Drone> DalDrone = dal.GetDronesByPredicate().ToList();
+
+            foreach (var item in DalDrone)
+            {
+                DroneToList.Add(new DroneToList
+                {
+                    DroneID = item.DroneID,
+                    DroneModel = item.DroneModel,
+                    DroneWeight = (BO.WeightCategories)item.DroneWeight,
+                });
+            }
+
             double[] temp = dal.RequetPowerConsumption();//לשים את שאר המשתנים
             PowerConsumption_Available = temp[0];
 
-
-            List<IDAL.DO.Drone> DroneList = dal.GetDronesByPredicate().ToList();
             List<IDAL.DO.BaseStation> baseStations = dal.GetBaseStationByPredicate().ToList();
 
             List<IDAL.DO.Parcel> parcels =
                 dal.GetPackagesByPredicate(x => x.DroneId != 0).ToList();// Sorts packages that belong to the drone but are not provided
-            foreach (var item in DroneToList)
+            foreach (var item in this.DroneToList)
             {
                 int index = parcels.FindIndex(x => x.DroneId == item.DroneID && x.Delivered == DateTime.MinValue);
                 if (index != -1)
                 {
+                    item.NumOfPackageDelivered = parcels[index].ParcelId;
                     item.Status = DroneStatus.busy;
 
                     IDAL.DO.Customer SenderCustomer = dal.GetCustomer(parcels[index].SenderId);
                     IDAL.DO.Customer TargetCustomer = dal.GetCustomer(parcels[index].TargetId);
 
-                    Location Senderlocation = new Location { Latitude = SenderCustomer.Latitude, Longtitude =
-                        SenderCustomer.Longtitude };
-                    Location Targetlocation = new Location { Latitude = TargetCustomer.Latitude, Longtitude =
-                        TargetCustomer.Longtitude };
+                    Location Senderlocation = new Location
+                    {
+                        Latitude = SenderCustomer.Latitude,
+                        Longtitude =
+                        SenderCustomer.Longtitude
+                    };
+                    Location Targetlocation = new Location
+                    {
+                        Latitude = TargetCustomer.Latitude,
+                        Longtitude =
+                        TargetCustomer.Longtitude
+                    };
 
                     // מצב סוללה נדרשת בין השולח ליעד בהתאם לגודל החבילה
                     double battarySenderToTarget = BO.HelpFunction.Distance(TargetCustomer.Latitude, SenderCustomer.Latitude,
@@ -92,125 +220,34 @@ namespace BO
                         item.CurrentLocation.Longtitude = SenderCustomer.Longtitude;
                     }
                     item.BattaryStatus = (random.NextDouble() * (100 - battarySenderToTarget)) + battarySenderToTarget;// לשאול את יהודה
-
                 }
-
             }
+         
         }
-        //------------------------------------- Add functions------------------------//
-        public static void AddBaseStation(BaseStation newBaseStation)
+
+        public BaseStation GetBaseStation(int stationID)
         {
-            IDAL.DO.BaseStation baseStation = new()
-            {
-                StationID = newBaseStation.ID,
-                Name = newBaseStation.Name,
-                Longtitude = newBaseStation.Location.Longtitude,
-                Latitude = newBaseStation.Location.Latitude,
-                ChargeSlots = newBaseStation.AvailableChargingStations,// charge stations
-            };
-            try
-            {
-                dalobj.Add_BaseStation(baseStation);
-            }
-            catch { }
+            throw new NotImplementedException();
         }
-        public static void AddNewDrone(Drone newDrone, int chargingStationFree)// 
+
+        public Drone GetDrone(int droneID)
         {
-            IDAL.DO.Drone drone = new()
-            {
-                DroneID = newDrone.DroneID,
-                DroneModel = newDrone.Drone_Model,
-                DroneWeight = (IDAL.DO.WeightCategories)newDrone.Drone_weight,
-            };
-            try
-            {
-                dalobj.Add_Drone(drone);
-
-                newDrone.BattaryStatus = random.Next(20, 41);
-                newDrone.Status = DroneStatus.maintenance;
-                newDrone.CurrentLocation.Latitude = dalobj.GetBaseStation(chargingStationFree).Latitude;
-                newDrone.CurrentLocation.Longtitude = dalobj.GetBaseStation(chargingStationFree).Longtitude;
-            }
-            catch { }
-
+            throw new NotImplementedException();
         }
 
-        public static void AddNewCustomer(Customer newCustomer)
+        public Customer GetCustomer(int customerID)
         {
-            IDAL.DO.Customer customer = new()
-            {
-                CustomerId = newCustomer.CustomerId,
-                Name = newCustomer.Name,
-                Phone = newCustomer.Phone,
-                Latitude = newCustomer.LocationCustomer.Latitude,
-                Longtitude = newCustomer.LocationCustomer.Longtitude
-            };
-            try
-            {
-                dalobj.Add_Customer(customer);
-            }
-            catch { }
-
+            throw new NotImplementedException();
         }
-        public static void AddNewParcel(Parcel newParcel)
+
+        public Parcel GetParcel(int parcelID)
         {
-            try
-            {
-                newParcel.Drone = null;
-                IDAL.DO.Parcel parcel = new()
-                {
-                    SenderId = newParcel.SenderId,
-                    TargetId = newParcel.TargetId,
-                    Parcel_weight = (IDAL.DO.WeightCategories)newParcel.weight,
-                    ParcelPriority = (IDAL.DO.Priorities)newParcel.Priority,
-                    Created = DateTime.Now,
-                    Assignment = DateTime.MinValue,
-                    PickedUp = DateTime.MinValue,
-                    Delivered = DateTime.MinValue
-                };
-            }
-            catch { }
+            throw new NotImplementedException();
         }
-
-        //-----------------------Display list optaions------------------//
 
         public IEnumerable<BasetationToList> GetBasetationToLists(Predicate<BasetationToList> predicate = null)
         {
-            List<BasetationToList> BLStation = new List<BasetationToList>();
-            List<IDAL.DO.BaseStation> DalStation = dalobj.GetBaseStationByPredicate().ToList();
-
-            foreach (var item in DalStation)
-            {
-                BLStation.Add(new BasetationToList
-                {
-                    ID = item.StationID,
-                    Name = item.Name,
-                    AvailableChargingStations = item.ChargeSlots,
-                    NotAvailableChargingStations = dalobj.GetDroneChargesByPredicate(x => x.StationID == item.StationID).ToList().Count
-                });
-
-                return BLStation.FindAll(x => predicate == null ? true : predicate(x));
-            }
-        }
-        public IEnumerable<DroneToList> GetDroneToLists(Predicate<DroneToList> predicate = null)
-        {
-            List<DroneToList> BLdrone = new List<DroneToList>();
-            List<IDAL.DO.Drone> DalDrone = dalobj.GetDronesByPredicate().ToList();
-            foreach (var item in DalDrone)
-            {
-                BLdrone.Add(new DroneToList
-                {
-                    DroneID = item.DroneID,
-                    DroneModel = item.DroneModel,
-                    DroneWeight = (BO.WeightCategories)item.DroneWeight,
-                    //-------- method of BO-------//
-
-                    NumOfPackageDelivered = dalobj.GetPackagesByPredicate(x => x.ParcelId == item.DroneID).ToList().Count(),
-                    Status = (BO.DroneStatus)item.status,
-                    BattaryStatus = 
-                    Location = dalobj.
-                });
-            }
+            throw new NotImplementedException();
         }
     }
 
