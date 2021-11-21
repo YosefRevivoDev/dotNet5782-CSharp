@@ -270,16 +270,20 @@ namespace BO
 
         public BaseStation GetBaseStation(int stationID)
         {
-            List<BaseStation> BLbaseStation = new List<BaseStation>();
-            List<IDAL.DO.BaseStation> DalBaseStation = dal.GetBaseStationByPredicate().ToList();
+            IDAL.DO.BaseStation DalBaseStation = dal.GetBaseStation(stationID);
+            BaseStation BLbaseStation = new BaseStation();
+            BLbaseStation.ID = DalBaseStation.StationID;
+            BLbaseStation.Location.Latitude = DalBaseStation.Latitude;
+            BLbaseStation.Location.Longtitude = DalBaseStation.Latitude;
+            BLbaseStation.Name = DalBaseStation.Name;
+            BLbaseStation.AvailableChargingStations = DalBaseStation.ChargeSlots;
+            BLbaseStation.droneCharges = new List<DroneCharge>();
 
-            foreach (var item in DalBaseStation)
+            List<IDAL.DO.DroneCharge> DroneCharges = dal.GetDroneChargesByPredicate(x => x.StationID == stationID).ToList();
+            foreach (var item in DroneCharges)
             {
-                BLbaseStation.Add(new BaseStation
-                
-
-            });
-
+                BLbaseStation.droneCharges.Add(new DroneCharge { DroneID = item.DroneID, BattaryStatus = DroneToList.Find(x=>x.DroneID == item.DroneID).BattaryStatus });
+            }
             return BLbaseStation;
         }
 
@@ -293,30 +297,30 @@ namespace BO
 
 
 
-        public BaseStation GetBaseStation(int stationID)
-        {
-            throw new NotImplementedException();
-        }
+        //public BaseStation GetBaseStation(int stationID)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public Drone GetDrone(int droneID)
-        {
-            throw new NotImplementedException();
-        }
+        //public Drone GetDrone(int droneID)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public Customer GetCustomer(int customerID)
-        {
-            throw new NotImplementedException();
-        }
+        //public Customer GetCustomer(int customerID)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public Parcel GetParcel(int parcelID)
-        {
-            throw new NotImplementedException();
-        }
+        //public Parcel GetParcel(int parcelID)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public IEnumerable<BasetationToList> GetBasetationToLists(Predicate<BasetationToList> predicate = null)
-        {
-            throw new NotImplementedException();
-        }
+        //public IEnumerable<BasetationToList> GetBasetationToLists(Predicate<BasetationToList> predicate = null)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 
 }
