@@ -270,16 +270,22 @@ namespace BO
 
         public BaseStation GetBaseStation(int stationID)
         {
-            List<BaseStation> BLbaseStation = new List<BaseStation>();
+            BaseStation BLbaseStation = new BaseStation();
             List<IDAL.DO.BaseStation> DalBaseStation = dal.GetBaseStationByPredicate().ToList();
 
-            foreach (var item in DalBaseStation)
+            for (int i  = 0;i < DalBaseStation.Count; i ++)
             {
-                BLbaseStation.Add(new BaseStation
-                
+                if (DalBaseStation[i].StationID == stationID)
+                {
+                    BLbaseStation.ID = DalBaseStation[i].StationID;
+                    BLbaseStation.Name = DalBaseStation[i].Name;
+                    BLbaseStation.Location.Latitude = DalBaseStation[i].Latitude;
+                    BLbaseStation.Location.Longtitude = DalBaseStation[i].Longtitude;
+                    BLbaseStation.AvailableChargingStations = dal.GetBaseStationByPredicate(x => x.ChargeSlots != 0).ToList().Count;
+                    DroneCharge 
 
-            });
-
+                }
+            }
             return BLbaseStation;
         }
 
