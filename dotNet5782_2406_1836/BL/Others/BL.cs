@@ -270,59 +270,112 @@ namespace BO
 
         public BaseStation GetBaseStation(int stationID)
         {
+            IDAL.DO.BaseStation DalBaseStation = dal.GetBaseStation(stationID);
             BaseStation BLbaseStation = new BaseStation();
-            List<IDAL.DO.BaseStation> DalBaseStation = dal.GetBaseStationByPredicate().ToList();
+            BLbaseStation.ID = DalBaseStation.StationID;
+            BLbaseStation.Location.Latitude = DalBaseStation.Latitude;
+            BLbaseStation.Location.Longtitude = DalBaseStation.Latitude;
+            BLbaseStation.Name = DalBaseStation.Name;
+            BLbaseStation.AvailableChargingStations = DalBaseStation.ChargeSlots;
+            BLbaseStation.droneCharges = new List<DroneCharge>();
 
-            for (int i  = 0;i < DalBaseStation.Count; i ++)
+            List<IDAL.DO.DroneCharge> DroneCharges = dal.GetDroneChargesByPredicate(x => x.StationID == stationID).ToList();
+            foreach (var item in DroneCharges)
             {
-                if (DalBaseStation[i].StationID == stationID)
-                {
-                    BLbaseStation.ID = DalBaseStation[i].StationID;
-                    BLbaseStation.Name = DalBaseStation[i].Name;
-                    BLbaseStation.Location.Latitude = DalBaseStation[i].Latitude;
-                    BLbaseStation.Location.Longtitude = DalBaseStation[i].Longtitude;
-                    BLbaseStation.AvailableChargingStations = dal.GetBaseStationByPredicate(x => x.ChargeSlots != 0).ToList().Count;
-                    DroneCharge 
-
-                }
+                BLbaseStation.droneCharges.Add(new DroneCharge 
+                                            { DroneID = item.DroneID, BattaryStatus = 
+                                            DroneToList.Find(x=>x.DroneID == item.DroneID).BattaryStatus });
             }
             return BLbaseStation;
         }
 
-
-
-
-
-
-
-
-
-
-
-        public BaseStation GetBaseStation(int stationID)
+        public Drone GetDrone (int id)
         {
-            throw new NotImplementedException();
+            IDAL.DO.Drone Daldrone = dal.GetDrone(id);
+            Drone BLdrone = new Drone();
+
+            BLdrone.DroneID = Daldrone.DroneID;
+            BLdrone.Drone_Model = Daldrone.DroneModel;
+            BLdrone.Drone_weight = (BO.WeightCategories)Daldrone.DroneWeight;
+            BLdrone.BattaryStatus = 
+            BLdrone.Status = 
+            BLdrone.PackageInDeliver =
+            BLdrone.CurrentLocation =
+    
+            return BLdrone;
         }
 
-        public Drone GetDrone(int droneID)
+        public Customer GetCustomer (int id)
         {
-            throw new NotImplementedException();
+            IDAL.DO.Customer DalCustomer = dal.GetCustomer(id);
+            Customer BLCustomer = new Customer();
+
+            BLCustomer.CustomerId = DalCustomer.CustomerId;
+            BLCustomer.NameCustomer = DalCustomer.Name;
+            BLCustomer.PhoneCustomer = DalCustomer.Phone;
+            BLCustomer.LocationCustomer.Latitude = DalCustomer.Latitude;
+            BLCustomer.LocationCustomer.Longtitude = DalCustomer.Longtitude;
+
+
+            List<Parcel> PackagesToCustomer = new List<Parcel>();
+            List<Parcel> PackagesFromCustomer = new List<Parcel>();
+
+            return BLCustomer;
         }
 
-        public Customer GetCustomer(int customerID)
+        public Parcel GetParcel(int id)
         {
-            throw new NotImplementedException();
+            IDAL.DO.Parcel DalParcel = dal.GetParcel(id);
+            Parcel BLParcel = new Parcel();
+
+            BLParcel.Id = DalParcel.ParcelId;
+            BLParcel.SenderId = DalParcel.SenderId;
+            BLParcel.TargetId = DalParcel.TargetId;
+            BLParcel.weight = (BO.WeightCategories)DalParcel.Parcel_weight;
+            BLParcel.Priority = (BO.Priorities)DalParcel.ParcelPriority;
+            BLParcel.Drone.DroneID = DalParcel.DroneId;
+            BLParcel.CreateTime = DalParcel.Created;
+            BLParcel.Requested = DalParcel.Assignment;
+            BLParcel.PickedUp = DalParcel.PickedUp;
+            BLParcel.Delivered = DalParcel.Delivered;
+
+            return BLParcel;
         }
 
-        public Parcel GetParcel(int parcelID)
-        {
-            throw new NotImplementedException();
-        }
 
-        public IEnumerable<BasetationToList> GetBasetationToLists(Predicate<BasetationToList> predicate = null)
-        {
-            throw new NotImplementedException();
-        }
+
+
+
+
+
+
+
+
+
+        //public BaseStation GetBaseStation(int stationID)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Drone GetDrone(int droneID)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Customer GetCustomer(int customerID)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Parcel GetParcel(int parcelID)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public IEnumerable<BasetationToList> GetBasetationToLists(Predicate<BasetationToList> predicate = null)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 
 }

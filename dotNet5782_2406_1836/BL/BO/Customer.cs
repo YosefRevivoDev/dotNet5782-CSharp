@@ -9,9 +9,8 @@ namespace BO
      public class Customer : CustomerInParcel
     {
         
-        public int PhoneCustomer { get; set; }
+        public string PhoneCustomer { get; set; }
         public Location LocationCustomer { get; set; }
-        public string Phone { get; set; }
         public string Name { get; set; }
 
         internal static List<Parcel> PackagesToCustomer = new List<Parcel>();
