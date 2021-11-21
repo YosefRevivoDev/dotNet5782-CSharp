@@ -8,7 +8,7 @@ namespace BO
 {
     public class CustomerToList: CustomerInParcel
     {
-        public int Phone { get; set; }
+        public string Phone { get; set; }
         public int SendParcelAndSupplied { get; set; }
         public int SendParcelAndNotSupplied { get; set; }
         public int ParcelsReciever { get; set; }

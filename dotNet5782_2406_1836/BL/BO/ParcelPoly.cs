@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BO
 {
-    public class Parcel_poly
+    public class ParcelPoly
     {
         public int Id { get; set; }
         public  WeightCategories weight { get; set; }

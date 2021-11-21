@@ -18,9 +18,9 @@ namespace BO
 
         public BL()
         {
-           dal = new DalObject.DalObject(); // Access to summon methods from Datasource
+            dal = new DalObject.DalObject(); // Access to summon methods from Datasource
             DroneToList = new List<DroneToList>();
-           GetDroneToLists();
+            GetDroneToLists();
         }
         //------------------------------------- Add functions------------------------//
         public void AddBaseStation(BaseStation newBaseStation)
@@ -124,7 +124,6 @@ namespace BO
                     Name = item.Name,
                     AvailableChargingStations = item.ChargeSlots,
                     NotAvailableChargingStations = dal.GetDroneChargesByPredicate(x => x.StationID == item.StationID).ToList().Count
-
                 });
             }
             return BLStation;
@@ -222,8 +221,77 @@ namespace BO
                     item.BattaryStatus = (random.NextDouble() * (100 - battarySenderToTarget)) + battarySenderToTarget;// לשאול את יהודה
                 }
             }
-         
         }
+
+        //public void GetCustomerToList()
+        public IEnumerable<CustomerToList> GetCustomerToList()
+        {
+            List<IDAL.DO.Customer> customers = dal.GetCustomersByPredicate().ToList();
+            List<CustomerToList> BLCustomer = new List<CustomerToList>();
+
+            foreach (var item in customers)
+            {
+                BLCustomer.Add(new CustomerToList
+                {
+                    CustomerId = item.CustomerId,
+                    NameCustomer = item.Name,
+                    Phone = item.Phone,
+                    SendParcelAndSupplied = dal.GetPackagesByPredicate(x => x.SenderId == item.CustomerId && x.Delivered != DateTime.MinValue).ToList().Count,
+                    SendParcelAndNotSupplied = dal.GetPackagesByPredicate(x => x.SenderId == item.CustomerId && x.Delivered == DateTime.MinValue).ToList().Count,
+                    ParcelsReciever = dal.GetPackagesByPredicate(x => x.TargetId == item.CustomerId && x.Delivered == DateTime.Now).ToList().Count,
+                    ParcelOweyToCustomer = dal.GetPackagesByPredicate(x => x.TargetId == item.CustomerId && x.PickedUp == DateTime.MinValue).ToList().Count
+                });
+            }
+            return BLCustomer;
+        }
+
+        public IEnumerable<ParcelToList> GetParcelToLists()
+        {
+            List<IDAL.DO.Parcel> parcels = dal.GetPackagesByPredicate().ToList();
+            List<ParcelToList> BLparcels = new List<ParcelToList>();
+
+            foreach (var item in parcels)
+            {
+                BLparcels.Add(new ParcelToList
+                {
+                    Id = item.ParcelId,
+                    SenderId = item.SenderId,
+                    TargetId = item.TargetId,
+                    Weight = (BO.WeightCategories)item.Parcel_weight,
+                    Priority = (BO.Priorities)item.ParcelPriority,
+                    ParcelStatus = , // לבדוק עם יהודה מה צריך לעשות פה ,
+                    ParcelAreNotAssighmentToDrone = dal.GetPackagesByPredicate(x => x.DroneId == item.DroneId && x.Assignment == DateTime.MinValue).ToList().Count
+                });
+            }
+            return BLparcels;
+        }
+
+        // ----------------- Display Object ---------------------//
+
+        public BaseStation GetBaseStation(int stationID)
+        {
+            List<BaseStation> BLbaseStation = new List<BaseStation>();
+            List<IDAL.DO.BaseStation> DalBaseStation = dal.GetBaseStationByPredicate().ToList();
+
+            foreach (var item in DalBaseStation)
+            {
+                BLbaseStation.Add(new BaseStation
+                
+
+            });
+
+            return BLbaseStation;
+        }
+
+
+
+
+
+
+
+
+
+
 
         public BaseStation GetBaseStation(int stationID)
         {

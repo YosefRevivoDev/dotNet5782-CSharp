@@ -2,7 +2,7 @@
 
 namespace BO
 {
-    public class Parcel : Parcel_poly
+    public class Parcel : ParcelPoly
     {
         public int SenderId { get; set; }
         public int TargetId { get; set; }
