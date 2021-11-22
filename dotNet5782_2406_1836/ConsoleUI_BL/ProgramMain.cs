@@ -16,6 +16,8 @@ namespace ConsoleUI_BL
         {
             Console.WriteLine("ikk");
             Console.WriteLine(String.Join("    ", bl.DroneToList));
+            //DalObject.DalObject dal = new DalObject.DalObject();
+            //MenuStartAplication(dal)
 
         }
 
