@@ -78,7 +78,7 @@ namespace BO
             {
                 CustomerId = newCustomer.CustomerId,
                 Name = newCustomer.Name,
-                Phone = newCustomer.Phone,
+                Phone = newCustomer.PhoneCustomer,
                 Latitude = newCustomer.LocationCustomer.Latitude,
                 Longtitude = newCustomer.LocationCustomer.Longtitude
             };
@@ -291,17 +291,8 @@ namespace BO
 
         public Drone GetDrone (int id)
         {
-            IDAL.DO.Drone Daldrone = dal.GetDrone(id);
-            Drone BLdrone = new Drone();
-
-            BLdrone.DroneID = Daldrone.DroneID;
-            BLdrone.Drone_Model = Daldrone.DroneModel;
-            BLdrone.Drone_weight = (BO.WeightCategories)Daldrone.DroneWeight;
-            BLdrone.BattaryStatus = 
-            BLdrone.Status = 
-            BLdrone.PackageInDeliver =
-            BLdrone.CurrentLocation =
-    
+            
+             
             return BLdrone;
         }
 
