@@ -282,33 +282,30 @@ namespace BO
             List<IDAL.DO.DroneCharge> DroneCharges = dal.GetDroneChargesByPredicate(x => x.StationID == stationID).ToList();
             foreach (var item in DroneCharges)
             {
-                BLbaseStation.droneCharges.Add(new DroneCharge 
-                                            { DroneID = item.DroneID, BattaryStatus = 
-                                            DroneToList.Find(x=>x.DroneID == item.DroneID).BattaryStatus });
+                BLbaseStation.droneCharges.Add(new DroneCharge
+                {
+                    DroneID = item.DroneID,
+                    BattaryStatus = DroneToList.Find(x => x.DroneID == item.DroneID).BattaryStatus
+                });
             }
             return BLbaseStation;
         }
 
-        public Drone GetDrone (int id)
+        public DroneToList GetDrone(int id)
         {
-            IDAL.DO.Drone Daldrone = dal.GetDrone(id);
-            Drone BLdrone = new Drone();
+            DroneToList BLdrone = DroneToList[DroneToList.FindIndex(x => x.DroneID == id)];
+            IDAL.DO.Drone drone = dal.GetDrone(id);
 
-            BLdrone.DroneID = Daldrone.DroneID;
-            BLdrone.Drone_Model = Daldrone.DroneModel;
-            BLdrone.Drone_weight = (BO.WeightCategories)Daldrone.DroneWeight;
-            BLdrone.BattaryStatus = 
-            BLdrone.Status = 
-            BLdrone.PackageInDeliver =
-            BLdrone.CurrentLocation =
-    
+            if (drone.DroneID == -1) { throw new Exception("This Drone have not exist, please try again."); }
+
             return BLdrone;
         }
 
-        public Customer GetCustomer (int id)
+        public Customer GetCustomer(int id)
         {
             IDAL.DO.Customer DalCustomer = dal.GetCustomer(id);
             Customer BLCustomer = new Customer();
+
 
             BLCustomer.CustomerId = DalCustomer.CustomerId;
             BLCustomer.NameCustomer = DalCustomer.Name;
@@ -317,8 +314,30 @@ namespace BO
             BLCustomer.LocationCustomer.Longtitude = DalCustomer.Longtitude;
 
 
-            List<Parcel> PackagesToCustomer = new List<Parcel>();
-            List<Parcel> PackagesFromCustomer = new List<Parcel>();
+            //packages that the customer send
+            BLCustomer.PackagesFromCustomer = new List<Parcel>();
+
+            List<IDAL.DO.Parcel> DalPackagesFromCustomer = dal.GetPackagesByPredicate(x => x.SenderId == id).ToList();
+            foreach (var item in DalPackagesFromCustomer)
+            {
+                BLCustomer.PackagesFromCustomer.Add(new Parcel
+                {
+                    SenderId = item.SenderId //לשאול אם צריך השמה מלאה
+                });
+            }
+
+            //packages that the customer recieve
+            BLCustomer.PackagesToCustomer = new List<Parcel>();
+
+            List<IDAL.DO.Parcel> DalPackagesToCustomer = dal.GetPackagesByPredicate(x => x.TargetId == id).ToList();
+            foreach (var item in DalPackagesToCustomer)
+            {
+                BLCustomer.PackagesToCustomer.Add(new Parcel
+                {
+                    TargetId = item.TargetId//לשאול אם צריך השמה מלאה
+                });
+            }
+
 
             return BLCustomer;
         }
@@ -339,11 +358,34 @@ namespace BO
             BLParcel.PickedUp = DalParcel.PickedUp;
             BLParcel.Delivered = DalParcel.Delivered;
 
+
+            //איך אני ניגש ל PARCEL.DRONE
+            List<Parcel> Drone = dal.GetDronesByPredicate(x => x.DroneID == id).ToList();
+            foreach (var item in DalParcel)
+            {
+                BLParcel.Add(new DroneCharge
+                {
+                    DroneID = item.DroneID,
+                    BattaryStatus = DroneToList.Find(x => x.DroneID == item.DroneID).BattaryStatus
+                });
+            }
             return BLParcel;
         }
 
+        //-------------------------------------------- UPDATE FUNC ------------------------------// 
 
-
+        public void UpadateDrone(int id, string model)
+        {
+                List<IDAL.DO.Drone> drones = dal.GetDronesByPredicate().ToList();
+            foreach (var item in drones)
+            {
+                if (item.DroneID == id)
+                {
+                    dal.UpdateDrone(drones[item.DroneID]) = id;
+                }
+            }
+            //לבדוק שימוש בפונקציה UPDATEDRONE 
+        }
 
 
 

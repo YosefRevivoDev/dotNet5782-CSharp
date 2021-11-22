@@ -168,12 +168,12 @@ namespace ConsoleUI
 
             Console.WriteLine("Please Enter your Choice Parcel: 1 = regular,2 =  fast, 3= emergency");
             int.TryParse(Console.ReadLine(), out temp);
-            parcel.Parcel_priority = (Priorities)temp;
+            parcel.ParcelPriority = (Priorities)temp;
 
             Console.WriteLine("The Time Requested is: ");
             DateTime dateTime = new DateTime();
             DateTime.TryParse(Console.ReadLine(), out dateTime);
-            parcel.Requested = dateTime;
+            parcel.Assignment = dateTime;
 
             Console.WriteLine("The Time Scheduled is: ");
             DateTime.TryParse(Console.ReadLine(), out dateTime);
@@ -320,6 +320,31 @@ namespace ConsoleUI
                     break;
             }
         }
+
+        private static void UpdateDrone()
+        {
+            
+            Console.WriteLine("Please enter Drone ID: ");
+            int.TryParse(Console.ReadLine(), out int id);
+            //לקרוא לפונקציה שמזירה את הרחפן עם ה ID הנל
+            droneToUpadate.DroneID = id;
+
+            Console.WriteLine("Please enter New Drone Model: ");
+            droneToUpadate.DroneModel = Console.ReadLine();
+            //לקרוא לפונקציה שמזירה את הרחפן עם ה ID הנל
+        }
+
+
+
+
+
+
+
+
+
+
+
+
 
         // Call PackageCollectionByDrone function by parcel ID & drone ID paramters
         private static void ReleaseDroneFromCharged(DalObject.DalObject dal)
