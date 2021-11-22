@@ -374,19 +374,68 @@ namespace BO
 
         //-------------------------------------------- UPDATE FUNC ------------------------------// 
 
-        public void UpadateDrone(int id, string model)
+        public void UpadateDrone(int id, string newNameModel)
         {
-                List<IDAL.DO.Drone> drones = dal.GetDronesByPredicate().ToList();
-            foreach (var item in drones)
+            try
             {
-                if (item.DroneID == id)
-                {
-                    dal.UpdateDrone(drones[item.DroneID]) = id;
-                }
+                IDAL.DO.Drone drones = dal.GetDrone(id);
+                drones.DroneModel = newNameModel;
+                dal.UpdateDrone(drones);
             }
-            //לבדוק שימוש בפונקציה UPDATEDRONE 
+            catch (IDAL.DO.DroneException)
+            {
+
+                throw new Exception("");
+            }
+            DroneToList.Find(x => x.DroneID == id).DroneModel = newNameModel;
         }
 
+        public void UpdateBaseStation(int stationId, string newNameStation, int sumOfChargestation)
+        {
+            try
+            {
+                IDAL.DO.BaseStation baseStation = dal.GetBaseStation(stationId);
+                BaseStation station = new BaseStation();
+
+                baseStation.Name = newNameStation;
+                baseStation.ChargeSlots = sumOfChargestation - baseStation.d;//לבדוק איך סוכמים
+
+
+                dal.UpdateBaseStation(baseStation);
+            }
+            catch (IDAL.DO.BaseStationException)
+            {
+
+                throw new Exception(" ");
+            }
+        }
+
+        public void UpdateCustomr(int customerId, string newNameCustomer, string newPhoneCustomer)
+        {
+            try
+            {
+                IDAL.DO.Customer customer = dal.GetCustomer(customerId);
+                customer.Name = newNameCustomer;
+                customer.Phone = newPhoneCustomer;
+
+                dal.UpdateCustomer(customer);
+            }
+            catch (IDAL.DO.CustumerException)
+            {
+
+                throw new Exception(" ");
+            }
+            // האם להוסיף למערך כלשהו?
+        }
+
+        public void SendDroneToCharge(int droneId)
+        {
+            IDAL.DO.Drone drone = dal.GetDrone(droneId);
+            if (true)
+            {
+
+            }
+        }
 
 
 
