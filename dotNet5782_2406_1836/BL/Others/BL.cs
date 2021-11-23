@@ -398,8 +398,10 @@ namespace BO
                 BaseStation station = new BaseStation();
                    
                 baseStation.Name = newNameStation;
-                baseStation.ChargeSlots = sumOfChargestation -baseStation.d ;//לבדוק איך סוכמים
-                
+
+                //check sum of available ChargeSlots + sum of unavailable ChargeSlots
+                if (baseStation.ChargeSlots + stationId < DroneToList.Count)
+                baseStation.ChargeSlots = sumOfChargestation - baseStation.ChargeSlots + DroneToList.Count  ;//לבדוק איך סוכמים
 
                 dal.UpdateBaseStation(baseStation);
             }
