@@ -137,12 +137,12 @@ namespace DalObject
             //DataSource.Drones[DataSource.Drones.ToList().
             //FindIndex(i => i.DroneID == droneId)].status = DroneStatus.maintenance;
 
-            int index = DataSource.DroneCharges.ToList().FindIndex(i => i.StationID == baseStationId);
-            DroneCharge droneCharge = DataSource.DroneCharges[index];
-            droneCharge.DroneID = droneId;
-            DataSource.DroneCharges[index] = droneCharge;
-
-            //Add_DroneCharge(new DroneCharge { DroneID = droneId, StationID = baseStationId });
+            int index = DataSource.DroneCharges.ToList().FindIndex(i => i.DroneID == droneId);
+            if (index != -1)
+            {
+                return;
+            }
+            Add_DroneCharge(new DroneCharge { DroneID = droneId, StationID = baseStationId });
         }
 
         public void ReleasingChargeDrone(int droneId, int baseStationId)
@@ -271,7 +271,7 @@ namespace DalObject
         }
         public IEnumerable<Parcel> GetPackagesByPredicate(Predicate<Parcel> predicate = null)
         {
-            return DataSource.Packages.FindAll(i => predicate == null ? true : predicate(i));
+            return DataSource.Packages .FindAll(i => predicate == null ? true : predicate(i));
         }
         public IEnumerable<BaseStation> GetBaseStationByPredicate(Predicate<BaseStation> predicate = null)
         {

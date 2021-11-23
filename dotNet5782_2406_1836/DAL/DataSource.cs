@@ -29,7 +29,7 @@ namespace DalObject
             internal static double PowerConsumption_LightWeight = 0.04;
             internal static double PowerConsumption_MediumWeight = 0.07;
             internal static double PowerConsumption_HeavyWeight = 0.1;
-            internal static double LoadingDrone = 0;
+            internal static double LoadingDrone = 100;
 
             //------------------RunID---------------------------//
 
@@ -52,8 +52,13 @@ namespace DalObject
                     "Alpha1", "Alpha2", "Alpha3", "Beta1", "Beta2", "Beta3", "Beta4", "Beta5", "Beta6", "Beta7"
             };
             #region initStation
-            Stations.Add(new BaseStation { Name = "Base_A", StationID = Config.RunIdStation++ });
-            Stations.Add(new BaseStation { Name = "Base_B", StationID = Config.RunIdStation++ });
+            Stations.Add(new BaseStation { Name = "Base_A", StationID = Config.RunIdStation++, AvailableChargeSlots = 50,
+                Latitude = 33,
+                Longtitude = 34
+            });
+
+            Stations.Add(new BaseStation { Name = "Base_B", StationID = Config.RunIdStation++,
+            AvailableChargeSlots = 80, Latitude = 33, Longtitude = 34});
             #endregion
             for (int i = 0; i < 10; i++)
             {
@@ -95,6 +100,16 @@ namespace DalObject
                     Created = currentTime.AddDays(3),
                 }
                 );
+            }
+
+            for (int i = 0; i < 10; i++)
+            {
+                DroneCharges.Add(new DroneCharge
+                {
+                    DroneID = Drones[i].DroneID,
+                    StationID =
+                    Stations[rand.Next(0, 2)].StationID
+                });
             }
         }
     }

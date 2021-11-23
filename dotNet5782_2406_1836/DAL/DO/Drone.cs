@@ -9,7 +9,7 @@ namespace IDAL.DO
         public WeightCategories DroneWeight { get; set; }
         public override string ToString()
         {
-            return $"Drone:, ID:{DroneID}, Model:{DroneModel}, Weight:{DroneWeight},DroneStatus:{status}";
+            return $"Drone:, ID:{DroneID}, Model:{DroneModel}, Weight:{DroneWeight}";
         }
     }
 

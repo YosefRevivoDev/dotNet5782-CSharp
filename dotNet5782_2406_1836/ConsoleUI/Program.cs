@@ -126,7 +126,7 @@ namespace ConsoleUI
 
             Console.WriteLine("Please enter number of charging station:");
             int.TryParse(Console.ReadLine(), out ChargeSlots);
-            station.ChargeSlots = ChargeSlots;
+            station.AvailableChargeSlots = ChargeSlots;
 
             Console.WriteLine("Please enter the longitude:");
             double.TryParse(Console.ReadLine(), out Longtitude);
@@ -327,10 +327,10 @@ namespace ConsoleUI
             Console.WriteLine("Please enter Drone ID: ");
             int.TryParse(Console.ReadLine(), out int id);
             //לקרוא לפונקציה שמזירה את הרחפן עם ה ID הנל
-            droneToUpadate.DroneID = id;
+            //droneToUpadate.DroneID = id;
 
             Console.WriteLine("Please enter New Drone Model: ");
-            droneToUpadate.DroneModel = Console.ReadLine();
+            //droneToUpadate.DroneModel = Console.ReadLine();
             //לקרוא לפונקציה שמזירה את הרחפן עם ה ID הנל
         }
 
@@ -419,25 +419,23 @@ namespace ConsoleUI
             switch (SubOptions)
             {
                 case 1:
-                    Console.WriteLine("All Station Data: ");
-                    DisplayList(dal, dal.GetBaseStation());
+                    Console.WriteLine("Free Charge Slots: ");
+                    DisplayList(dal, dal.GetBaseStationByPredicate());
                     break;
                 case 2:
                     Console.WriteLine("All Customers Data: ");
-                    DisplayList(dal, dal.GetCustomer());
+                    DisplayList(dal, dal.GetCustomersByPredicate());
                     break;
                 case 3:
                     Console.WriteLine("All Drones Data: ");
-                    DisplayList(dal, dal.GetDrones());
+                    DisplayList(dal, dal.GetDronesByPredicate());
                     break;
                 case 4:
-                    Console.WriteLine("All Packages Data: ");
-                    DisplayList(dal, dal.GetPackages());
-                    break;
-                case 5:
                     Console.WriteLine("Free Packages: ");
                     DisplayList(dal, dal.GetPackagesByPredicate());
                     break;
+                case 5:
+                    
                 case 6:
                     Console.WriteLine("Free Charge Slots: ");
                     DisplayList(dal, dal.GetBaseStationByPredicate());
@@ -445,9 +443,9 @@ namespace ConsoleUI
             }
         }
         //Print a generic list by object 
-        public static void DisplayList<T>(DalObject.DalObject dal, T[] t) where T : struct
+        public static void DisplayList<T>(DalObject.DalObject dal,IEnumerable <T> ts) where T : struct
         {
-            foreach (T s in t)
+            foreach (T s in ts)
             {
                 Console.WriteLine(s);
             }

@@ -11,7 +11,7 @@ namespace BO
      public int NotAvailableChargingStations { get; set; }
         public override string ToString()
         {
-            return base.ToString() + $" Not available charging stations:{NotAvailableChargingStations}";
+            return base.ToString() + $" Not available charging stations: {NotAvailableChargingStations} ";
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿    using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,8 +16,8 @@ namespace BO
 
         public override string ToString()
         {
-            return base.ToString()+$"Drone: {Drone_Model},WeightCategories{Drone_weight}," +
-                $"DroneStatus{Status},Location{CurrentLocation},PackageInDeliver{PackageInDeliver}";
+            return base.ToString()+$"Drone: {Drone_Model} ,WeightCategories: {Drone_weight} ," +
+                $"DroneStatus: {Status} ,Location: {CurrentLocation} ,PackageInDeliver: {PackageInDeliver} ";
         }
     }
 }

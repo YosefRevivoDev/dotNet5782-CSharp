@@ -11,9 +11,10 @@ namespace BO
         public int DroneID { get; set; }
         public double BattaryStatus  { get;  set; }
 
+
         public override string ToString()
         {
-            return $"DroneCharge: ID:{DroneID}, BattaryStatus:{BattaryStatus}";
+            return $"DroneCharge: ID: {DroneID} , BattaryStatus: {BattaryStatus} ";
         }
 
     }

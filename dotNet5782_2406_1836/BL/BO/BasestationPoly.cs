@@ -13,8 +13,8 @@ namespace BO
         public int AvailableChargingStations { get; set; }
         public override string ToString()
         {
-            return  $" Basestation ID:{ID} ,Basestation name: {Name} , " +
-                $"AvailableChargingStations: {AvailableChargingStations}";
+            return string.Join(Environment.NewLine + " :" + $" Basestation ID: {ID} ," + $"Basestation name: {Name}",
+                $"AvailableChargingStations: {AvailableChargingStations} ");
         }
 
     }

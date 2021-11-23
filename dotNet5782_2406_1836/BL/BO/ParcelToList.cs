@@ -16,8 +16,8 @@ namespace BO
         public int ParcelAreNotAssighmentToDrone { get; set; }
         public override string ToString()
         {
-            return base.ToString() + $"Sender ID:{SenderId}, Target ID:{TargetId},"
-                +$"Status {ParcelStatus}";
+            return base.ToString() + $"Sender ID: {SenderId}, Target ID: {TargetId}, "
+                +$"Status {ParcelStatus} ";
         }
     }
 }

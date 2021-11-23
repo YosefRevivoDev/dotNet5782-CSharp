@@ -16,9 +16,9 @@ namespace BO
 
         public override string ToString()
         {
-            return base.ToString()+$"Phone {Phone},SendParcelAndSupplied{SendParcelAndSupplied}," +
-                $"SendParcelAndNotSupplied{SendParcelAndNotSupplied},ParcelsReciever{ParcelsReciever}," +
-                $"ParcelOweyToCustomer{ParcelOweyToCustomer}";
+            return base.ToString() + $"Phone: {Phone} , SendParcelAndSupplied: {SendParcelAndSupplied} ," +
+                $"SendParcelAndNotSupplied: {SendParcelAndNotSupplied} ,ParcelsReciever: {ParcelsReciever} ," +
+                $"ParcelOweyToCustomer: {ParcelOweyToCustomer} ";
         }
 
 

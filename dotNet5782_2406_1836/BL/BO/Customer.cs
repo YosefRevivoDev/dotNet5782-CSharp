@@ -18,8 +18,8 @@ namespace BO
 
         public override string ToString()
         {
-            return base.ToString()+$"Customer: PhoneCustomer{PhoneCustomer}," +
-                $"LocationCustomer{LocationCustomer}" + string.Join("/t", PackagesToCustomer)
+            return base.ToString()+$"Customer: PhoneCustomer{PhoneCustomer} ," +
+                $"LocationCustomer: {LocationCustomer} " + string.Join("/t", PackagesToCustomer)
                 +string.Join("/t", PackagesFromCustomer);
         }
     }

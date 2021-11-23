@@ -14,7 +14,7 @@ namespace BO
 
         public override string ToString()
         {
-            return $"ID:{Id}, weight:{weight},Priorities{Priority}";
+            return $"ID: {Id} , weight: {weight},Priorities: {Priority} ";
         }
     }
 }

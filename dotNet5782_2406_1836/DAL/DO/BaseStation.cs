@@ -14,18 +14,18 @@ namespace IDAL.DO
             this.Name = name;
             this.Longtitude = longitude;
             this.Latitude = latitude;
-            this.ChargeSlots = chargeSlots;
+            this.AvailableChargeSlots = chargeSlots;
         }
 
         public int StationID { get; set; }
         public string Name { get; set; }
         public double Longtitude { get; set; }
         public double Latitude { get; set; }
-        public int ChargeSlots { get; set; }
+        public int AvailableChargeSlots { get; set; }
         public override string ToString()
         {
             return $"Station: ID:{StationID}, Name:{Name}, Longtitude:{Longtitude}," +
-             $"Latitude:{Latitude}, ChargeSlots:{ChargeSlots}";
+             $"Latitude:{Latitude}, ChargeSlots:{AvailableChargeSlots}";
         }
 
     }

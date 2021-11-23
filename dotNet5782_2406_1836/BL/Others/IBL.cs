@@ -1,22 +1,31 @@
-﻿using BO;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IDAL.DO;
 
-namespace IBL
+namespace BO
 {
     public interface IBL
     {
-        List<DroneToList> DroneToList { get; }
-        public static void AddOptions(int SubOptions){ }
+        List<DroneToList> DroneToList { get; set; }
 
-        BO.BaseStation GetBaseStation(int stationID);
-        BO.Drone GetDrone(int droneID);
-        BO.Customer GetCustomer(int customerID);
-        BO.Parcel GetParcel(int parcelID);
-        public IEnumerable<BasetationToList> GetBasetationToLists(Predicate<BasetationToList> predicate = null);
+        void AddBaseStation(BaseStation newBaseStation);
+        void AddNewCustomer(Customer newCustomer);
+        void AddNewDrone(DroneToList newDrone, int NumberOfStation);
+        void AddNewParcel(Parcel newParcel, int SenderId, int TargetId);
+        BaseStation GetBaseStation(int stationID);
+        IEnumerable<BasetationToList> GetBasetationToLists();
+        Customer GetCustomer(int id);
+        IEnumerable<CustomerToList> GetCustomerToList();
+        Drone GetDrone(int id);
+        void InitDroneToLists();
+        Parcel GetParcel(int id);
+        IEnumerable<ParcelToList> GetParcelToLists();
+        void ReleaseDroneFromCharge(int droneId, DateTime dateTime);
+        void SendDroneToCharge(int droneId);
+        void UpadateDrone(int id, string newNameModel);
+        void UpdateBaseStation(int stationId, string newNameStation, int sumOfChargestation);
+        void UpdateCustomr(int customerId, string newNameCustomer, string newPhoneCustomer);
+        void PackageCollectionByDrone(int pacelIdAssociate, int droneIdAssociate);
+        void DeliveredPackageToCustumer(int parcelIdAssociate, int droneIdAssociate);
+       // void ReleasingChargeDrone(int droneIdAssociate, int baseStationId);
     }
 }

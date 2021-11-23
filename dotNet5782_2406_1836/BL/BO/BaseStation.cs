@@ -13,8 +13,9 @@ namespace BO
 
         public override string ToString()
         {
-            return base.ToString() + $" Location:{Location}," + 
-                string.Join("/t", droneCharges);
+           
+            return base.ToString() + $"Location: {Location} , " +
+                string.Join(Environment.NewLine + " :", droneCharges);
         }
     }
 }
