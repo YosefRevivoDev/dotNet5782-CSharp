@@ -263,8 +263,6 @@ namespace ConsoleUI_BL
 
             Console.WriteLine(string.Format("Drone Details: {0} " , newDrone));
         }
-
-
         
         public static void DisplayCustomer(IBL bL)
         {
@@ -274,7 +272,7 @@ namespace ConsoleUI_BL
             Customer newCustomer = bl.GetCustomer(CustomerID);
             Console.WriteLine(string.Format("Customer Details: {0} " , newCustomer));
         }
-        //Print Parcel by string.Format
+
         public static void DisplayParcel(IBL bL)
         {
             int ParcelID;
@@ -293,16 +291,16 @@ namespace ConsoleUI_BL
                   //AssociateParcel(bL);
                     break;
                 case 2:
-                //    packageCollectByDrone(bL);
+                //packageCollectByDrone(bL);
                     break;
                 case 3:
                  //   DeliveredParcel(bl);
                     break;
                 case 4:
-                //    SendingDroneToCharge(bl);
+                // SendingDroneToCharge(bl);
                     break;
                 case 5:
-               //     ReleaseDroneFromCharged(bl);
+               //  ReleaseDroneFromCharged(bl);
                     break;
             }
         }

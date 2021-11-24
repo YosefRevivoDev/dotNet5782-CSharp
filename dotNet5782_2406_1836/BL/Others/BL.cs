@@ -6,8 +6,8 @@ namespace BO
 {
     public class BL : IBL
     {
-        readonly IDAL.IDal dal;
-        public List<DroneToList> DroneToList { get; set; }
+        readonly IDAL.IDal dal; // Dal object to invite DAL functions 
+        public List<DroneToList> DroneToList { get; set; } //Dynamic drone's list at BL layer
         static Random random = new(DateTime.Now.Millisecond);
         static double PowerConsumptionAvailable;
         static double PowerConsumption_LightWeight;
@@ -19,18 +19,19 @@ namespace BO
         {
             dal = new DalObject.DalObject(); // Access to summon methods from Datasource
             DroneToList = new List<DroneToList>();
-            InitDroneToLists();
+            InitDroneToLists(); // Initialize the list from DAL layer 
         }
         //------------------------------------- Add functions------------------------//
         public void AddBaseStation(BaseStation newBaseStation)
         {
+            //Set drone information from DAL layer 
             IDAL.DO.BaseStation baseStation = new()
             {
                 StationID = newBaseStation.ID,
                 Name = newBaseStation.Name,
                 Longtitude = newBaseStation.Location.Longtitude,
                 Latitude = newBaseStation.Location.Latitude,
-                AvailableChargeSlots = newBaseStation.AvailableChargingStations,// charge stations
+                AvailableChargeSlots = newBaseStation.AvailableChargingStations,
             };
             try
             {
@@ -38,11 +39,13 @@ namespace BO
             }
             catch { }
         }
-        public void AddNewDrone(DroneToList newDrone, int NumberOfStation)// 
+        public void AddNewDrone(DroneToList newDrone, int NumberOfStation) 
         {
             try
             {
-                IDAL.DO.BaseStation baseStation = dal.GetBaseStation(NumberOfStation);
+                //Get bastation from Dal with ID key 
+                IDAL.DO.BaseStation baseStation = dal.GetBaseStation(NumberOfStation); 
+
                 if (baseStation.AvailableChargeSlots > 0)
                 {
                     IDAL.DO.DroneCharge droneCharge = new IDAL.DO.DroneCharge
@@ -143,20 +146,33 @@ namespace BO
                 });
             }
 
-            double[] temp = dal.RequetPowerConsumption();//לשים את שאר המשתנים
+            //Arrray of requet power consumption
+            double[] temp = dal.RequetPowerConsumption();
             PowerConsumptionAvailable = temp[0];
+            PowerConsumptionAvailable= temp[1];
+            PowerConsumption_LightWeight= temp[2];
+            PowerConsumption_MediumWeight= temp[3];
+            PowerConsumption_HeavyWeight= temp[4];
 
+            //get basetation list from Dal layer and create a new Bl list
             List<IDAL.DO.BaseStation> baseStations = dal.GetBaseStationByPredicate().ToList();
 
+            // Sorts packages that belong to the drone but are not provided
             List<IDAL.DO.Parcel> parcels =
-                dal.GetPackagesByPredicate(x => x.DroneId != 0).ToList();// Sorts packages that belong to the drone but are not provided
-            foreach (var item in this.DroneToList)
+                dal.GetPackagesByPredicate(x => x.DroneId != 0).ToList();
+
+            foreach (var item in this.DroneToList)//For all DroneToList do 
             {
+                //Index of parcel that assigned but not sent
                 int index = parcels.FindIndex(x => x.DroneId == item.DroneID && x.Delivered == DateTime.MinValue);
-                if (index != -1)
+
+                if (index != -1)//if have a parcel that assigned but not sent, do 
                 {
-                    item.NumOfPackageDelivered = parcels[index].ParcelId;
+                    //get the parcel ID that assigned to the drone & set to DroneToList parcel ID that not delivered and change status to busy
+                    item.NumOfPackageDelivered = parcels[index].ParcelId; 
                     item.Status = DroneStatus.busy;
+
+                    //Set parmaters to SenderCustomer & TargetCustomer
 
                     IDAL.DO.Customer SenderCustomer = dal.GetCustomer(parcels[index].SenderId);
                     IDAL.DO.Customer TargetCustomer = dal.GetCustomer(parcels[index].TargetId);
@@ -174,10 +190,11 @@ namespace BO
                         TargetCustomer.Longtitude
                     };
 
-                    // מצב סוללה נדרשת בין השולח ליעד בהתאם לגודל החבילה
+                    // Battery status is required between the sender and the destination depending on the size of the package
                     double battarySenderToTarget = BO.HelpFunction.Distance(TargetCustomer.Latitude, SenderCustomer.Latitude,
                                    TargetCustomer.Longtitude, SenderCustomer.Longtitude);
 
+                    // Case of parcel weight 
                     switch (parcels[index].Parcel_weight)
                     {
                         case IDAL.DO.WeightCategories.light:
@@ -192,30 +209,30 @@ namespace BO
                         default:
                             break;
                     }
-                    // מצב סוללה += הנדרשת בין ליעד לתחנת בסיס הקרובה ביותר ליעד 
+                    // Battery status + = required between the destination and the base station closest to the destination 
                     battarySenderToTarget += BO.HelpFunction.IndexOfMinDistancesBetweenLocations
                         (baseStations, Targetlocation).Item2 * PowerConsumptionAvailable;
 
-                    if (parcels[index].PickedUp == DateTime.MinValue)
+                    if (parcels[index].PickedUp == DateTime.MinValue)//parcel that  not sent
                     {
                         if (baseStations.Count == 0) // לבדוק אם זה false
                         {
                             throw new Exception("There are no stations in the area");
                         }
-                        // קביעת מיקום הרחפן בתחנה הקרובה ביותר לשולח במצב שהחבילה לא נאספה
+                        // Determine the position of the skimmer at the station closest to the sender in the situation where the package was not collected
                         int indexMinDistance = BO.HelpFunction.IndexOfMinDistancesBetweenLocations(baseStations, Senderlocation).Item1;
                         item.CurrentLocation.Longtitude = baseStations[indexMinDistance].Longtitude;
                         item.CurrentLocation.Latitude = baseStations[indexMinDistance].Latitude;
 
-                        // מצב סוללה הנדרשת בין מיקום הרחפן
-                        // שזה מיקום התחנת בסיס הקרובה ביותר לשולח) לבין השולח)
+                        // Battery status required between glider position
+                        // which is the location of the base station closest to the sender) and the sender)
                         battarySenderToTarget += BO.HelpFunction.Distance(item.CurrentLocation.Latitude, SenderCustomer.Latitude,
                            item.CurrentLocation.Longtitude, SenderCustomer.Longtitude) * PowerConsumptionAvailable;
                     }
 
                     else
                     {
-                        //
+                        //parcel that sent
                         item.CurrentLocation.Latitude = SenderCustomer.Latitude;
                         item.CurrentLocation.Longtitude = SenderCustomer.Longtitude;
                     }
@@ -224,7 +241,6 @@ namespace BO
             }
         }
 
-        //public void GetCustomerToList()
         public IEnumerable<CustomerToList> GetCustomerToList()
         {
             List<IDAL.DO.Customer> customers = dal.GetCustomersByPredicate().ToList();
@@ -237,9 +253,13 @@ namespace BO
                     CustomerId = item.CustomerId,
                     NameCustomer = item.Name,
                     Phone = item.Phone,
+                    //SendParcelAndSupplied => Check if SenderId == item.CustomerId & Delivered != Min date 
                     SendParcelAndSupplied = dal.GetPackagesByPredicate(x => x.SenderId == item.CustomerId && x.Delivered != DateTime.MinValue).ToList().Count,
+                    //SendParcelAndNotSupplied => Check if SenderId == CustomerId & Delivered == Min date 
                     SendParcelAndNotSupplied = dal.GetPackagesByPredicate(x => x.SenderId == item.CustomerId && x.Delivered == DateTime.MinValue).ToList().Count,
+                    //ParcelsReciever => Check if TargetId == CustomerId & Delivered == Min date 
                     ParcelsReciever = dal.GetPackagesByPredicate(x => x.TargetId == item.CustomerId && x.Delivered == DateTime.Now).ToList().Count,
+                    //ParcelOweyToCustomer => Check if TargetId == item.CustomerId & Delivered == Min date 
                     ParcelOweyToCustomer = dal.GetPackagesByPredicate(x => x.TargetId == item.CustomerId && x.PickedUp == DateTime.MinValue).ToList().Count
                 });
             }
@@ -322,6 +342,7 @@ namespace BO
             {
                 BLCustomer.PackagesFromCustomer.Add(GetParcel(item.ParcelId));
             }
+
             //packages that the customer recieve
             BLCustomer.PackagesToCustomer = new List<Parcel>();
             List<IDAL.DO.Parcel> DalPackagesToCustomer = dal.GetPackagesByPredicate(x => x.TargetId == id).ToList();
