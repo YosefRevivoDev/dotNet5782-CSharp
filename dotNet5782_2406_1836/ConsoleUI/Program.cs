@@ -136,7 +136,7 @@ namespace ConsoleUI
             double.TryParse(Console.ReadLine(), out Latitude);
             station.Latitude = Latitude;
 
-            dal.Add_BaseStation(station);
+            dal.AddBaseStation(station);
 
             Console.WriteLine("A new base station has been added");
         }
@@ -187,7 +187,7 @@ namespace ConsoleUI
             DateTime.TryParse(Console.ReadLine(), out dateTime);
             parcel.Delivered = dateTime;
 
-            dal.Add_Parcel(parcel);
+            dal.AddParcel(parcel);
 
             Console.WriteLine("A new parcel has been added");
         }
@@ -215,7 +215,7 @@ namespace ConsoleUI
             double.TryParse(Console.ReadLine(), out Latitude);
             customer.Latitude = Latitude;
 
-            dal.Add_Customer(customer);
+            dal.AddCustomer(customer);
 
             Console.WriteLine("A new base customer has been added");
         }
@@ -237,7 +237,7 @@ namespace ConsoleUI
             //double.TryParse(Console.ReadLine(), out double Battary);
             //drone.Battary = Battary;
 
-            dal.Add_Drone(drone);
+            dal.AddDrone(drone);
         }
 
         //--------------------------------------------Display OBJ FUNCTIONS---------------------------------------------//

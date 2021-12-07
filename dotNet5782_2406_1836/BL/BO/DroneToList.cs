@@ -9,7 +9,7 @@ namespace BO
     public class DroneToList : DroneCharge
     {
         public string DroneModel { get; set; }
-        public WeightCategories DroneWeight { get; set; }
+        public DroneWeightCategories DroneWeight { get; set; }
         public Location CurrentLocation { get; set; }
         public int NumOfPackageDelivered { get; set; } // num of packege
         public  DroneStatus Status { get; set; }

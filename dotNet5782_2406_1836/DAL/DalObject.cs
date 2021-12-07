@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IDAL.DO;
-using DalObject;
 using IDAL;
 
 namespace DalObject
@@ -16,31 +15,31 @@ namespace DalObject
         /// <summary>
         /// Checks if the object the user is looking for is in the list, then throws an error if it does not add to the list 
         /// </summary>
-        /// <param name="new_baseStation"></param>
-        public void Add_BaseStation(BaseStation new_baseStation)
+        /// <param name="newBaseStation"></param>
+        public void AddBaseStation(BaseStation newBaseStation)
         {
-            DataSource.Stations.Add(DataSource.Stations.FindIndex(i => i.StationID == new_baseStation.StationID) == -1 ?
-                new_baseStation : throw new BaseStationException($"This id{new_baseStation.StationID}already exist"));
+            DataSource.Stations.Add(DataSource.Stations.FindIndex(i => i.StationID == newBaseStation.StationID) == -1 ?
+                newBaseStation : throw new BaseStationException($"This id{newBaseStation.StationID}already exist"));
         }
 
-        public void Add_Drone(Drone new_drone)
+        public void AddDrone(Drone newDrone)
         {
-            DataSource.Drones.Add((Drone)(DataSource.Drones.FindIndex(i => i.DroneID == new_drone.DroneID) == -1 ?
-                new_drone : throw new DroneException($"This id {new_drone.DroneID} already exist")));
+            DataSource.Drones.Add((Drone)(DataSource.Drones.FindIndex(i => i.DroneID == newDrone.DroneID) == -1 ?
+                newDrone : throw new DroneException($"This id {newDrone.DroneID} already exist")));
         }
 
-        public void Add_Customer(Customer new_customer)
+        public void AddCustomer(Customer newCustomer)
         {
-            DataSource.Clients.Add(DataSource.Clients.FindIndex(i => i.CustomerId == new_customer.CustomerId) == -1 ?
-            new_customer : throw new CustumerException($"This id {new_customer.CustomerId} already exist"));
+            DataSource.Clients.Add(DataSource.Clients.FindIndex(i => i.CustomerId == newCustomer.CustomerId) == -1 ?
+            newCustomer : throw new CustumerException($"This id {newCustomer.CustomerId} already exist"));
         }
 
-        public void Add_Parcel(Parcel new_parcel)
+        public void AddParcel(Parcel newParcel)
         {
-            DataSource.Packages.Add(DataSource.Packages.FindIndex(i => i.ParcelId == new_parcel.ParcelId) == -1 ?
-            new_parcel : throw new ParcelException($"This id {new_parcel.ParcelId} already exist"));
+            DataSource.Packages.Add(DataSource.Packages.FindIndex(i => i.ParcelId == newParcel.ParcelId) == -1 ?
+            newParcel : throw new ParcelException($"This id {newParcel.ParcelId} already exist"));
         }
-        public void Add_DroneCharge(DroneCharge droneCharge)
+        public void AddDroneCharge(DroneCharge droneCharge)
         {
             DataSource.DroneCharges.Add((DroneCharge)(DataSource.DroneCharges.FindIndex(i => i.StationID == droneCharge.StationID) == -1 ?
             droneCharge : throw new DroneChargeException($"This id {droneCharge.StationID} already exist")));
@@ -109,6 +108,7 @@ namespace DalObject
             int index = DataSource.Packages.ToList().FindIndex(i => i.ParcelId == parcelId);
             Parcel parcel = DataSource.Packages[index];
             parcel.DroneId = droneId;
+            parcel.PickedUp = DateTime.Now;
             DataSource.Packages[index] = parcel;
         }
 
@@ -140,9 +140,9 @@ namespace DalObject
             int index = DataSource.DroneCharges.ToList().FindIndex(i => i.DroneID == droneId);
             if (index != -1)
             {
-                return;
+                throw new Exception("The charge Drone have not exists");
             }
-            Add_DroneCharge(new DroneCharge { DroneID = droneId, StationID = baseStationId });
+            AddDroneCharge(new DroneCharge { DroneID = droneId, StationID = baseStationId });
         }
 
         public void ReleasingChargeDrone(int droneId, int baseStationId)
@@ -235,14 +235,14 @@ namespace DalObject
             DataSource.Clients[index] = customer;
         }
 
-        public void UpdateParcel(Parcel parcrl)
+        public void UpdateParcel(Parcel parcel)
         {
-            int index = DataSource.Packages.FindIndex(i => i.ParcelId == parcrl.ParcelId);
+            int index = DataSource.Packages.FindIndex(i => i.ParcelId == parcel.ParcelId);
             if (index == -1)
             {
                 throw new Exception($"This Parcel have not exist, Please try again.");
             }
-            DataSource.Packages[index] = parcrl;
+            DataSource.Packages[index] = parcel;
         }
 
         public void UpdateDroneCharge(DroneCharge droneCharge)
@@ -254,7 +254,21 @@ namespace DalObject
             }
             DataSource.DroneCharges[index] = droneCharge;
         }
+        public void MinusDroneCharge(int stationId)
+        {
+            BaseStation station = DataSource.Stations.Find(x => x.StationID == stationId);
+            DataSource.Stations.Remove(station);
+            station.AvailableChargeSlots--;
+            DataSource.Stations.Add(station);
+        }
 
+        public void PlusDroneCharge(int stationId)
+        {
+            BaseStation station = DataSource.Stations.Find(x => x.StationID == stationId);
+            DataSource.Stations.Remove(station);
+            station.AvailableChargeSlots++;
+            DataSource.Stations.Add(station);
+        }
 
 
         //--------------------------------------------------DISPLAY FUNCTION---------------------------------------//

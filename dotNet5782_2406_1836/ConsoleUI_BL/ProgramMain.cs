@@ -7,11 +7,11 @@ using BO;
 
 namespace ConsoleUI_BL
 {
-    class ProgramMain
+    internal class ProgramMain
     {
-        static readonly IBL bl = new BL();
+        private static readonly IBL bl = new BL();
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             //Console.WriteLine(String.Join("    ", bl.DroneToList));
             MenuStartAplication();
@@ -20,7 +20,7 @@ namespace ConsoleUI_BL
         }
 
         #region
-        Random random = new(DateTime.Now.Millisecond);
+        readonly Random random = new(DateTime.Now.Millisecond);
 
         public static void MenuStartAplication()
         {
@@ -116,7 +116,7 @@ namespace ConsoleUI_BL
 
         public static void AddBaseStation()
         {
-            BO.BaseStation station = new();
+            BaseStation station = new();
             station.Location = new Location();
             Console.WriteLine("Please enter baseStation Id: ");
             int.TryParse(Console.ReadLine(), out int stationID);
@@ -138,7 +138,7 @@ namespace ConsoleUI_BL
             station.Location.Latitude = latitude;
 
             // list of DroneCharge & initiolize the list to empty list 
-            station.droneCharges = new List<BO.DroneCharge>();
+            station.droneCharges = new List<DroneCharge>();
             Console.WriteLine("A new basestation has been added ");
             bl.AddBaseStation(station);
 
@@ -149,7 +149,7 @@ namespace ConsoleUI_BL
         {
 
             //IDAL.DO.Drone drone = new();
-            BO.DroneToList drone = new();
+            DroneToList drone = new();
 
             Console.WriteLine("Please enter number DroneID: ");
             int.TryParse(Console.ReadLine(), out int DroneID);
@@ -160,7 +160,7 @@ namespace ConsoleUI_BL
 
             Console.WriteLine("Please enter drone weight: 1 to light ,2 to medium ,3 to heavy ");//לבדוק חריגה אם הוזן מספר גדול מ 3 
             int.TryParse(Console.ReadLine(), out int temp);
-            drone.DroneWeight = (BO.WeightCategories)temp;// MaxWeight
+            drone.DroneWeight = (DroneWeightCategories)temp;// MaxWeight
 
             Console.WriteLine("Please enter number of station to loading the drone: ");
             int.TryParse(Console.ReadLine(), out int stationId);
@@ -171,13 +171,11 @@ namespace ConsoleUI_BL
 
         public static void AddNewCustomer()
         {
-            int CustomerId;
-            double Longtitude, Latitude;
-            BO.Customer customer = new();
+            Customer customer = new();
             customer.LocationCustomer = new();
 
             Console.WriteLine("Please enter id: ");
-            int.TryParse(Console.ReadLine(), out CustomerId);
+            int.TryParse(Console.ReadLine(), out int CustomerId);
             customer.CustomerId = CustomerId;
 
             Console.WriteLine("Please enter name: ");
@@ -187,11 +185,11 @@ namespace ConsoleUI_BL
             customer.PhoneCustomer = Console.ReadLine();
 
             Console.WriteLine("Please enter longitude: ");
-            double.TryParse(Console.ReadLine(), out Longtitude);
+            double.TryParse(Console.ReadLine(), out double Longtitude);
             customer.LocationCustomer.Longtitude = Longtitude;
 
             Console.WriteLine("Please enter latitude: ");
-            double.TryParse(Console.ReadLine(), out Latitude);
+            double.TryParse(Console.ReadLine(), out double Latitude);
             customer.LocationCustomer.Latitude = Latitude;
 
             bl.AddNewCustomer(customer);
@@ -202,7 +200,7 @@ namespace ConsoleUI_BL
         public static void AddNewParcel()
         {
 
-            BO.Parcel parcel = new();
+            Parcel parcel = new();
 
             DateTime currentDate = DateTime.Now;
 
@@ -247,18 +245,16 @@ namespace ConsoleUI_BL
         //Print BaseStation by string.Format
         public static void DisplayBaseStation(IBL bL)
         {
-            int stationID;
             Console.WriteLine("Please enter station ID: ");
-            int.TryParse(Console.ReadLine(), out stationID);
+            int.TryParse(Console.ReadLine(), out int stationID);
             BaseStation station = bl.GetBaseStation(stationID);
             Console.WriteLine(string.Format("Station Details: {0} ", station));
         }
         //Print Drone by string.Format
         public static void DisplayDrone(IBL bl)
         {
-            int DroneID;
             Console.WriteLine("Please enter Drone ID: ");
-            int.TryParse(Console.ReadLine(), out DroneID);
+            int.TryParse(Console.ReadLine(), out int DroneID);
             Drone newDrone = bl.GetDrone(DroneID);
 
             Console.WriteLine(string.Format("Drone Details: {0} " , newDrone));
@@ -268,18 +264,16 @@ namespace ConsoleUI_BL
         
         public static void DisplayCustomer(IBL bL)
         {
-            int CustomerID;
             Console.WriteLine("Please enter Customer ID: ");
-            int.TryParse(Console.ReadLine(), out CustomerID);
+            int.TryParse(Console.ReadLine(), out int CustomerID);
             Customer newCustomer = bl.GetCustomer(CustomerID);
             Console.WriteLine(string.Format("Customer Details: {0} " , newCustomer));
         }
         //Print Parcel by string.Format
         public static void DisplayParcel(IBL bL)
         {
-            int ParcelID;
             Console.WriteLine("Please enter Parcel ID: ");
-            int.TryParse(Console.ReadLine(), out ParcelID);
+            int.TryParse(Console.ReadLine(), out int ParcelID);
             Parcel new_Parcel = bl.GetParcel(ParcelID);
             Console.WriteLine(string.Format("Parcel Details: {0} " , new_Parcel));
         }
@@ -312,67 +306,61 @@ namespace ConsoleUI_BL
        
 
         // Call PackageCollectionByDrone function by parcel ID & drone ID paramters
-        private static void ReleaseDroneFromCharged(BO.BL bL)
+        private static void ReleaseDroneFromCharged(IBL bL)
         {
-            int pacel_id_associate, drone_id_associate;
-
             Console.WriteLine("Please enter parcel ID that you what to associate with your drone: ");
-            int.TryParse(Console.ReadLine(), out pacel_id_associate);
-
+            int.TryParse(Console.ReadLine(), out int pacelIdAssociate);
             Console.WriteLine("Please enter drone ID that you what to associate with your parcel: ");
-            int.TryParse(Console.ReadLine(), out drone_id_associate);
-            bl.PackageCollectionByDrone(pacel_id_associate, drone_id_associate);
+            int.TryParse(Console.ReadLine(), out int droneIdAssociate);
+            bl.ReleaseDroneFromCharge(droneIdAssociate, pacelIdAssociate, (DateTime)date);
         }
 
         //Call DliveredPackageToCustumer function by parcel ID & drone ID paramters
-        public static void SendingDroneToCharge(BO.BL bL)
+        public static void SendingDroneToCharge(IBL bL)
         {
-            int parcelIdAssociate, droneIdAssociate;
 
             Console.WriteLine("Please enter parcel ID that you what to associate with your drone: ");
-            int.TryParse(Console.ReadLine(), out parcelIdAssociate);
+            int.TryParse(Console.ReadLine(), out int parcelIdAssociate);
 
             Console.WriteLine("Please enter drone ID that you what to associate with your parcel: ");
-            int.TryParse(Console.ReadLine(), out droneIdAssociate);
-            bl.DeliveredPackageToCustumer(parcelIdAssociate, droneIdAssociate);
+            int.TryParse(Console.ReadLine(), out int droneIdAssociate);
+            bl.SendDroneToCharge(parcelIdAssociate, droneIdAssociate);
         }
 
         //Call ChargeDrone function by parcel ID & drone ID paramters
-        private static void DeliveredParcel(DalObject.DalObject dal)
+        private static void DeliveredParcel(IBL bL)
         {
-            int baseStationId, drone_id_associate;
 
             Console.WriteLine("Please enter parcel ID that you what to associate with your drone: ");
-            int.TryParse(Console.ReadLine(), out baseStationId);
+            int.TryParse(Console.ReadLine(), out int baseStationId);
 
             Console.WriteLine("Please enter drone ID that you what to associate with your parcel: ");
-            int.TryParse(Console.ReadLine(), out drone_id_associate);
-            dal.ChargeDrone(drone_id_associate, baseStationId);
+            int.TryParse(Console.ReadLine(), out int droneIdAssociate);
+
+            bL.ChargeDrone(droneIdAssociate, baseStationId);
         }
 
         //Call ChargeDrone function by baseStationId & drone ID paramters
-        private static void packageCollectByDrone(DalObject.DalObject dal)
+        private static void packageCollectByDrone(IBL bL)
         {
-            int baseStationId, drone_id_associate;
 
             Console.WriteLine("Please enter parcel ID that you what to associate with your drone: ");
-            int.TryParse(Console.ReadLine(), out baseStationId);
+            int.TryParse(Console.ReadLine(), out int baseStationId);
 
             Console.WriteLine("Please enter drone ID that you what to associate with your parcel: ");
-            int.TryParse(Console.ReadLine(), out drone_id_associate);
-            dal.ChargeDrone(drone_id_associate, baseStationId);
+            int.TryParse(Console.ReadLine(), out int droneIdAssociate);
+            bL.ChargeDrone(droneIdAssociate, baseStationId);
         }
 
         //Call ReleasingChargeDrone function by drone_id & baseStationId paramters
         public static void AssociateParcel(IBL bL)
         {
-            int baseStationId, droneIdAssociate;
 
             Console.WriteLine("Please enter parcel ID that you what to associate with your drone: ");
-            int.TryParse(Console.ReadLine(), out baseStationId);
+            int.TryParse(Console.ReadLine(), out int baseStationId);
 
             Console.WriteLine("Please enter drone ID that you what to associate with your parcel; ");
-            int.TryParse(Console.ReadLine(), out droneIdAssociate);
+            int.TryParse(Console.ReadLine(), out int droneIdAssociate);
             //bl.ReleasingChargeDrone(droneIdAssociate, baseStationId);
         }
 
@@ -403,7 +391,7 @@ namespace ConsoleUI_BL
             }
         }
         //Print a generic list by object 
-        public static void DisplayList<T>(IBL bl, IEnumerable<T> t)
+        public static void DisplayList<T>(IBL bL, IEnumerable<T> t)
         {
             foreach (T s in t)
             {
