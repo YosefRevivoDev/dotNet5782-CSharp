@@ -10,4 +10,5 @@ namespace BO
     public enum WeightCategories {light = 1,medium = 2,heavy = 3 }
     public enum Priorities { regular, fast, emergency }
     public enum ParcelStatus { Defined, associated, collected, provided }
+    public enum DroneWeightCategories { minimum , medium , maximum}
 }

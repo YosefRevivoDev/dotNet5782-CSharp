@@ -9,14 +9,14 @@ namespace BO
     public class Drone : DroneCharge
     {
         public string Drone_Model { get; set; }
-        public WeightCategories Drone_weight { get; set; }
+        public DroneWeightCategories DroneWeight { get; set; }
         public DroneStatus Status { get; set; }
         public Location CurrentLocation { get; set; }
         public int PackageInDeliver { get; set; }
 
         public override string ToString()
         {
-            return base.ToString()+$"Drone: {Drone_Model} ,WeightCategories: {Drone_weight} ," +
+            return base.ToString()+$"Drone: {Drone_Model} ,WeightCategories: {DroneWeight} ," +
                 $"DroneStatus: {Status} ,Location: {CurrentLocation} ,PackageInDeliver: {PackageInDeliver} ";
         }
     }

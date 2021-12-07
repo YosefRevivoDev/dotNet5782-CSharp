@@ -6,11 +6,11 @@ namespace IDAL
 {
     public interface IDal
     {
-        void Add_BaseStation(BaseStation new_baseStation);
-        void Add_Customer(Customer new_customer);
-        void Add_Drone(Drone new_drone);
-        void Add_DroneCharge(DroneCharge droneCharge);
-        void Add_Parcel(Parcel new_parcel);
+        void AddBaseStation(BaseStation new_baseStation);
+        void AddCustomer(Customer new_customer);
+        void AddDrone(Drone new_drone);
+        void AddDroneCharge(DroneCharge droneCharge);
+        void AddParcel(Parcel new_parcel);
         void ChargeDrone(int droneId, int baseStationId);
         void DeliveredPackageToCustumer(int parcelId, int droneId);
         BaseStation GetBaseStation(int Id);
@@ -35,5 +35,8 @@ namespace IDAL
         void UpdateDroneCharge(DroneCharge droneCharge);
         void UpdateParcel(Parcel parcrl);
         double[] RequetPowerConsumption();
+        void MinusDroneCharge(int stationId);
+        void PlusDroneCharge(int stationId);
+
     }
 }

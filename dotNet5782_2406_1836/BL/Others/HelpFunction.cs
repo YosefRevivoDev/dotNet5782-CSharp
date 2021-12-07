@@ -6,22 +6,20 @@ using System.Threading.Tasks;
 
 namespace BO
 {
-    
-    static class HelpFunction
+
+    public partial class BL
     {
         static double shortDistance = 400000000;
         internal static double ShortDistance(double latitude1, double latitude2, double longtitude1, double longtitude2)
         {
-                double Dtemp;
-                Dtemp = Distance(latitude1, latitude2, longtitude1, longtitude2);
-                if (shortDistance > Dtemp)
-                {
-                    shortDistance = Dtemp;
-                }
+            double Dtemp;
+            Dtemp = Distance(latitude1, latitude2, longtitude1, longtitude2);
+            if (shortDistance > Dtemp)
+            {
+                shortDistance = Dtemp;
+            }
             return shortDistance;
         }
-
-
 
 
         //---------------Calculate distance betweene 2 cordinates------------//
@@ -58,20 +56,43 @@ namespace BO
 
             // calculate the result
             return (c * r);
-        } 
+        }
 
         public static (int, double) IndexOfMinDistancesBetweenLocations(List<IDAL.DO.BaseStation> baseStations, Location location)
         {
             List<double> distances = new List<double>();
             foreach (var b in baseStations)
             {
-                distances.Add(BO.HelpFunction.Distance(b.Latitude, location.Latitude,
+                distances.Add(Distance(b.Latitude, location.Latitude,
                     b.Longtitude, location.Longtitude));
             }
             return (distances.FindIndex(i => i == distances.Min()), distances.Min());
         }
 
- 
+        public static DroneToList BatteryStatusBetweenLocations(Location location, DroneToList drone, Enum weight)
+        {
+
+            double BatteryStatusBetweenLocations =
+                Distance(location.Latitude, drone.CurrentLocation.Latitude, location.Longtitude, drone.CurrentLocation.Longtitude);
+            switch (weight)
+            {
+                case IDAL.DO.WeightCategories.light:
+                    BatteryStatusBetweenLocations *= BL.PowerConsumption_LightWeight;
+                    break;
+                case IDAL.DO.WeightCategories.medium:
+                    BatteryStatusBetweenLocations *= BL.PowerConsumption_MediumWeight;
+                    break;
+                case IDAL.DO.WeightCategories.heavy:
+                    BatteryStatusBetweenLocations *= BL.PowerConsumption_HeavyWeight;
+                    break;
+                default:
+                    break;
+            }
+            //Check if drone's way enough to pass the mession 
+            return drone.BattaryStatus - BatteryStatusBetweenLocations > 0 ? drone : default;
+        }
+
+       
     }
 }
 
