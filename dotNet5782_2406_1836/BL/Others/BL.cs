@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace BO
 {
-    public partial class BL : IBL
+    public partial class BL : IBL.IBL
     {
         readonly IDAL.IDal dal; // Dal object to invite DAL functions 
         public List<DroneToList> DroneToList { get; set; } //Dynamic drone's list at BL layer
@@ -475,9 +475,9 @@ namespace BO
             dal.ChargeDrone(droneId, stationId);//  Create an instance in the datasource
         }
 
-        public void ReleaseDroneFromCharge(int droneId, int stationId)
+        public void ReleaseDroneFromCharge(int droneId, int stationId, DateTime dateTime)
         {
-            DateTime dateTime;
+           
             DroneToList drone = DroneToList.Find(x => x.DroneID == droneId);
             if (drone == null)
             {

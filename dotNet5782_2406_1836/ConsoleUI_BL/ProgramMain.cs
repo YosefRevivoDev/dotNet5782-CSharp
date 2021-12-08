@@ -304,13 +304,13 @@ namespace ConsoleUI_BL
        
 
         // Call PackageCollectionByDrone function by parcel ID & drone ID paramters
-        private static void ReleaseDroneFromCharged(IBL bL)
+        private static void ReleaseDroneFromCharge(IBL bL)
         {
             Console.WriteLine("Please enter parcel ID that you what to associate with your drone: ");
             int.TryParse(Console.ReadLine(), out int pacelIdAssociate);
             Console.WriteLine("Please enter drone ID that you what to associate with your parcel: ");
             int.TryParse(Console.ReadLine(), out int droneIdAssociate);
-            bl.ReleaseDroneFromCharge(droneIdAssociate, pacelIdAssociate, (DateTime)date);
+            bl.ReleaseDroneFromCharge(droneIdAssociate, pacelIdAssociate, DateTime.Now);
         }
 
         //Call DliveredPackageToCustumer function by parcel ID & drone ID paramters
@@ -326,29 +326,29 @@ namespace ConsoleUI_BL
         }
 
         //Call ChargeDrone function by parcel ID & drone ID paramters
-        private static void DeliveredParcel(IBL bL)
-        {
+        //private static void DeliveredParcel(IBL bL)
+        //{
 
-            Console.WriteLine("Please enter parcel ID that you what to associate with your drone: ");
-            int.TryParse(Console.ReadLine(), out int baseStationId);
+        //    Console.WriteLine("Please enter parcel ID that you what to associate with your drone: ");
+        //    int.TryParse(Console.ReadLine(), out int baseStationId);
 
-            Console.WriteLine("Please enter drone ID that you what to associate with your parcel: ");
-            int.TryParse(Console.ReadLine(), out int droneIdAssociate);
+        //    Console.WriteLine("Please enter drone ID that you what to associate with your parcel: ");
+        //    int.TryParse(Console.ReadLine(), out int droneIdAssociate);
 
-            bL.ChargeDrone(droneIdAssociate, baseStationId);
-        }
+        //    bL.ChargeDrone(droneIdAssociate, baseStationId);
+        //}
 
-        //Call ChargeDrone function by baseStationId & drone ID paramters
-        private static void packageCollectByDrone(IBL bL)
-        {
+        ////Call ChargeDrone function by baseStationId & drone ID paramters
+        //private static void packageCollectByDrone(IBL bL)
+        //{
 
-            Console.WriteLine("Please enter parcel ID that you what to associate with your drone: ");
-            int.TryParse(Console.ReadLine(), out int baseStationId);
+        //    Console.WriteLine("Please enter parcel ID that you what to associate with your drone: ");
+        //    int.TryParse(Console.ReadLine(), out int baseStationId);
 
-            Console.WriteLine("Please enter drone ID that you what to associate with your parcel: ");
-            int.TryParse(Console.ReadLine(), out int droneIdAssociate);
-            bL.ChargeDrone(droneIdAssociate, baseStationId);
-        }
+        //    Console.WriteLine("Please enter drone ID that you what to associate with your parcel: ");
+        //    int.TryParse(Console.ReadLine(), out int droneIdAssociate);
+        //    bL.(droneIdAssociate, baseStationId);
+        //}
 
         //Call ReleasingChargeDrone function by drone_id & baseStationId paramters
         public static void AssociateParcel(IBL bL)
@@ -359,7 +359,7 @@ namespace ConsoleUI_BL
 
             Console.WriteLine("Please enter drone ID that you what to associate with your parcel; ");
             int.TryParse(Console.ReadLine(), out int droneIdAssociate);
-            //bl.ReleasingChargeDrone(droneIdAssociate, baseStationId);
+            bl.ReleaseDroneFromCharge(droneIdAssociate, baseStationId, DateTime.Now);// לבדוק עם יהודה 
         }
 
 
