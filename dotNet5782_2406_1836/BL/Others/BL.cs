@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace BO
 {
-    public partial class BL : IBL
+    public partial class BL : IBL.IBL
     {
         IDAL.IDal dal;
         public List<DroneToList> DroneToList { get; set; }
@@ -457,9 +457,9 @@ namespace BO
             dal.ChargeDrone(droneId, stationId);//  Create an instance in the datasource
         }
 
-        public void ReleaseDroneFromCharge(int droneId, int stationId)
+        public void ReleaseDroneFromCharge(int droneId, int stationId, DateTime dateTime)
         {
-            DateTime dateTime;
+           
             DroneToList drone = DroneToList.Find(x => x.DroneID == droneId);
             if (drone == null)
             {

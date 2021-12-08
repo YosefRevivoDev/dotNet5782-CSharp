@@ -14,10 +14,10 @@ namespace IDAL.DO
         public WeightCategories Parcel_weight { get; set; }
         public Priorities ParcelPriority { get; set; }
         public int DroneId { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime PickedUp { get; set; }
-        public DateTime Delivered { get; set; }
-        public DateTime Assignment { get; set; }
+        public DateTime? Created { get; set; }
+        public DateTime? PickedUp { get; set; }
+        public DateTime? Delivered { get; set; }
+        public DateTime? Assignment { get; set; }
         public override string ToString()
         {
             return $"Parcel: , Id:{ParcelId}, Senderld: {SenderId}" +

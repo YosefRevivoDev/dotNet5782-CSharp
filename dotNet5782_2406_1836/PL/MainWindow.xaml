@@ -4,16 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="600
-        " Width="800">
-    <Grid Margin="0,0,0,30">
-        <Button Content="Button" HorizontalAlignment="Right" Margin="0,71,377,0" VerticalAlignment="Top" Height="50" Width="140
-                "/>
-        <TextBox HorizontalAlignment="Center" Margin="491,0,0,0" Text="שלום ניתאי
-                 " TextWrapping="Wrap" VerticalAlignment="Center" Width="200" Height="70"/>
-        <CheckBox Content="מעל גיל 18
-                  " HorizontalAlignment="Left" Margin="284,173,0,0" VerticalAlignment="Top" Height="23" Width="175"/>
-
-    </Grid>
+        mc:Ignorable="d" 
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Title="MainWindow" Height="450" Width="800">
+    <StackPanel>
+        <Button x:Name="btnAddDrone" Content="הוסף רחפן" Margin="3"/>
+        <Button x:Name="btnListDrone" Content="הצג רחפנים" Margin="3,10,5,5" Click="btnListDrone_Click"/>
+    </StackPanel>
 </Window>
