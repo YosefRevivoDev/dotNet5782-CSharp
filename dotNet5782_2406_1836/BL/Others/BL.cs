@@ -1,18 +1,18 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace BO
 {
-    public partial class BL : IBL.IBL
+    public partial class BL : IBL
     {
         readonly IDAL.IDal dal; // Dal object to invite DAL functions 
         public List<DroneToList> DroneToList { get; set; } //Dynamic drone's list at BL layer
         static Random random = new(DateTime.Now.Millisecond);
         public static double PowerConsumptionAvailable;
-        public static double PowerConsumption_LightWeight;
-        public static double PowerConsumption_MediumWeight;
-        public static double PowerConsumption_HeavyWeight;
+        public static double PowerConsumptionLightWeight;
+        public static double PowerConsumptionMediumWeight;
+        public static double PowerConsumptionHeavyWeight;
         public static double LoadingDrone;
 
         public BL()
@@ -39,12 +39,12 @@ namespace BO
             }
             catch { }
         }
-        public void AddNewDrone(DroneToList newDrone, int NumberOfStation) 
+        public void AddNewDrone(DroneToList newDrone, int NumberOfStation)
         {
             try
             {
                 //Get bastation from Dal with ID key 
-                IDAL.DO.BaseStation baseStation = dal.GetBaseStation(NumberOfStation); 
+                IDAL.DO.BaseStation baseStation = dal.GetBaseStation(NumberOfStation);
 
                 if (baseStation.AvailableChargeSlots > 0)
                 {
@@ -101,7 +101,7 @@ namespace BO
                 {
                     SenderId = SenderId,
                     TargetId = TargetId,
-                    Parcel_weight = (IDAL.DO.WeightCategories)newParcel.weight,
+                    ParcelWeight = (IDAL.DO.WeightCategories)newParcel.weight,
                     ParcelPriority = (IDAL.DO.Priorities)newParcel.Priority,
                     Created = DateTime.Now,
                     Assignment = DateTime.MinValue,
@@ -149,27 +149,27 @@ namespace BO
             //Arrray of requet power consumption
             double[] temp = dal.RequetPowerConsumption();
             PowerConsumptionAvailable = temp[0];
-            PowerConsumptionAvailable= temp[1];
-            PowerConsumption_LightWeight= temp[2];
-            PowerConsumption_MediumWeight= temp[3];
-            PowerConsumption_HeavyWeight= temp[4];
+            PowerConsumptionAvailable = temp[1];
+            PowerConsumptionLightWeight = temp[2];
+            PowerConsumptionMediumWeight = temp[3];
+            PowerConsumptionHeavyWeight = temp[4];
 
             //get basetation list from Dal layer and create a new Bl list
             List<IDAL.DO.BaseStation> baseStations = dal.GetBaseStationByPredicate().ToList();
 
             // Sorts packages that belong to the drone but are not provided
             List<IDAL.DO.Parcel> parcels =
-                dal.GetPackagesByPredicate(x => x.DroneId != 0).ToList();
+                dal.GetPackagesByPredicate(x => x.DroneId >= 0).ToList();// שיניתי את התנאי של הDrone
 
             foreach (var item in this.DroneToList)//For all DroneToList do 
             {
-                //Index of parcel that assigned but not sent
-                int index = parcels.FindIndex(x => x.DroneId == item.DroneID && x.Delivered == DateTime.MinValue);
+                //Index of parcel that assigned but not sent1
+                int index = parcels.FindIndex(x => x.DroneId == item.DroneID && x.Delivered != DateTime.Now);
 
                 if (index != -1)//if have a parcel that assigned but not sent, do 
                 {
                     //get the parcel ID that assigned to the drone & set to DroneToList parcel ID that not delivered and change status to busy
-                    item.NumOfPackageDelivered = parcels[index].ParcelId; 
+                    item.NumOfPackageDelivered = parcels[index].ParcelId;
                     item.Status = DroneStatus.busy;
 
                     //Set parmaters to SenderCustomer & TargetCustomer
@@ -180,14 +180,12 @@ namespace BO
                     Location Senderlocation = new()
                     {
                         Latitude = SenderCustomer.Latitude,
-                        Longtitude =
-                        SenderCustomer.Longtitude
+                        Longtitude = SenderCustomer.Longtitude
                     };
                     Location Targetlocation = new()
                     {
                         Latitude = TargetCustomer.Latitude,
-                        Longtitude =
-                        TargetCustomer.Longtitude
+                        Longtitude = TargetCustomer.Longtitude
                     };
 
                     // Battery status is required between the sender and the destination depending on the size of the package
@@ -195,16 +193,16 @@ namespace BO
                                    TargetCustomer.Longtitude, SenderCustomer.Longtitude);
 
                     // Case of parcel weight 
-                    switch (parcels[index].Parcel_weight)
+                    switch (parcels[index].ParcelWeight)
                     {
                         case IDAL.DO.WeightCategories.light:
-                            battarySenderToTarget *= PowerConsumption_LightWeight;
+                            battarySenderToTarget *= PowerConsumptionLightWeight;
                             break;
                         case IDAL.DO.WeightCategories.medium:
-                            battarySenderToTarget *= PowerConsumption_MediumWeight;
+                            battarySenderToTarget *= PowerConsumptionMediumWeight;
                             break;
                         case IDAL.DO.WeightCategories.heavy:
-                            battarySenderToTarget *= PowerConsumption_HeavyWeight;
+                            battarySenderToTarget *= PowerConsumptionHeavyWeight;
                             break;
                         default:
                             break;
@@ -232,11 +230,12 @@ namespace BO
 
                     else
                     {
+                        item.CurrentLocation = new();
                         //parcel that sent
                         item.CurrentLocation.Latitude = SenderCustomer.Latitude;
                         item.CurrentLocation.Longtitude = SenderCustomer.Longtitude;
                     }
-                    item.BattaryStatus = (random.NextDouble() * (100 - battarySenderToTarget)) + battarySenderToTarget;// לשאול את יהודה
+                    item.BattaryStatus = (random.NextDouble() * (100 - battarySenderToTarget)) + battarySenderToTarget;
                 }
             }
         }
@@ -278,7 +277,7 @@ namespace BO
                     Id = item.ParcelId,
                     SenderId = item.SenderId,
                     TargetId = item.TargetId,
-                    Weight = (BO.WeightCategories)item.Parcel_weight,
+                    Weight = (BO.WeightCategories)item.ParcelWeight,
                     Priority = (BO.Priorities)item.ParcelPriority,
                     //ParcelStatus = , // לבדוק עם יהודה מה צריך לעשות פה ,
                     ParcelAreNotAssighmentToDrone = dal.GetPackagesByPredicate(x => x.DroneId == item.DroneId && x.Assignment == DateTime.MinValue).ToList().Count
@@ -361,7 +360,7 @@ namespace BO
             BLParcel.Id = DalParcel.ParcelId;
             BLParcel.Sender = GetCustomer(DalParcel.SenderId);
             BLParcel.Target = GetCustomer(DalParcel.TargetId);
-            BLParcel.weight = (BO.WeightCategories)DalParcel.Parcel_weight;
+            BLParcel.weight = (BO.WeightCategories)DalParcel.ParcelWeight;
             BLParcel.Priority = (BO.Priorities)DalParcel.ParcelPriority;
             BLParcel.CreateTime = DalParcel.Created;
             BLParcel.Requested = DalParcel.Assignment;
@@ -369,7 +368,7 @@ namespace BO
             BLParcel.Delivered = DalParcel.Delivered;
             BLParcel.Drone.DroneID = drone.DroneID;
             BLParcel.Drone.BattaryStatus = drone.BattaryStatus;
-            BLParcel.Drone.CorrentLocation = new Location
+            BLParcel.Drone.CorrentLocation = new Location()
             {
                 Latitude = drone.CurrentLocation.Latitude,
                 Longtitude = drone.CurrentLocation.Longtitude
@@ -379,7 +378,7 @@ namespace BO
 
         //-------------------------------------------- UPDATE FUNC ------------------------------// 
 
-        public void UpadateDrone(int id, string newNameModel)
+        public void UpdateDrone(int id, string newNameModel)
         {
             try
             {
@@ -458,8 +457,9 @@ namespace BO
                     Location = new Location { Latitude = item.Latitude, Longtitude = item.Longtitude }
                 });
             }
+
             double distanceBetweenStationToDrone =
-                            IndexOfMinDistancesBetweenLocations(Dalstations, droneToCharge.CurrentLocation).Item2;
+                          BO.HelpFunction.IndexOfMinDistancesBetweenLocations(Dalstations, droneToCharge.CurrentLocation).Item2;
             if (droneToCharge.BattaryStatus - distanceBetweenStationToDrone * PowerConsumptionAvailable < 0)
             {
                 throw new Exception("WRONG!, There are not enough battery to complete this mission");
@@ -467,7 +467,7 @@ namespace BO
             droneToCharge.BattaryStatus -=
                 distanceBetweenStationToDrone * PowerConsumptionAvailable;
             droneToCharge.CurrentLocation =
-                BLStations[IndexOfMinDistancesBetweenLocations(Dalstations, droneToCharge.CurrentLocation).Item1].Location;
+                BLStations[BO.HelpFunction.IndexOfMinDistancesBetweenLocations(Dalstations, droneToCharge.CurrentLocation).Item1].Location;
             droneToCharge.Status = DroneStatus.maintenance;
 
             dal.MinusDroneCharge(stationId);// Lowering the number of charging stations by 1
@@ -477,7 +477,6 @@ namespace BO
 
         public void ReleaseDroneFromCharge(int droneId, int stationId, DateTime dateTime)
         {
-           
             DroneToList drone = DroneToList.Find(x => x.DroneID == droneId);
             if (drone == null)
             {
@@ -506,12 +505,12 @@ namespace BO
         public void AssignmentOfPackageToDrone(int droneId) //שיוך חבילה לרחפן
         {
             DroneToList drone = DroneToList.Find(x => x.DroneID == droneId);
-            List<IDAL.DO.Parcel> parcels = dal.GetPackagesByPredicate(x => (int)x.Parcel_weight < (int)drone.DroneWeight).OrderBy(i => (int)i.ParcelPriority).ThenBy(i => (int)i.Parcel_weight).ToList();// לבדוק עם יהודה לגבי תנאי הסינון
+            List<IDAL.DO.Parcel> parcels = dal.GetPackagesByPredicate(x => (int)x.ParcelWeight < (int)drone.DroneWeight).OrderBy(i => (int)i.ParcelPriority).ThenBy(i => (int)i.ParcelWeight).ToList();// לבדוק עם יהודה לגבי תנאי הסינון
             if (drone.Status == DroneStatus.available)
             {
                 foreach (var parcel in parcels)
                 {
-                    if (batteryStatusBetweenAllLocation(parcel, drone))
+                    if (BatteryStatusBetweenAllLocation(parcel, drone))
                     {
                         drone.Status = DroneStatus.busy;
                         drone.NumOfPackageDelivered = parcel.ParcelId;
@@ -528,25 +527,25 @@ namespace BO
                 throw new Exception("The Drone is not available");
         }
 
-        private bool batteryStatusBetweenAllLocation(IDAL.DO.Parcel parcel, DroneToList drones)
+        private bool BatteryStatusBetweenAllLocation(IDAL.DO.Parcel parcel, DroneToList drones)
         {
 
-            double BattaryStatus = Distance(drones.CurrentLocation.Latitude,
+            double BattaryStatus = BO.HelpFunction.Distance(drones.CurrentLocation.Latitude,
                                    GetCustomer(parcel.SenderId).LocationCustomer.Latitude,
                                    drones.CurrentLocation.Longtitude, GetCustomer(parcel.SenderId).LocationCustomer.Longtitude)
                                    * PowerConsumptionAvailable;
-            double diSenderToTarget = Distance(GetCustomer(parcel.SenderId).LocationCustomer.Latitude, GetCustomer(parcel.TargetId).LocationCustomer.Latitude,
+            double diSenderToTarget = BO.HelpFunction.Distance(GetCustomer(parcel.SenderId).LocationCustomer.Latitude, GetCustomer(parcel.TargetId).LocationCustomer.Latitude,
                 GetCustomer(parcel.SenderId).LocationCustomer.Longtitude, GetCustomer(parcel.TargetId).LocationCustomer.Longtitude);
-            switch ((WeightCategories)parcel.Parcel_weight)
+            switch ((WeightCategories)parcel.ParcelWeight)
             {
                 case WeightCategories.light:
-                    BattaryStatus += diSenderToTarget * PowerConsumption_LightWeight;
+                    BattaryStatus += diSenderToTarget * PowerConsumptionLightWeight;
                     break;
                 case WeightCategories.medium:
-                    BattaryStatus += diSenderToTarget * PowerConsumption_MediumWeight;
+                    BattaryStatus += diSenderToTarget * PowerConsumptionMediumWeight;
                     break;
                 case WeightCategories.heavy:
-                    BattaryStatus += diSenderToTarget * PowerConsumption_HeavyWeight;
+                    BattaryStatus += diSenderToTarget * PowerConsumptionHeavyWeight;
                     break;
                 default:
                     break;
@@ -554,7 +553,7 @@ namespace BO
             List<BaseStation> baseStationsBL = new List<BaseStation>();
             List<IDAL.DO.BaseStation> baseStationsDAL = dal.GetBaseStationByPredicate().ToList();
 
-            BattaryStatus += IndexOfMinDistancesBetweenLocations(baseStationsDAL, GetCustomer(parcel.TargetId).LocationCustomer).Item2;
+            BattaryStatus += BO.HelpFunction.IndexOfMinDistancesBetweenLocations(baseStationsDAL, GetCustomer(parcel.TargetId).LocationCustomer).Item2;
             if (drones.BattaryStatus - BattaryStatus < 0)
             {
                 return false;
@@ -578,7 +577,7 @@ namespace BO
             if (parcels.PickedUp == DateTime.MinValue)
             {
                 Location location = GetCustomer(parcels.SenderId).LocationCustomer;
-                drones.BattaryStatus -= Distance(drones.CurrentLocation.Latitude, location.Latitude, drones.CurrentLocation.Longtitude, location.Longtitude) * PowerConsumptionAvailable;
+                drones.BattaryStatus -= BO.HelpFunction.Distance(drones.CurrentLocation.Latitude, location.Latitude, drones.CurrentLocation.Longtitude, location.Longtitude) * PowerConsumptionAvailable;
                 drones.CurrentLocation = location;
                 dal.PackageCollectionByDrone(parcels.ParcelId, droneID);
             }
@@ -586,6 +585,11 @@ namespace BO
             {
                 throw new Exception("This Parcel have been collected");
             }
+        }
+
+        public IEnumerable<DroneToList> GetDroneToListsBLByPredicate(Predicate<DroneToList> predicate=null)
+        {
+            return DroneToList.FindAll(i => predicate == null ? true : predicate(i));
         }
     }
 }

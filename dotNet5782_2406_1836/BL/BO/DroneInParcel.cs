@@ -12,7 +12,7 @@ namespace BO
         
 
         public override string ToString()
-        {         
+        {
             return base.ToString() + $"Location: {CorrentLocation} ";
         }
     }

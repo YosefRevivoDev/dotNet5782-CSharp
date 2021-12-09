@@ -276,7 +276,7 @@ namespace DalObject
         // Gets a list and sends a copy to  generic func in Main prog.
 
         public IEnumerable<Drone> GetDronesByPredicate(Predicate<Drone> predicate = null)
-        {
+        { 
             return DataSource.Drones.FindAll(i => predicate == null ? true : predicate(i));
         }
         public IEnumerable<Customer> GetCustomersByPredicate(Predicate<Customer> predicate = null)

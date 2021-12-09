@@ -11,7 +11,7 @@ namespace IDAL.DO
         public int ParcelId { get; set; }
         public int SenderId { get; set; }
         public int TargetId { get; set; }
-        public WeightCategories Parcel_weight { get; set; }
+        public WeightCategories ParcelWeight { get; set; }
         public Priorities ParcelPriority { get; set; }
         public int DroneId { get; set; }
         public DateTime? Created { get; set; }
@@ -22,7 +22,7 @@ namespace IDAL.DO
         {
             return $"Parcel: , Id:{ParcelId}, Senderld: {SenderId}" +
                     $", Targetld: {TargetId}" +
-                    $", Weight: {Parcel_weight}" +
+                    $", Weight: {ParcelWeight}" +
                     $", Priority: {ParcelPriority}" +
                     $", Assignment: {Assignment}" +
                     $", Droneld: {DroneId}" +

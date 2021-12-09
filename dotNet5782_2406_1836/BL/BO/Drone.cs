@@ -16,7 +16,7 @@ namespace BO
 
         public override string ToString()
         {
-            return base.ToString()+$"Drone: {DroneModel} ,WeightCategories: {DroneWeight} ," +
+            return base.ToString() + $"Drone: {DroneModel} ,WeightCategories: {DroneWeight} ," +
                 $"DroneStatus: {Status} ,Location: {CurrentLocation} ,PackageInDeliver: {PackageInDeliver} ";
         }
     }

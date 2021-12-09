@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using BO;
 
-namespace IBL
+
+namespace BO
 {
     public partial interface IBL
     {
@@ -22,7 +22,7 @@ namespace IBL
         void ReleaseDroneFromCharge(int droneId, int stationId, DateTime dateTime);
         //void ReleaseDroneFromCharged();
         void SendDroneToCharge(int droneId, int stationId);
-        void UpadateDrone(int id, string newNameModel);
+        void UpdateDrone(int id, string newNameModel);
         void UpdateBaseStation(int stationId, string newNameStation, int sumOfChargestation);
         void UpdateCustomr(int customerId, string newNameCustomer, string newPhoneCustomer);
       //  void ChargeDrone(int droneIdAssociate, int baseStationId);

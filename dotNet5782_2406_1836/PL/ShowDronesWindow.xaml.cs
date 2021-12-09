@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using BO;
-using IBL;
 
 
 namespace PL
@@ -22,20 +21,25 @@ namespace PL
     /// </summary>
     public partial class ShowDronesWindow : Window
     {
-        IBL.IBL GetBL;
+        BL getBL;
 
-        public ShowDronesWindow(IBL.IBL getBL)
+        public ShowDronesWindow(BL getBL)
         {
             InitializeComponent();
-            this.cmbStatusSelector.ItemsSource = Enum.GetValues(typeof(DroneWeightCategories));
-            this.GetBL = getBL;
+            this.cmbStatusSelector.ItemsSource = Enum.GetValues(typeof(DroneStatus));
+            this.getBL = getBL;
         }
 
         private void cmbStatusSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             DroneStatus status = (DroneStatus)cmbStatusSelector.SelectedItem;
             this.txtLable.Text = status.ToString();
-            this.lstDroneListView.ItemsSource = GetBL.DroneToList()
+            this.lstDroneListView.ItemsSource = getBL.GetDroneToListsBLByPredicate(x=> x.Status == status).ToList();
+        }
+
+        private void txtLable_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }

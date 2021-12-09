@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace BO
 {
-
-    public partial class BL
+    public partial class HelpFunction
     {
         static double shortDistance = 400000000;
         internal static double ShortDistance(double latitude1, double latitude2, double longtitude1, double longtitude2)
@@ -77,13 +77,13 @@ namespace BO
             switch (weight)
             {
                 case IDAL.DO.WeightCategories.light:
-                    BatteryStatusBetweenLocations *= BL.PowerConsumption_LightWeight;
+                    BatteryStatusBetweenLocations *= BL.PowerConsumptionLightWeight;
                     break;
                 case IDAL.DO.WeightCategories.medium:
-                    BatteryStatusBetweenLocations *= BL.PowerConsumption_MediumWeight;
+                    BatteryStatusBetweenLocations *= BL.PowerConsumptionMediumWeight;
                     break;
                 case IDAL.DO.WeightCategories.heavy:
-                    BatteryStatusBetweenLocations *= BL.PowerConsumption_HeavyWeight;
+                    BatteryStatusBetweenLocations *= BL.PowerConsumptionHeavyWeight;
                     break;
                 default:
                     break;
