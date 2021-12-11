@@ -13,29 +13,18 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using BO;
 
-
 namespace PL
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for AddDroneWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class AddDroneWindow : Window
     {
-        BL getBL;
-        public MainWindow()
+        BL bL;
+        public AddDroneWindow(BL getBl)
         {
+            bL = getBl;
             InitializeComponent();
-            getBL = new BL();
-        }
-
-        private void btnListDrone_Click(object sender, RoutedEventArgs e)
-        {
-            new ShowDronesWindow(getBL).Show();
-        }
-
-        private void btnAddDrone_Click(object sender, RoutedEventArgs e)
-        {
-            new AddDroneWindow(getBL).Show();
         }
     }
 }

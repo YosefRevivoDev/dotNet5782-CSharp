@@ -95,7 +95,7 @@ namespace DalObject
                     ParcelWeight = (WeightCategories)rand.Next(0, 2),
                     DroneId = Drones[i].DroneID,
                     Assignment = currentTime,
-                    Delivered = currentTime.AddDays(1),
+                    Delivered = i % 2 == 0 ? null : currentTime.AddDays(1),
                     PickedUp = currentTime.AddDays(2),
                     Created = currentTime.AddDays(3),
                 }

@@ -13,7 +13,7 @@ namespace BO
 
         public override string ToString()
         {
-            return base.ToString() + $"Location: {CorrentLocation} ";
+            return base.ToString() + string.Format("Location: " + "\r\n" +CorrentLocation);
         }
     }
 }

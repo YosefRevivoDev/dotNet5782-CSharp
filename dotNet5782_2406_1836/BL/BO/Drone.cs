@@ -16,8 +16,8 @@ namespace BO
 
         public override string ToString()
         {
-            return base.ToString() + $"Drone: {DroneModel} ,WeightCategories: {DroneWeight} ," +
-                $"DroneStatus: {Status} ,Location: {CurrentLocation} ,PackageInDeliver: {PackageInDeliver} ";
+            return base.ToString() + string.Format("Drone Model: " + DroneModel + "\r\n" + "WeightCategories: " + DroneWeight + "\r\n" +
+                "DroneStatus: " + Status + "\r\n" + "Location: " + CurrentLocation + "\r\n" + "PackageInDeliver: " + PackageInDeliver);
         }
     }
 }

@@ -39,7 +39,7 @@ namespace PL
 
         private void txtLable_TextChanged(object sender, TextChangedEventArgs e)
         {
-
+            
         }
     }
 }

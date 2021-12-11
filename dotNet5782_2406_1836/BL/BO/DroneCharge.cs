@@ -9,12 +9,12 @@ namespace BO
     public class DroneCharge
     {
         public int DroneID { get; set; }
-        public double BattaryStatus  { get;  set; }
+        public double BattaryStatus { get; set; }
 
 
         public override string ToString()
         {
-            return $"DroneCharge: ID: {DroneID} , BattaryStatus: {BattaryStatus} ";
+            return string.Format("ID: " + DroneID + "\r\n" + "BattaryStatus: " + BattaryStatus + "\r\n");
         }
 
     }

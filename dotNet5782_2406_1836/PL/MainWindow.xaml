@@ -13,8 +13,8 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
         Title="MainWindow" Height="450" Width="800">
-    <StackPanel>
-        <Button x:Name="btnAddDrone" Content="הוסף רחפן" Margin="3"/>
+    <StackPanel Height="434" VerticalAlignment="Bottom">
+        <Button x:Name="btnAddDrone" Content="הוסף רחפן" Margin="3" Click="btnAddDrone_Click"/>
         <Button x:Name="btnListDrone" Content="הצג רחפנים" Margin="3,10,5,5" Click="btnListDrone_Click"/>
     </StackPanel>
 </Window>

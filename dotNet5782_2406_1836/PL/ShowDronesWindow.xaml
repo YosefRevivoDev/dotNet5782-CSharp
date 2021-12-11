@@ -8,8 +8,8 @@
         Title="ShowDronesWindow" Height="450" Width="800">
     <Grid x:Name="MainGrid" Margin="12,0,-12,0">
         <Grid.RowDefinitions>
-            <RowDefinition Height="50*"/>
-            <RowDefinition Height="400*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="8*"/>
         </Grid.RowDefinitions>
         <Grid Name="UpGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
               Height="auto" Width="auto">
@@ -22,6 +22,17 @@
             <TextBox x:Name="txtLable" Text="TBD" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" />
             <ComboBox x:Name="cmbStatusSelector" Grid.Column="1" Text="Choose status: " IsEditable="True" IsReadOnly="True" 
                       HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="Choose status: " SelectionChanged="cmbStatusSelector_SelectionChanged"/>
+
+            <ComboBox x:Name="cmbWeightSelector" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2"
+                      IsEditable="True" IsReadOnly="True" Height="auto" Width="auto" ToolTip="Choose Weight"
+                      Text="Choose Weight: " SelectionChanged="cmbStatusSelector_SelectionChanged"/>
+            <ListView Grid.Column="3">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
         </Grid>
         <ListView x:Name="lstDroneListView" Grid.Row="1"/>
     </Grid>

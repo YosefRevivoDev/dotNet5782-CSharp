@@ -9,7 +9,9 @@ namespace IDAL.DO
         public WeightCategories DroneWeight { get; set; }
         public override string ToString()
         {
-            return $"Drone:, ID:{DroneID}, Model:{DroneModel}, Weight:{DroneWeight}";
+            return string.Format("DroneID: " + DroneID
+            +"\n" + "Model: " + "\n" + DroneModel
+            +"Weight: " + "\n" + DroneWeight);
         }
     }
 

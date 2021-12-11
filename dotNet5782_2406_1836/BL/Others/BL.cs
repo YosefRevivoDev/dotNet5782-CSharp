@@ -164,7 +164,7 @@ namespace BO
             foreach (var item in this.DroneToList)//For all DroneToList do 
             {
                 //Index of parcel that assigned but not sent1
-                int index = parcels.FindIndex(x => x.DroneId == item.DroneID && x.Delivered != DateTime.Now);
+                int index = parcels.FindIndex(x => x.DroneId == item.DroneID && x.Delivered == null);
 
                 if (index != -1)//if have a parcel that assigned but not sent, do 
                 {
