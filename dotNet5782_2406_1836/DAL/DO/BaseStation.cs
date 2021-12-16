@@ -8,14 +8,14 @@ namespace IDAL.DO
 {
     public struct BaseStation
     {
-        public BaseStation(int id, string name, double longitude, double latitude, int chargeSlots)
-        {
-            this.StationID = id;
-            this.Name = name;
-            this.Longtitude = longitude;
-            this.Latitude = latitude;
-            this.AvailableChargeSlots = chargeSlots;
-        }
+        //public BaseStation(int id, string name, double longitude, double latitude, int chargeSlots)
+        //{
+        //    this.StationID = id;
+        //    this.Name = name;
+        //    this.Longtitude = longitude;
+        //    this.Latitude = latitude;
+        //    this.AvailableChargeSlots = chargeSlots;
+        //}
 
         public int StationID { get; set; }
         public string Name { get; set; }

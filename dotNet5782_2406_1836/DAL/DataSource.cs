@@ -29,7 +29,7 @@ namespace DalObject
             internal static double PowerConsumption_LightWeight = 0.04;
             internal static double PowerConsumption_MediumWeight = 0.07;
             internal static double PowerConsumption_HeavyWeight = 0.1;
-            internal static double LoadingDrone = 10;
+            internal static double LoadingDrone = 2;
 
             //------------------RunID---------------------------//
 

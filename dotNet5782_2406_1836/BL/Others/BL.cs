@@ -39,7 +39,7 @@ namespace BO
             }
             catch { }
         }
-        public void AddNewDrone(DroneToList newDrone, int NumberOfStation)
+        public void AddNewDrone(Drone newDrone, int NumberOfStation)
         {
             try
             {
@@ -104,9 +104,9 @@ namespace BO
                     ParcelWeight = (IDAL.DO.WeightCategories)newParcel.weight,
                     ParcelPriority = (IDAL.DO.Priorities)newParcel.Priority,
                     Created = DateTime.Now,
-                    Assignment = DateTime.MinValue,
-                    PickedUp = DateTime.MinValue,
-                    Delivered = DateTime.MinValue
+                    Assignment = null,
+                    PickedUp = null,
+                    Delivered = null
                 };
                 dal.AddParcel(parcel);
             }
@@ -211,7 +211,7 @@ namespace BO
                     battarySenderToTarget += BO.HelpFunction.IndexOfMinDistancesBetweenLocations
                         (baseStations, Targetlocation).Item2 * PowerConsumptionAvailable;
 
-                    if (parcels[index].PickedUp == DateTime.MinValue)//parcel that  not sent
+                    if (parcels[index].PickedUp == null)//parcel that  not sent
                     {
                         if (baseStations.Count == 0)
                         {
@@ -253,13 +253,13 @@ namespace BO
                     NameCustomer = item.Name,
                     Phone = item.Phone,
                     //SendParcelAndSupplied => Check if SenderId == item.CustomerId & Delivered != Min date 
-                    SendParcelAndSupplied = dal.GetPackagesByPredicate(x => x.SenderId == item.CustomerId && x.Delivered != DateTime.MinValue).ToList().Count,
+                    SendParcelAndSupplied = dal.GetPackagesByPredicate(x => x.SenderId == item.CustomerId && x.Delivered != null).ToList().Count,
                     //SendParcelAndNotSupplied => Check if SenderId == CustomerId & Delivered == Min date 
-                    SendParcelAndNotSupplied = dal.GetPackagesByPredicate(x => x.SenderId == item.CustomerId && x.Delivered == DateTime.MinValue).ToList().Count,
+                    SendParcelAndNotSupplied = dal.GetPackagesByPredicate(x => x.SenderId == item.CustomerId && x.Delivered == null).ToList().Count,
                     //ParcelsReciever => Check if TargetId == CustomerId & Delivered == Min date 
                     ParcelsReciever = dal.GetPackagesByPredicate(x => x.TargetId == item.CustomerId && x.Delivered == DateTime.Now).ToList().Count,
                     //ParcelOweyToCustomer => Check if TargetId == item.CustomerId & Delivered == Min date 
-                    ParcelOweyToCustomer = dal.GetPackagesByPredicate(x => x.TargetId == item.CustomerId && x.PickedUp == DateTime.MinValue).ToList().Count
+                    ParcelOweyToCustomer = dal.GetPackagesByPredicate(x => x.TargetId == item.CustomerId && x.PickedUp == null).ToList().Count
                 });
             }
             return BLCustomer;
@@ -280,7 +280,7 @@ namespace BO
                     Weight = (BO.WeightCategories)item.ParcelWeight,
                     Priority = (BO.Priorities)item.ParcelPriority,
                     //ParcelStatus = , // לבדוק עם יהודה מה צריך לעשות פה ,
-                    ParcelAreNotAssighmentToDrone = dal.GetPackagesByPredicate(x => x.DroneId == item.DroneId && x.Assignment == DateTime.MinValue).ToList().Count
+                    ParcelAreNotAssighmentToDrone = dal.GetPackagesByPredicate(x => x.DroneId == item.DroneId && x.Assignment == null).ToList().Count
                 });
             }
             return BLparcels;
@@ -314,9 +314,10 @@ namespace BO
 
         public Drone GetDrone(int id)
         {
-            //      Drone BLdrone = DroneToList[DroneToList.FindIndex(x => x.DroneID == id)];
             Drone BLdrone = new();
             IDAL.DO.Drone drone = dal.GetDrone(id);
+            
+
 
             if (drone.DroneID == -1) { throw new Exception("This Drone have not exist, please try again."); }
 
@@ -574,7 +575,7 @@ namespace BO
                 throw new Exception("This Drone is not assinged");
             }
             IDAL.DO.Parcel parcels = dal.GetParcel(drones.NumOfPackageDelivered);
-            if (parcels.PickedUp == DateTime.MinValue)
+            if (parcels.PickedUp == null)
             {
                 Location location = GetCustomer(parcels.SenderId).LocationCustomer;
                 drones.BattaryStatus -= BO.HelpFunction.Distance(drones.CurrentLocation.Latitude, location.Latitude, drones.CurrentLocation.Longtitude, location.Longtitude) * PowerConsumptionAvailable;

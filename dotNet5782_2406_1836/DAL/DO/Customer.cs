@@ -4,7 +4,6 @@ namespace IDAL.DO
 {
     public struct Customer
     {
-
         public int CustomerId { get; set; }
         public string Name { get; set; }
         public string Phone { get; set; }
@@ -16,5 +15,4 @@ namespace IDAL.DO
                     $"Latitude:{Latitude}";
         }
     }
-
 }

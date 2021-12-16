@@ -16,6 +16,7 @@ using BO;
 
 namespace PL
 {
+    
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -33,9 +34,6 @@ namespace PL
             new ShowDronesWindow(getBL).Show();
         }
 
-        private void btnAddDrone_Click(object sender, RoutedEventArgs e)
-        {
-            new AddDroneWindow(getBL).Show();
-        }
+       
     }
 }

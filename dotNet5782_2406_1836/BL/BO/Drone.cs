@@ -13,6 +13,8 @@ namespace BO
         public DroneStatus Status { get; set; }
         public Location CurrentLocation { get; set; }
         public int PackageInDeliver { get; set; }
+        public Parcel Parcel { get; set; }
+
 
         public override string ToString()
         {
