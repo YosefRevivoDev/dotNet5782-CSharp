@@ -69,7 +69,7 @@ namespace BO
                 };
                 newDrone.BattaryStatus = random.Next(20, 41);
                 dal.AddDrone(drone);
-                DroneToList.Add(newDrone);
+          //      DroneToList.Add();
             }
             catch { }
 

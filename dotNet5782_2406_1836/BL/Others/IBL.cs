@@ -16,7 +16,7 @@ namespace BO
         Parcel GetParcel(int id);
         void AddBaseStation(BaseStation newBaseStation);
         void AddNewCustomer(Customer newCustomer);
-        void AddNewDrone(DroneToList newDrone, int NumberOfStation);
+        void AddNewDrone(Drone newDrone, int NumberOfStation);
         void AddNewParcel(Parcel newParcel, int SenderId, int TargetId);
         void InitDroneToLists();
         void ReleaseDroneFromCharge(int droneId, int stationId, DateTime dateTime);

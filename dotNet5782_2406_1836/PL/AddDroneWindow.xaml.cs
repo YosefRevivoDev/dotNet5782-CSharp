@@ -80,5 +80,14 @@ namespace PL
             e.Handled = regex.IsMatch(e.Text);
         }
 
+        private void btnSendDroneToCharge(object sender, RoutedEventArgs e)
+        {
+            // bL.SendDroneToCharge()
+        }
+
+        private void _btnRealeseDroneClick(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

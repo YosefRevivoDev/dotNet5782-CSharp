@@ -165,7 +165,7 @@ namespace ConsoleUI_BL
             Console.WriteLine("Please enter number of station to loading the drone: ");
             int.TryParse(Console.ReadLine(), out int stationId);
            
-            bl.AddNewDrone(drone, stationId);
+          //  bl.AddNewDrone(drone, stationId);
             Console.WriteLine("A new drone has been added ");
         }
 
