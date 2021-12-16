@@ -52,7 +52,7 @@ namespace PL
                         bL.AddNewDrone(addNewDrone, bL.GetDroneToListsBLByPredicate().ToList().Count);
                         _showDronesWindow.DronesToList.Add(bL.GetDroneToListsBLByPredicate()
                             .First(i => i.DroneID == addNewDrone.DroneID));
-                        MessageBox.Show(addNewDrone.ToString(), "Good Inser Drone");
+                        MessageBox.Show(addNewDrone.ToString(), "Good Insert Drone");
                         Close();
                     }
                     catch (Exception ex)

@@ -31,8 +31,8 @@ namespace PL
             DronesToList = new();
 
             DronesToList.ToList().AddRange(getBL.GetDroneToListsBLByPredicate().ToList());
-            this.cmbStatusSelector.ItemsSource = Enum.GetValues(typeof(DroneStatus));
-            this.cmbWeightSelector.ItemsSource = Enum.GetValues(typeof(DroneWeightCategories));
+            cmbStatusSelector.ItemsSource = Enum.GetValues(typeof(DroneStatus));
+            cmbWeightSelector.ItemsSource = Enum.GetValues(typeof(DroneWeightCategories));
             this.getBL = getBL;
             lstDroneListView.ItemsSource = DronesToList;
         }
@@ -40,8 +40,8 @@ namespace PL
         private void cmbStatusSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             DroneStatus status = (DroneStatus)cmbStatusSelector.SelectedItem;
-            this.txtLable.Text = status.ToString();
-            this.lstDroneListView.ItemsSource = getBL.GetDroneToListsBLByPredicate(x => x.Status == status).ToList();
+            txtLable.Text = status.ToString();
+            lstDroneListView.ItemsSource = getBL.GetDroneToListsBLByPredicate(x => x.Status == status).ToList();
         }
 
         private void txtLable_TextChanged(object sender, TextChangedEventArgs e)
