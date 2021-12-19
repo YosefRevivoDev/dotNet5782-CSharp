@@ -19,17 +19,21 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Content="DroneID"/>
             <TextBox x:Name="DroneId" PreviewTextInput="NumberValidationTextBox" Grid.Column="1" Text="{Binding DroneID}" TextChanged="DroneId_TextChanged" />
             <Label Content="DroneModel" Grid.Row="1"/>
-            <TextBox x:Name="DroneModel" Grid.Column="1" Grid.Row="1" Text="{Binding DroneModel}"/>
+            <TextBox x:Name="DroneModel" Grid.Column="1" Grid.Row="1" Text="{Binding DroneModel, Mode=TwoWay}"/>
             <Label Content="DroneWeight" Grid.Row="2"/>
             <ComboBox x:Name="DroneWeight" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" SelectedItem="{Binding DroneWeight}"/>
-            <Label Content="NumberOfStation" Grid.Row="3"/>
-            <TextBox x:Name="NumberOfStation" Grid.Column="1" Grid.Row="3" Text="{Binding NumberOfStation}"/>
+            <Label Name="NumberOfStation" Content="NumberOfStation" Grid.Row="3"/>
+            <ComboBox x:Name="NumberOfStations" DisplayMemberPath="ID" Grid.Column="1" Grid.Row="3" SelectionChanged="NumberOfStation_SelectionChanged" />
             <Button x:Name="addDrone" Content="הוסף" HorizontalAlignment="Stretch" Grid.Row="4" Grid.Column="1"
                     Margin="5,5,5,5" VerticalAlignment="Center" Width="128" Click="addDrone_Click"/>
+            <!--<ProgressBar Background="Green" Height="30" Grid.Row="5" Grid.Column="2" Maximum="100" Value="{Binding BattaryStatus}" ></ProgressBar>-->
+            <Grid Grid.Column="1" Grid.Row="4"/>
+
         </Grid>
         <Grid x:Name="DroneSituateGrid" Margin="400,32,34,29">
             <Grid.RowDefinitions>
@@ -39,6 +43,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
+                
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="163*"/>
@@ -46,15 +51,15 @@
                 <ColumnDefinition Width="97*"/>
                 <ColumnDefinition Width="40"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="btnUpdateModel" Content="עדכון" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.465,0.553" Width="163"/>
-            <TextBox Grid.Column="1" HorizontalAlignment="Left" Margin="21,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsEnabled="True" Grid.ColumnSpan="2"/>
+            <Button x:Name="btnUpdateModel" Content="עדכון" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.465,0.553" Width="163" Click="btnUpdateModel_Click"/>
+            <TextBox x:Name="txtUpdateModel"  Text="{Binding DroneModel, Mode=TwoWay}" Grid.Column="1" HorizontalAlignment="Left" Margin="21,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsEnabled="True" Grid.ColumnSpan="2"/>
             <Button x:Name="btnDroneCharge" Content="שליחת רחפן לטעינה" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" Width="163" Click="btnSendDroneToCharge" />
             <Button x:Name="btnRealeseDrone" Content="שחרור רחפן מטעינה" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Width="163" Click="_btnRealeseDroneClick"/>
             <Button x:Name="btnSendDroneToDeliver" Content="שליחת רחפן למשלוח" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Width="163"/>
             <Button x:Name="btnCollectParcel" Content="איסוף חבילה" HorizontalAlignment="Center" Grid.Row="4" VerticalAlignment="Center" Width="163"/>
             <Button x:Name="btnSupplyParcel" Content="אספקת חבילה" HorizontalAlignment="Center" Grid.Row="5" VerticalAlignment="Center" Width="163"/>
-            <Button x:Name="btnExit" Content="x" Grid.Column="3" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" Width="40" Height="40"/>
-
+            <Button x:Name="btnExit" Content="x" Grid.Column="3" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="btnExit_Click"/>
+  
         </Grid>
     </Grid>
 </Window>

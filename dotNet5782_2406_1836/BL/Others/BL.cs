@@ -142,7 +142,7 @@ namespace BO
                 {
                     DroneID = item.DroneID,
                     DroneModel = item.DroneModel,
-                    DroneWeight = (DroneWeightCategories)item.DroneWeight,
+                    DroneWeight = (WeightCategories)item.DroneWeight,
                 });
             }
 
@@ -161,11 +161,11 @@ namespace BO
             List<IDAL.DO.Parcel> parcels =
                 dal.GetPackagesByPredicate(x => x.DroneId >= 0).ToList();// שיניתי את התנאי של הDrone
 
-            foreach (var item in this.DroneToList)//For all DroneToList do 
+            foreach (var item in DroneToList)//For all DroneToList do 
             {
                 //Index of parcel that assigned but not sent1
-                int index = parcels.FindIndex(x => x.DroneId == item.DroneID && x.Delivered == null);
-
+                int index = parcels.FindIndex(x => x.DroneId == item.DroneID/* && x.Delivered == null*/);
+                item.CurrentLocation = new();
                 if (index != -1)//if have a parcel that assigned but not sent, do 
                 {
                     //get the parcel ID that assigned to the drone & set to DroneToList parcel ID that not delivered and change status to busy
@@ -210,6 +210,7 @@ namespace BO
                     // Battery status + = required between the destination and the base station closest to the destination 
                     battarySenderToTarget += BO.HelpFunction.IndexOfMinDistancesBetweenLocations
                         (baseStations, Targetlocation).Item2 * PowerConsumptionAvailable;
+                  
 
                     if (parcels[index].PickedUp == null)//parcel that  not sent
                     {
@@ -230,12 +231,16 @@ namespace BO
 
                     else
                     {
-                        item.CurrentLocation = new();
                         //parcel that sent
                         item.CurrentLocation.Latitude = SenderCustomer.Latitude;
                         item.CurrentLocation.Longtitude = SenderCustomer.Longtitude;
                     }
-                    item.BattaryStatus = (random.NextDouble() * (100 - battarySenderToTarget)) + battarySenderToTarget;
+                    //  item.BattaryStatus = (random.NextDouble() * (100 - battarySenderToTarget)) + battarySenderToTarget;
+                    item.BattaryStatus = random.Next(20, 80);
+                }
+                else 
+                {
+
                 }
             }
         }
@@ -316,11 +321,16 @@ namespace BO
         {
             Drone BLdrone = new();
             IDAL.DO.Drone drone = dal.GetDrone(id);
-            
+            if (drone.DroneID == -1)
+            {
+                throw new Exception("This Drone have not exist, please try again.");
+            }
 
+            BLdrone.DroneID = drone.DroneID;
+            BLdrone.DroneModel = drone.DroneModel;
+            BLdrone.DroneWeight = (WeightCategories)drone.DroneWeight;
 
-            if (drone.DroneID == -1) { throw new Exception("This Drone have not exist, please try again."); }
-
+           
             return BLdrone;
         }
 
@@ -386,13 +396,13 @@ namespace BO
                 IDAL.DO.Drone drones = dal.GetDrone(id);
                 drones.DroneModel = newNameModel;
                 dal.UpdateDrone(drones);
+                DroneToList.Find(x => x.DroneID == id).DroneModel = newNameModel;
             }
             catch (IDAL.DO.DroneException)
             {
-
                 throw new Exception("");
             }
-            DroneToList.Find(x => x.DroneID == id).DroneModel = newNameModel;
+            
         }
 
         public void UpdateBaseStation(int stationId, string newNameStation, int sumOfChargestation)
@@ -446,29 +456,30 @@ namespace BO
             {
                 throw new Exception("Only available Drone can be sending to charge");
             }
-            List<IDAL.DO.BaseStation> Dalstations = dal.GetBaseStationByPredicate(x => x.AvailableChargeSlots > 0).ToList();
-            List<BaseStation> BLStations = new();
-            foreach (var item in Dalstations)
+            IDAL.DO.BaseStation baseStation = dal.GetBaseStation(stationId);
+            BaseStation _baseStation = new BaseStation()
             {
-                BLStations.Add(new BaseStation
-                {
-                    ID = item.StationID,
-                    Name = item.Name,
-                    AvailableChargingStations = item.AvailableChargeSlots,
-                    Location = new Location { Latitude = item.Latitude, Longtitude = item.Longtitude }
-                });
-            }
+                ID = baseStation.StationID,
+                Name = baseStation.Name,
+                AvailableChargingStations = baseStation.AvailableChargeSlots,
+                Location = new Location { Latitude = baseStation.Latitude, Longtitude = baseStation.Longtitude }
+            };
 
+            
             double distanceBetweenStationToDrone =
-                          BO.HelpFunction.IndexOfMinDistancesBetweenLocations(Dalstations, droneToCharge.CurrentLocation).Item2;
-            if (droneToCharge.BattaryStatus - distanceBetweenStationToDrone * PowerConsumptionAvailable < 0)
+                          BO.HelpFunction.BatteryStatusBetweenLocations(_baseStation.Location
+                          , droneToCharge, droneToCharge.DroneWeight);
+
+            if (distanceBetweenStationToDrone == default)
             {
                 throw new Exception("WRONG!, There are not enough battery to complete this mission");
             }
+
             droneToCharge.BattaryStatus -=
                 distanceBetweenStationToDrone * PowerConsumptionAvailable;
-            droneToCharge.CurrentLocation =
-                BLStations[BO.HelpFunction.IndexOfMinDistancesBetweenLocations(Dalstations, droneToCharge.CurrentLocation).Item1].Location;
+
+            droneToCharge.CurrentLocation = _baseStation.Location;
+
             droneToCharge.Status = DroneStatus.maintenance;
 
             dal.MinusDroneCharge(stationId);// Lowering the number of charging stations by 1

@@ -23,16 +23,19 @@ namespace PL
     public partial class ShowDronesWindow : Window
     {
         BL getBL;
-       public  ObservableCollection<DroneToList> DronesToList;
+        public ObservableCollection<DroneToList> DronesToList;
 
         public ShowDronesWindow(BL getBL)
         {
             InitializeComponent();
             DronesToList = new();
+            foreach (var item in getBL.GetDroneToListsBLByPredicate())
+            {
+                DronesToList.Add(item);
+            }
 
-            DronesToList.ToList().AddRange(getBL.GetDroneToListsBLByPredicate().ToList());
             cmbStatusSelector.ItemsSource = Enum.GetValues(typeof(DroneStatus));
-            cmbWeightSelector.ItemsSource = Enum.GetValues(typeof(DroneWeightCategories));
+            cmbWeightSelector.ItemsSource = Enum.GetValues(typeof(WeightCategories));
             this.getBL = getBL;
             lstDroneListView.ItemsSource = DronesToList;
         }
@@ -41,7 +44,7 @@ namespace PL
         {
             DroneStatus status = (DroneStatus)cmbStatusSelector.SelectedItem;
             txtLable.Text = status.ToString();
-            lstDroneListView.ItemsSource = getBL.GetDroneToListsBLByPredicate(x => x.Status == status).ToList();
+            lstDroneListView.ItemsSource = DronesToList.Where(x => x.Status == status).ToList();
         }
 
         private void txtLable_TextChanged(object sender, TextChangedEventArgs e)
@@ -55,23 +58,26 @@ namespace PL
 
         private void btnCloseWindow_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void cmbWeightSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            DroneWeightCategories droneWeight = (DroneWeightCategories)cmbWeightSelector.SelectedItem;
-            this.txtLable.Text = droneWeight.ToString();
-            this.lstDroneListView.ItemsSource = getBL.GetDroneToListsBLByPredicate(x => x.DroneWeight == droneWeight).ToList();
+            WeightCategories droneWeight = (WeightCategories)cmbWeightSelector.SelectedItem;
+            txtLable.Text = droneWeight.ToString();
+            lstDroneListView.ItemsSource = DronesToList.Where(x => x.DroneWeight == droneWeight).ToList();
 
         }
 
-
-
-
         private void lstDroneListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            new AddDroneWindow(getBL, this).Show();
+            DroneToList drones = (DroneToList)lstDroneListView.SelectedItem;
+            if (drones != null)
+            {
+                int Idrone = lstDroneListView.SelectedIndex;
+                new AddDroneWindow(getBL, this, drones, Idrone).Show();
+            }
+           
         }
     }
 }

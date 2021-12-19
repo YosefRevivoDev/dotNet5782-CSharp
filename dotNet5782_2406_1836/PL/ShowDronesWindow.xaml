@@ -35,7 +35,7 @@
             <Button x:Name="btnAddDrone" Content="הוסף רחפן" Click="btnAddDrone_Click" Grid.Column="3"
                     HorizontalAlignment="Left" VerticalAlignment="Center" Margin="28,0,0,0"/>
         </Grid>
-        <ListView x:Name="lstDroneListView" Grid.Row="1">
+        <ListView x:Name="lstDroneListView"  Grid.Row="1" MouseDoubleClick="lstDroneListView_MouseDoubleClick">
         </ListView>
         <Button x:Name="btnCloseWindow" Content="x" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,16,0" Click="btnCloseWindow_Click" Width="40" Height="24" RenderTransformOrigin="0.228,0.604" />
 

@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using BO;
+using System.ComponentModel.DataAnnotations;
+
 
 namespace PL
 {
@@ -21,44 +23,145 @@ namespace PL
     /// </summary>
     public partial class AddDroneWindow : Window
     {
-        Drone addNewDrone;
-        BL bL;
-        ShowDronesWindow _showDronesWindow;
-        public AddDroneWindow(BL getBl, ShowDronesWindow showDronesWindow)
+        private Drone Drone { set; get; }
+        public BL bL;
+        private DroneToList DroneToList;
+        private ShowDronesWindow ShowDronesWindow;
+        private BasetationToList BaseStation { set; get; }
+
+        /// <summary>
+        /// Constructor for add drone
+        /// </summary>
+        /// <param name="getBl"></param>
+        /// <param name="_showDronesWindow"></param>
+        public AddDroneWindow(BL getBl, ShowDronesWindow _showDronesWindow)
         {
-            bL = getBl;
-            addNewDrone = new Drone();
-            DataContext = addNewDrone;
             InitializeComponent();
+            bL = getBl;
+            Drone = new Drone();
+            DataContext = Drone;
             DroneSituateGrid.Visibility = Visibility.Collapsed;
             droneGrid.VerticalAlignment = VerticalAlignment.Center;
             droneGrid.HorizontalAlignment = HorizontalAlignment.Center;
             ///droneGrid.Margin = ;
-            _showDronesWindow = showDronesWindow;
-            DroneWeight.ItemsSource = Enum.GetValues(typeof(DroneWeightCategories));
+            ItemsSourceStations();
+
+            ShowDronesWindow = _showDronesWindow;
+            DroneWeight.ItemsSource = Enum.GetValues(typeof(WeightCategories));
+        }
+
+        
+        public int Idrone;
+
+        /// <summary>
+        /// Constructor for update drone
+        /// </summary>
+        /// <param name="bL"></param>
+        /// <param name="_ShowDronesWindow"></param>
+        /// <param name="drone"></param>
+        /// <param name="_Idrone"></param>
+        public AddDroneWindow(BL bL, ShowDronesWindow _ShowDronesWindow, DroneToList drone, int _Idrone)
+        {
+
+            InitializeComponent();
+            DroneSituateGrid.Visibility = Visibility.Visible;
+            Idrone = _Idrone;
+            this.bL = bL;
+            Drone = bL.GetDrone(drone.DroneID);
+            ShowDronesWindow = _ShowDronesWindow;
+            DataContext = Drone;
+            UpdateGridVisibility();
+            ItemsSourceStations();
+            DroneToList = drone;
+        }
+        private void ItemsSourceStations()
+        {
+            NumberOfStations.ItemsSource = bL.GetBasetationToLists();
+        }
+
+        private void UpdateGridVisibility()
+        {
+            DroneId.IsReadOnly = true;
+            DroneModel.IsReadOnly = true;
+            DroneWeight.IsReadOnly = true;
+          /*  NumberOfStations.Visibility = Visibility.Hidden;
+            NumberOfStation.Visibility = Visibility.Hidden;*/
+            addDrone.Visibility = Visibility.Hidden;
         }
 
         private void addDrone_Click(object sender, RoutedEventArgs e)
         {
-           MessageBoxResult messageBoxResult =  MessageBox.Show("האם אתה בטוח שאתה רוצה להוסיף את הרחפן?"
-               , "Insert Drone",  MessageBoxButton.YesNoCancel);
+            MessageBoxResult messageBoxResult = MessageBox.Show("האם אתה בטוח שאתה רוצה להוסיף את הרחפן?"
+                , "הכנס רחפן", MessageBoxButton.YesNoCancel);
 
+            if (BaseStation != null)
+            {
+                switch (messageBoxResult)
+                {
+                    case MessageBoxResult.Yes:
+                        try
+                        {
+                            bL.AddNewDrone(Drone, bL.GetDroneToListsBLByPredicate().ToList().Count);
+                            ShowDronesWindow.DronesToList.Add(bL.GetDroneToListsBLByPredicate()
+                                .First(i => i.DroneID == Drone.DroneID));
+                            MessageBox.Show(Drone.ToString(), "הרחפן נוסף בהצלחה");
+                            Close();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+                        break;
+                    case MessageBoxResult.Cancel:
+                        Close();
+                        break;
+                    case MessageBoxResult.No:
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            else
+            {
+                MessageBox.Show( "חמור יקר אנא בחר תחנה", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void DroneId_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]$");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
+
+
+        private void btnExit_Click(object sender, RoutedEventArgs e)
+        {
+            ShowDronesWindow.IsEnabled = true;
+            Close();
+        }
+
+        private void btnUpdateModel_Click(object sender, RoutedEventArgs e)
+        {
+
+            MessageBoxResult messageBoxResult = MessageBox.Show("האם אתה רוצה לעדכן את שם הרחפן?",
+                "הכנס שם רחפן", MessageBoxButton.YesNoCancel);
            
             switch (messageBoxResult)
             {
-                 case MessageBoxResult.Yes:
-                    try
-                    {
-                        bL.AddNewDrone(addNewDrone, bL.GetDroneToListsBLByPredicate().ToList().Count);
-                        _showDronesWindow.DronesToList.Add(bL.GetDroneToListsBLByPredicate()
-                            .First(i => i.DroneID == addNewDrone.DroneID));
-                        MessageBox.Show(addNewDrone.ToString(), "Good Insert Drone");
-                        Close();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);  
-                    }
+                case MessageBoxResult.Yes:
+                    bL.UpdateDrone(Drone.DroneID, Drone.DroneModel);
+                    DroneToList.DroneModel = Drone.DroneModel;
+                    ShowDronesWindow.DronesToList[Idrone] = DroneToList;
+                    ShowDronesWindow.lstDroneListView.Items.Refresh();
+
+                    MessageBox.Show(Drone.ToString(), "הרחפן עודכן בהצלחה");
+                    Close();
                     break;
                 case MessageBoxResult.Cancel:
                     Close();
@@ -69,25 +172,24 @@ namespace PL
                     break;
             }
         }
-
-        private void DroneId_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            
-        }
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
-        {
-            Regex regex = new Regex("[^0-9]$");
-            e.Handled = regex.IsMatch(e.Text);
-        }
-
         private void btnSendDroneToCharge(object sender, RoutedEventArgs e)
         {
-            // bL.SendDroneToCharge()
+            if (Drone.Status == DroneStatus.available && BaseStation != null)
+            {
+                bL.SendDroneToCharge(Drone.DroneID, BaseStation.ID);
+            }
         }
 
         private void _btnRealeseDroneClick(object sender, RoutedEventArgs e)
         {
 
         }
+
+        private void NumberOfStation_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            BaseStation = (BO.BasetationToList)NumberOfStations.SelectedItem;
+        }
+
+        
     }
 }
