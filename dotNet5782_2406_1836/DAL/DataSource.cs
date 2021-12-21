@@ -25,23 +25,20 @@ namespace DalObject
         internal class Config
         {
             // ------------- PowerConsumption by Drone -----------------//
-            internal static double PowerConsumption_Available = 0.01;
-            internal static double PowerConsumption_LightWeight = 0.04;
-            internal static double PowerConsumption_MediumWeight = 0.07;
-            internal static double PowerConsumption_HeavyWeight = 0.1;
+            internal static double PowerConsumptionAvailable = 0.01;
+            internal static double PowerConsumptionLightWeight = 0.04;
+            internal static double PowerConsumptionMediumWeight = 0.07;
+            internal static double PowerConsumptionHeavyWeight = 0.1;
             internal static double LoadingDrone = 2;
 
             //------------------RunID---------------------------//
 
-            internal static int RunIdStation = 0;
-            internal static int RunIdDrone = 0;
-            internal static int RunCustomerId = 0;
-            internal static int RunParcelId = 0;
+            internal static int RunIdStation = 1;
+            internal static int RunIdDrone = 1;
+            internal static int RunCustomerId = 1;
+            internal static int RunParcelId = 1;
 
             //---------------------static attributes--------------------
-
-
-
         }
         
         public static void Initialize()
@@ -67,7 +64,7 @@ namespace DalObject
                     DroneID = ++Config.RunIdDrone,
                     DroneModel = DronesModels[i],
                     DroneWeight = (WeightCategories)random.Next(0, 2)
-                }
+                                    }
                 );
             }
 

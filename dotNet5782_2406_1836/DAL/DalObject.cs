@@ -302,10 +302,10 @@ namespace DalObject
         {
             double[] arr =
            {
-                DataSource.Config.PowerConsumption_Available ,
-                DataSource.Config.PowerConsumption_HeavyWeight ,
-                DataSource.Config.PowerConsumption_MediumWeight ,
-                DataSource.Config.PowerConsumption_HeavyWeight,
+                DataSource.Config.PowerConsumptionAvailable ,
+                DataSource.Config.PowerConsumptionHeavyWeight ,
+                DataSource.Config.PowerConsumptionMediumWeight ,
+                DataSource.Config.PowerConsumptionHeavyWeight,
                 DataSource.Config.LoadingDrone
             };
             return arr;

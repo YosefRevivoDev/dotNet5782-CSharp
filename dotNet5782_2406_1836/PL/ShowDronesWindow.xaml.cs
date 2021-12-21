@@ -53,7 +53,7 @@ namespace PL
         }
         private void btnAddDrone_Click(object sender, RoutedEventArgs e)
         {
-            new AddDroneWindow(getBL, this).Show();
+            new DroneWindow(getBL, this).Show();
         }
 
         private void btnCloseWindow_Click(object sender, RoutedEventArgs e)
@@ -75,7 +75,7 @@ namespace PL
             if (drones != null)
             {
                 int Idrone = lstDroneListView.SelectedIndex;
-                new AddDroneWindow(getBL, this, drones, Idrone).Show();
+                new DroneWindow(getBL, this, drones, Idrone).Show();
             }
            
         }

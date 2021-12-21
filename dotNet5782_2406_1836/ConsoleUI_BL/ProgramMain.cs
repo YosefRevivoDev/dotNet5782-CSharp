@@ -160,7 +160,7 @@ namespace ConsoleUI_BL
 
             Console.WriteLine("Please enter drone weight: 1 to light ,2 to medium ,3 to heavy ");//לבדוק חריגה אם הוזן מספר גדול מ 3 
             int.TryParse(Console.ReadLine(), out int temp);
-            drone.DroneWeight = (DroneWeightCategories)temp;// MaxWeight
+            drone.DroneWeight = (WeightCategories)temp;// MaxWeight
 
             Console.WriteLine("Please enter number of station to loading the drone: ");
             int.TryParse(Console.ReadLine(), out int stationId);
@@ -212,7 +212,7 @@ namespace ConsoleUI_BL
            
             Console.WriteLine("Please Enter your Choice Weight: 1 = light , 2 = medium , 3 = heavy ");
             int.TryParse(Console.ReadLine(), out int WeightParcel);
-            parcel.weight = (BO.WeightCategories)WeightParcel;
+            parcel.Weight = (BO.WeightCategories)WeightParcel;
 
             Console.WriteLine("Please Enter your Choice Parcel: 1 = regular ,2 =  fast , 3= emergency ");
             int.TryParse(Console.ReadLine(), out int priority);

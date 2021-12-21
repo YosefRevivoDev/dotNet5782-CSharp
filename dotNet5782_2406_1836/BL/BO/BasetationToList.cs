@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BO
 {
-   public class BasetationToList : BasestationPoly
+   public class BasetationToList: BaseStation
     {
      public int NotAvailableChargingStations { get; set; }
         public override string ToString()

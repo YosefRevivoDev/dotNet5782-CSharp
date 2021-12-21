@@ -1,4 +1,4 @@
-﻿<Window x:Class="PL.AddDroneWindow"
+﻿<Window x:Class="PL.DroneWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -55,8 +55,8 @@
             <TextBox x:Name="txtUpdateModel"  Text="{Binding DroneModel, Mode=TwoWay}" Grid.Column="1" HorizontalAlignment="Left" Margin="21,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsEnabled="True" Grid.ColumnSpan="2"/>
             <Button x:Name="btnDroneCharge" Content="שליחת רחפן לטעינה" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" Width="163" Click="btnSendDroneToCharge" />
             <Button x:Name="btnRealeseDrone" Content="שחרור רחפן מטעינה" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Width="163" Click="_btnRealeseDroneClick"/>
-            <Button x:Name="btnSendDroneToDeliver" Content="שליחת רחפן למשלוח" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Width="163"/>
-            <Button x:Name="btnCollectParcel" Content="איסוף חבילה" HorizontalAlignment="Center" Grid.Row="4" VerticalAlignment="Center" Width="163"/>
+            <Button x:Name="btnSendDroneToDeliver" Content="שליחת רחפן למשלוח" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Width="163" Click="btnSendDroneToDeliver_Click"/>
+            <Button x:Name="btnCollectParcel" Content="איסוף חבילה" HorizontalAlignment="Center" Grid.Row="4" VerticalAlignment="Center" Width="163" Click="btnCollectParcel_Click"/>
             <Button x:Name="btnSupplyParcel" Content="אספקת חבילה" HorizontalAlignment="Center" Grid.Row="5" VerticalAlignment="Center" Width="163"/>
             <Button x:Name="btnExit" Content="x" Grid.Column="3" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="btnExit_Click"/>
   

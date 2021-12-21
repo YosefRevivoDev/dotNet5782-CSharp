@@ -27,7 +27,7 @@ namespace BO
         {
             // Angle in 10th
             // of a degree
-            return (angleIn10thofaDegree * Math.PI) / 180;
+            return angleIn10thofaDegree * Math.PI / 180;
         }
         internal static double Distance(double latitude1, double latitude2, double longtitude1, double longtitude2)
         {
@@ -55,7 +55,7 @@ namespace BO
             double r = 6371;
 
             // calculate the result
-            return (c * r);
+            return c * r;
         }
 
         public static (int, double) IndexOfMinDistancesBetweenLocations(List<IDAL.DO.BaseStation> baseStations, Location location)
@@ -73,7 +73,7 @@ namespace BO
         {
 
             double BatteryStatusBetweenLocations =
-                Distance(location.Longtitude, drone.CurrentLocation.Latitude, location.Latitude, drone.CurrentLocation.Longtitude);
+                Distance(location.Latitude, drone.CurrentLocation.Latitude, location.Longtitude, drone.CurrentLocation.Longtitude);
             switch (weight)
             {
                 case WeightCategories.light:
@@ -92,7 +92,12 @@ namespace BO
             return drone.BattaryStatus - BatteryStatusBetweenLocations > 0 ? BatteryStatusBetweenLocations : default;
         }
 
-       
+        //public static Location GetRandomLocation<T>(List<T> ts) // פונקציה שמחזירה הגרלה של מיקום 
+        //{
+        //    Random random = new Random();
+        //    int index = random.Next(0, ts.Count);
+        //    return new Location() { Latitude = ts[index].Latitude ,Longtitude=ts[index].Longtitude };
+        //}
     }
 }
 

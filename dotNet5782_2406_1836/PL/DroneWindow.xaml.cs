@@ -21,12 +21,13 @@ namespace PL
     /// <summary>
     /// Interaction logic for AddDroneWindow.xaml
     /// </summary>
-    public partial class AddDroneWindow : Window
+    public partial class DroneWindow : Window
     {
         private Drone Drone { set; get; }
         public BL bL;
         private DroneToList DroneToList;
         private ShowDronesWindow ShowDronesWindow;
+        private ParcelInDeliver ParcelInDeliver;
         private BasetationToList BaseStation { set; get; }
 
         /// <summary>
@@ -34,7 +35,7 @@ namespace PL
         /// </summary>
         /// <param name="getBl"></param>
         /// <param name="_showDronesWindow"></param>
-        public AddDroneWindow(BL getBl, ShowDronesWindow _showDronesWindow)
+        public DroneWindow(BL getBl, ShowDronesWindow _showDronesWindow)
         {
             InitializeComponent();
             bL = getBl;
@@ -50,7 +51,7 @@ namespace PL
             DroneWeight.ItemsSource = Enum.GetValues(typeof(WeightCategories));
         }
 
-        
+
         public int Idrone;
 
         /// <summary>
@@ -60,7 +61,7 @@ namespace PL
         /// <param name="_ShowDronesWindow"></param>
         /// <param name="drone"></param>
         /// <param name="_Idrone"></param>
-        public AddDroneWindow(BL bL, ShowDronesWindow _ShowDronesWindow, DroneToList drone, int _Idrone)
+        public DroneWindow(BL bL, ShowDronesWindow _ShowDronesWindow, DroneToList drone, int _Idrone)
         {
 
             InitializeComponent();
@@ -84,8 +85,8 @@ namespace PL
             DroneId.IsReadOnly = true;
             DroneModel.IsReadOnly = true;
             DroneWeight.IsReadOnly = true;
-          /*  NumberOfStations.Visibility = Visibility.Hidden;
-            NumberOfStation.Visibility = Visibility.Hidden;*/
+            /*  NumberOfStations.Visibility = Visibility.Hidden;
+              NumberOfStation.Visibility = Visibility.Hidden;*/
             addDrone.Visibility = Visibility.Hidden;
         }
 
@@ -124,7 +125,7 @@ namespace PL
 
             else
             {
-                MessageBox.Show( "חמור יקר אנא בחר תחנה", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("חמור יקר אנא בחר תחנה", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -151,7 +152,7 @@ namespace PL
 
             MessageBoxResult messageBoxResult = MessageBox.Show("האם אתה רוצה לעדכן את שם הרחפן?",
                 "הכנס שם רחפן", MessageBoxButton.YesNoCancel);
-           
+
             switch (messageBoxResult)
             {
                 case MessageBoxResult.Yes:
@@ -182,14 +183,65 @@ namespace PL
 
         private void _btnRealeseDroneClick(object sender, RoutedEventArgs e)
         {
-
+            if (Drone.Status == DroneStatus.maintenance)
+            {
+                bL.ReleaseDroneFromCharge(Drone.DroneID, BaseStation.ID, DateTime.Now);
+            }
+            else
+            {
+                MessageBox.Show("הרחפן לא במצב תחזוקה", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void NumberOfStation_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            BaseStation = (BO.BasetationToList)NumberOfStations.SelectedItem;
+            BaseStation = (BasetationToList)NumberOfStations.SelectedItem;
         }
 
-        
+        private void btnSendDroneToDeliver_Click(object sender, RoutedEventArgs e)
+        {
+            if (Drone.Status == DroneStatus.available)
+            {
+                bL.AssignmentOfPackageToDrone(Drone.DroneID, ParcelInDeliver);
+                MessageBox.Show("הרחפן שויך בהצלחה", "אישור", MessageBoxButton.OK);
+
+            }
+            else
+            {
+                MessageBox.Show("הרחפן לא פנוי", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+
+            }
+        }
+
+        private void btnCollectParcel_Click(object sender, RoutedEventArgs e)
+        {
+
+            bL.CollectParcelByDrone(Drone.DroneID);
+
+            try
+            {
+                MessageBoxResult result = MessageBox.Show("נכנסת בהצלחה", "מידע", MessageBoxButton.OK, MessageBoxImage.Information);
+                switch (result)
+                {
+                    
+                    case MessageBoxResult.OK:
+                        
+                        bL.CollectParcelByDrone(Drone.DroneID);
+                        Drone = bL.GetDrone(Drone.DroneID);
+                        DataContext = Drone;
+                        ShowDronesWindow.lstDroneListView.Items.Refresh();
+                        btnCollectParcel.Visibility = Visibility.Hidden;
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "לא נמצא רחפן", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+        }
     }
 }
