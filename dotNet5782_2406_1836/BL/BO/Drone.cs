@@ -12,14 +12,13 @@ namespace BO
         public WeightCategories DroneWeight { get; set; }
         public DroneStatus Status { get; set; }
         public Location CurrentLocation { get; set; }
-        public int PackageInDeliver { get; set; }
-        public Parcel Parcel { get; set; }
+        public ParcelInDeliver ParcelInDeliverd { get; set; }
 
 
         public override string ToString()
         {
             return base.ToString() + string.Format("Drone Model: " + DroneModel + "\r\n" + "WeightCategories: " + DroneWeight + "\r\n" +
-                "DroneStatus: " + Status + "\r\n" + "Location: " + CurrentLocation + "\r\n" + "PackageInDeliver: " + PackageInDeliver);
+                "DroneStatus: " + Status + "\r\n" + "Location: " + CurrentLocation + "\r\n");
         }
     }
 }

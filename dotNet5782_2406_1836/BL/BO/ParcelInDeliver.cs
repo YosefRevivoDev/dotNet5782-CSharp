@@ -16,7 +16,7 @@ namespace BO
         public CustomerInParcel Target { get; set; }
         public Location CollectionLocation { get; set; }
         public Location DeliveryDestination { get; set; }
-        public int TransportDistance { get; set; }
+        public double TransportDistance { get; set; }
 
         public override string ToString()
         {

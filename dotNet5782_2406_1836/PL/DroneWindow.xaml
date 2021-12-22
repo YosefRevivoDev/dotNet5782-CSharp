@@ -5,14 +5,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="AddDroneWindow" Height="450" Width="800">
-    <Grid>
+        Title="AddDroneWindow" Height="450" Width="800" WindowStyle="None" >
+    <Window.Resources>
+        <Style x:Key="styleForButtons" TargetType="Button">
+            <Setter Property="Width" Value="165"></Setter>
+            <Setter Property="Height" Value="30"></Setter>
+        </Style>
+        
+        <Style x:Key="styleForTextBox" TargetType="TextBox">
+            <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+            <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+        </Style>
 
-        <Grid x:Name="droneGrid" Margin="60,30,450,154">
+        <Style x:Key=" styleForTextBox1" TargetType="TextBox" BasedOn="{StaticResource styleForTextBox}">
+            <Setter Property="Foreground" Value="Green"></Setter>
+        </Style>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2.3*"/>
+        </Grid.ColumnDefinitions>
+        
+        <Grid x:Name="droneGrid" Grid.Column="0">
+
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
@@ -20,46 +42,170 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Label Content="DroneID"/>
-            <TextBox x:Name="DroneId" PreviewTextInput="NumberValidationTextBox" Grid.Column="1" Text="{Binding DroneID}" TextChanged="DroneId_TextChanged" />
-            <Label Content="DroneModel" Grid.Row="1"/>
-            <TextBox x:Name="DroneModel" Grid.Column="1" Grid.Row="1" Text="{Binding DroneModel, Mode=TwoWay}"/>
-            <Label Content="DroneWeight" Grid.Row="2"/>
-            <ComboBox x:Name="DroneWeight" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" SelectedItem="{Binding DroneWeight}"/>
-            <Label Name="NumberOfStation" Content="NumberOfStation" Grid.Row="3"/>
-            <ComboBox x:Name="NumberOfStations" DisplayMemberPath="ID" Grid.Column="1" Grid.Row="3" SelectionChanged="NumberOfStation_SelectionChanged" />
-            <Button x:Name="addDrone" Content="הוסף" HorizontalAlignment="Stretch" Grid.Row="4" Grid.Column="1"
-                    Margin="5,5,5,5" VerticalAlignment="Center" Width="128" Click="addDrone_Click"/>
-            <!--<ProgressBar Background="Green" Height="30" Grid.Row="5" Grid.Column="2" Maximum="100" Value="{Binding BattaryStatus}" ></ProgressBar>-->
-            <Grid Grid.Column="1" Grid.Row="4"/>
+
+            <Label Content="מזהה רחפן" FontSize="16" FontWeight="UltraBlack" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBox x:Name="DroneId"  Style="{StaticResource styleForTextBox}" PreviewTextInput="NumberValidationTextBox" Text="{Binding DroneID}" TextChanged="DroneId_TextChanged" />
+            <Label Content="שם רחפן" Grid.Row="1" Grid.Column="1" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBox x:Name="DroneModel"  Style="{StaticResource styleForTextBox}"  Grid.Row="1" Text="{Binding DroneModel, Mode=TwoWay}"/>
+            <Label Content="משקל רחפן" Grid.Row="2" Grid.Column="1" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <ComboBox x:Name="DroneWeight"   Grid.Row="2" SelectedItem="{Binding DroneWeight}" />
+            <Label Name="NumberOfStation" Content="מספר תחנה" Grid.Row="3" Grid.Column="1" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <ComboBox x:Name="NumberOfStations" DisplayMemberPath="ID" Grid.Row="2" SelectionChanged="NumberOfStation_SelectionChanged" Width="83" HorizontalAlignment="Left" Margin="0,42,0,0" Grid.RowSpan="2" />
+            <Button x:Name="addDrone" Content="הוסף" Grid.Row="7"
+                    Margin="42,0,46,0" VerticalAlignment="Center" Width="128" Click="addDrone_Click" Grid.ColumnSpan="2"/>
+            <Label Content="מיקום רחפן" Grid.Column="1" Grid.Row="4" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBox x:Name="Location" Style="{StaticResource styleForTextBox}" Grid.Row="4" Width="64" PreviewTextInput="NumberValidationTextBox" Text="{Binding Location}"/>
+            <Label Content="מצב סוללה" Grid.Row="5" Grid.Column="1" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <ProgressBar x:Name="BatteryStatus"  Grid.Row="5" Value="{Binding BattaryStatus}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="64" Height="22" 
+                         Minimum="0" Maximum="100" Background="GreenYellow"/>
+            <TextBlock Text="{Binding ElementName=BatteryStatus, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="5"/>
+            <Label Content="מצב רחפן" Grid.Row="6" Grid.Column="1" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <ComboBox x:Name="StatusDrone" Grid.Row="6" SelectedItem="{Binding DroneStatus}" SelectionChanged="StatusDrone_SelectionChanged"
+                      DisplayMemberPath="DroneStatus"/>
 
         </Grid>
-        <Grid x:Name="DroneSituateGrid" Margin="400,32,34,29">
+
+        
+        <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                
+                <RowDefinition Height="2.3*"/>
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="163*"/>
-                <ColumnDefinition Width="66*"/>
-                <ColumnDefinition Width="97*"/>
-                <ColumnDefinition Width="40"/>
-            </Grid.ColumnDefinitions>
-            <Button x:Name="btnUpdateModel" Content="עדכון" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.465,0.553" Width="163" Click="btnUpdateModel_Click"/>
-            <TextBox x:Name="txtUpdateModel"  Text="{Binding DroneModel, Mode=TwoWay}" Grid.Column="1" HorizontalAlignment="Left" Margin="21,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsEnabled="True" Grid.ColumnSpan="2"/>
-            <Button x:Name="btnDroneCharge" Content="שליחת רחפן לטעינה" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" Width="163" Click="btnSendDroneToCharge" />
-            <Button x:Name="btnRealeseDrone" Content="שחרור רחפן מטעינה" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Width="163" Click="_btnRealeseDroneClick"/>
-            <Button x:Name="btnSendDroneToDeliver" Content="שליחת רחפן למשלוח" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Width="163" Click="btnSendDroneToDeliver_Click"/>
-            <Button x:Name="btnCollectParcel" Content="איסוף חבילה" HorizontalAlignment="Center" Grid.Row="4" VerticalAlignment="Center" Width="163" Click="btnCollectParcel_Click"/>
-            <Button x:Name="btnSupplyParcel" Content="אספקת חבילה" HorizontalAlignment="Center" Grid.Row="5" VerticalAlignment="Center" Width="163"/>
-            <Button x:Name="btnExit" Content="x" Grid.Column="3" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="btnExit_Click"/>
-  
+
+            <GroupBox x:Name="DroneSituateGrid" Grid.Row="0"  FontWeight="Bold" FontSize="18" Padding="10">
+
+                <GroupBox.Header>
+                    <StackPanel Orientation="Horizontal" Height="23" MaxHeight="23">
+                        <Button x:Name="btnExit" Content="יציאה" Height="24" Click="btnExit_Click" BorderBrush="White" Width="67" />
+                        <TextBlock FontWeight="Bold" FontStyle="Normal" FontSize="16" 
+                               TextAlignment="Center" TextWrapping="NoWrap" Margin="360,0,0,0" Height="22" Width="83"><Run Text=" :אפשרויות " Foreground="White"/></TextBlock>
+                    </StackPanel>
+                </GroupBox.Header>
+
+                <Grid>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="426*"/>
+                        <ColumnDefinition Width="107*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="btnUpdateModel" Style="{StaticResource styleForButtons}" Content="עדכון" Click="btnUpdateModel_Click" Grid.ColumnSpan="2"/>
+                    <Button x:Name="btnDroneCharge" Content="שליחת רחפן לטעינה" HorizontalAlignment="Left" Width="175" Click="btnSendDroneToCharge" Margin="4,6,0,0" Grid.Row="1" />
+                    <Button x:Name="btnRealeseDrone" Content="שחרור רחפן מטעינה" HorizontalAlignment="Left" Width="175" Click="_btnRealeseDroneClick" Margin="4,2,0,5"/>
+                    <Button x:Name="btnSendDroneToDeliver" Content="שליחת רחפן למשלוח" Grid.Row="1" Click="btnSendDroneToDeliver_Click" Margin="370,6,10,0" Grid.ColumnSpan="2"/>
+                    <Button x:Name="btnCollectParcel" Content="איסוף חבילה" VerticalAlignment="Top" Click="btnCollectParcel_Click" Margin="197,3,71,0" Height="30" />
+                    <Button x:Name="btnSupplyParcel" Content="אספקת חבילה" HorizontalAlignment="Left" VerticalAlignment="Top" Width="158" Margin="197,7,0,0" Height="30" Grid.Row="1"/>
+
+                </Grid>
+            </GroupBox>
+
+            
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <GroupBox x:Name="LeftGroupBox" Grid.Column="0" 
+                  FontWeight="Bold" FontSize="18" Padding="10">
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontWeight="Bold" Margin="75,0,0,0" FontStyle="Normal" FontSize="16">
+                        <Run Text="פרטי החבילה" Foreground="White"/></TextBlock>
+                        </StackPanel>
+                    </GroupBox.Header>
+
+                    <Grid>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel x:Name="StackLeft" Grid.Column="0" Orientation="Vertical">
+                            <TextBlock FontWeight="Bold" FontSize="16" Height="21" Text="{Binding ElementName= ParcelInDeliverd.ParcelId, Path=Value}"/>
+                            <TextBlock FontWeight="Bold" FontSize="16" Height="29" Margin="0,10,0,0" />
+                            <TextBlock FontWeight="Bold" FontSize="16" Height="26" Margin="0,10,0,0" />
+                            <TextBlock FontWeight="Bold" FontSize="16" Height="26" Margin="0,10,0,0" />
+                            <TextBlock FontWeight="Bold" FontSize="16" Height="26" Margin="0,10,0,0" />
+                            <TextBlock FontWeight="Bold" FontSize="16" Height="26" />
+                            <TextBlock FontWeight="Bold" FontSize="16" Height="26" />
+                            <TextBlock FontWeight="Bold" FontSize="16" Height="26" />
+
+                        </StackPanel>
+
+                        <StackPanel x:Name="StackRight" Grid.Column="1">
+                            <TextBlock HorizontalAlignment="Right">:מזהה חבילה</TextBlock>
+                            <TextBlock HorizontalAlignment="Right" Margin="0,5,0,0">: מספר שולח</TextBlock>
+                            <TextBlock HorizontalAlignment="Right" Margin="0,5,0,0">: מספר מקבל</TextBlock>
+                            <TextBlock HorizontalAlignment="Right" Margin="0,5,0,0">: משקל חבילה</TextBlock>
+                            <TextBlock HorizontalAlignment="Right" Margin="0,5,0,0">: עדיפות</TextBlock>
+                            <TextBlock HorizontalAlignment="Right" Margin="0,5,0,0">: מצב חבילה</TextBlock>
+                            <TextBlock HorizontalAlignment="Right" Margin="0,5,0,0">: נקודת איסוף</TextBlock>
+                            <TextBlock HorizontalAlignment="Right" Margin="0,5,0,0">: נקודת יעד</TextBlock>
+                        </StackPanel>
+                    </Grid>
+
+                </GroupBox>
+
+                <Grid  Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <GroupBox x:Name="RightGroupBox"
+                  FontWeight="Bold" FontSize="18" Padding="10">
+                        <GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontWeight="Bold" Margin="75,0,0,0" FontStyle="Normal" FontSize="16">
+                        <Run Text="פרטי לקוח" Foreground="White"/></TextBlock>
+                            </StackPanel>
+                        </GroupBox.Header>
+
+                        <Grid>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel x:Name="LeftStackLeft" Grid.Column="0" Orientation="Vertical">
+                                <TextBlock FontWeight="Bold" FontSize="16" Height="21" />
+                                <TextBlock FontWeight="Bold" FontSize="16" Height="29" Margin="0,10,0,0" />
+                                <TextBlock FontWeight="Bold" FontSize="16" Height="26" Margin="0,10,0,0" />
+                                <TextBlock FontWeight="Bold" FontSize="16" Height="26" Margin="0,10,0,0" />
+
+
+                            </StackPanel>
+
+                            <StackPanel x:Name="RightStackRight" Grid.Column="1">
+                                <TextBlock HorizontalAlignment="Right">:מזהה לקוח</TextBlock>
+                                <TextBlock HorizontalAlignment="Right" Margin="0,7,0,0">: שם לקוח</TextBlock>
+                                <TextBlock HorizontalAlignment="Right" Margin="0,7,0,0">: טלפון</TextBlock>
+                                <TextBlock HorizontalAlignment="Right" Margin="0,7,0,0">: מיקום לקוח</TextBlock>
+                                <DataGrid Height="100"/>
+
+                            </StackPanel>
+                        </Grid>
+
+                    </GroupBox>
+                </Grid>
+               
+            </Grid>
         </Grid>
+       
+
+
+       
+
     </Grid>
 </Window>
