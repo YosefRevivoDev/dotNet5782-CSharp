@@ -285,7 +285,7 @@ namespace DalObject
         }
         public IEnumerable<Parcel> GetPackagesByPredicate(Predicate<Parcel> predicate = null)
         {
-            return DataSource.Packages .FindAll(i => predicate == null ? true : predicate(i));
+            return DataSource.Packages.FindAll(i => predicate == null ? true : predicate(i));
         }
         public IEnumerable<BaseStation> GetBaseStationByPredicate(Predicate<BaseStation> predicate = null)
         {

@@ -49,6 +49,7 @@ namespace PL
 
             ShowDronesWindow = _showDronesWindow;
             DroneWeight.ItemsSource = Enum.GetValues(typeof(WeightCategories));
+            StatusDrone.SelectedItem = Enum.GetValues(typeof(DroneStatus));
         }
 
 
@@ -241,6 +242,11 @@ namespace PL
             {
                 MessageBox.Show(ex.ToString(), "לא נמצא רחפן", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void StatusDrone_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DroneToList = (DroneToList)StatusDrone.SelectedItem;
 
         }
     }

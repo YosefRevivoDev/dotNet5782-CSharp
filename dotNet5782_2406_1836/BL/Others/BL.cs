@@ -158,7 +158,11 @@ namespace BO
             List<IDAL.DO.Parcel> parcels = dal.GetPackagesByPredicate(x => x.DroneId > 0).ToList();// Sorts packages that belong to the drone but are not provided
             List<Customer> customer = new();
             List<IDAL.DO.Customer> customers = dal.GetCustomersByPredicate().ToList();
-            
+
+            //רשימת תעודות זהות של לקוחות שיש חבילות שסופקו להם
+            List<int> parcelThatDeliveredId = parcels.FindAll(x => x.Delivered != null).
+                Select(x => x.TargetId).ToList();
+
             foreach (var item in DroneToList)//For all DroneToList do 
             {
                 int index = parcels.FindIndex(x => x.DroneId == item.DroneID && x.Delivered == null);//Index of parcel that assigned but not sent1
@@ -229,18 +233,11 @@ namespace BO
                 }
                 else
                 {
-                    DroneStatus result = (DroneStatus)random.Next(1,2);
-                    switch (result)
-                    {
-                        case DroneStatus.available:
-                           // int i = random.Next(0 , parcels));
-                            //item.CurrentLocation = 
-                            break;
-                        case DroneStatus.maintenance:
+
                             int indexRand = random.Next(0, baseStations.Count);
-                            item.BattaryStatus = random.Next(0, 20);
                             item.CurrentLocation = new Location(){Latitude = baseStations[indexRand].Latitude,
                                 Longtitude= baseStations[indexRand].Longtitude};
+                            item.BattaryStatus = random.Next(0, 20);
                             break;
                         default:
                             break;
@@ -324,19 +321,44 @@ namespace BO
 
         public Drone GetDrone(int id)
         {
-            Drone BLdrone = new();
             IDAL.DO.Drone drone = dal.GetDrone(id);
+
             if (drone.DroneID == -1)
             {
                 throw new Exception("This Drone have not exist, please try again.");
             }
 
+            Drone BLdrone = new();
+            DroneToList droneToList = DroneToList.Find(x => x.DroneID == id);
             BLdrone.DroneID = drone.DroneID;
             BLdrone.DroneModel = drone.DroneModel;
             BLdrone.DroneWeight = (WeightCategories)drone.DroneWeight;
+            BLdrone.BattaryStatus = droneToList.BattaryStatus;
+            BLdrone.CurrentLocation = droneToList.CurrentLocation;
+            BLdrone.Status = droneToList.Status;
 
-
+           
             return BLdrone;
+        }
+
+        private ParcelInDeliver GetParcelInDeliverd(int NumOfPackageId)
+        {
+            Parcel parcel = GetParcel(NumOfPackageId);
+
+            ParcelInDeliver ParcelInDeliverd = new ParcelInDeliver();
+            ParcelInDeliverd.ID = parcel.Id;
+            ParcelInDeliverd.Sender = parcel.Sender;
+            ParcelInDeliverd.Target = parcel.Target;
+            ParcelInDeliverd.Priorities = parcel.Priority;
+            ParcelInDeliverd.CollectionLocation = GetCustomer(parcel.Sender.CustomerId).LocationCustomer;
+            ParcelInDeliverd.DeliveryDestination = GetCustomer(parcel.Target.CustomerId).LocationCustomer;
+            ParcelInDeliverd.WeightCategories = parcel.Weight;
+            ParcelInDeliverd.TransportDistance =
+                HelpFunction.Distance(ParcelInDeliverd.CollectionLocation.Latitude,
+                 ParcelInDeliverd.DeliveryDestination.Latitude,
+                 ParcelInDeliverd.CollectionLocation.Longtitude,
+                 ParcelInDeliverd.DeliveryDestination.Longtitude);
+            return ParcelInDeliverd;
         }
 
         public Customer GetCustomer(int id)
