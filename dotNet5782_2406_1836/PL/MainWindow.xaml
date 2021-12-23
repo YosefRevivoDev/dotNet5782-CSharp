@@ -12,24 +12,26 @@
         TextOptions.TextRenderingMode="Auto"
         FontFamily="{DynamicResource MaterialDesignFont}"
         Title="MainWindow" Height="450" Width="800">
+    
     <Window.Background>
-        <ImageBrush ImageSource="/drone.jpg"/>
+        <ImageBrush ImageSource="/PacketFly.jpg"/>
     </Window.Background>
+
     <Grid Background="Transparent">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="6*"/>
         </Grid.RowDefinitions>
+        
+        
 
-        <!--<Grid x:Name="image">
-            <Image x:Name="imageBackGround" Source="/drone.jpg" HorizontalAlignment="Stretch" Height="Auto" VerticalAlignment="Stretch" Width="Auto"/>
-        </Grid>-->
 
-        <StackPanel Height="60" Grid.Row="0">
+        <StackPanel Height="60" VerticalAlignment="Bottom" Grid.Row="0" Visibility="Hidden">
             <Button x:Name="btnListDrone" Content="הצג רחפנים" Margin="3,10,5,5" Click="btnListDrone_Click"/>
         </StackPanel>
-        <TabControl TabStripPlacement="Right" Grid.Row="1" Background="Transparent">
+
+        <TabControl TabStripPlacement="Right" Grid.Row="1" Background="Transparent" Visibility="Hidden">
             <TabItem Header="Admin">
 
                 <Grid Background="Transparent">
@@ -51,5 +53,5 @@
             </TabItem>
         </TabControl>
     </Grid>
-
+   
 </Window>
