@@ -31,7 +31,7 @@ namespace PL
 
         private void btnListDrone_Click(object sender, RoutedEventArgs e)
         {
-            new ShowDronesWindow(getBL).Show();
+           new ShowDronesWindow(getBL).Show();
         }
 
        
