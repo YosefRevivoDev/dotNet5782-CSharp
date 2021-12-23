@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="drone.jpg" />
     <None Remove="PacketFly.jpg" />
   </ItemGroup>
 

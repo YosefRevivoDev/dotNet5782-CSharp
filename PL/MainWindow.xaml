@@ -23,9 +23,6 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="6*"/>
         </Grid.RowDefinitions>
-        
-        
-
 
         <StackPanel Height="60" VerticalAlignment="Bottom" Grid.Row="0" Visibility="Visible">
             <Button x:Name="btnListDrone" Content="הצג רחפנים" Margin="3,10,5,5" Click="btnListDrone_Click"/>

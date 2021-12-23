@@ -27,7 +27,7 @@ namespace PL
         public BL bL;
         private DroneToList DroneToList;
         private ShowDronesWindow ShowDronesWindow;
-        private ParcelInDeliver ParcelInDeliver;
+        private ParcelInDeliver ParcelInDeliverd;
         private BasetationToList BaseStation { set; get; }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace PL
         {
             if (Drone.Status == DroneStatus.available)
             {
-                bL.AssignmentOfPackageToDrone(Drone.DroneID, ParcelInDeliver);
+                bL.AssignmentOfPackageToDrone(Drone.DroneID, ParcelInDeliverd);
                 MessageBox.Show("הרחפן שויך בהצלחה", "אישור", MessageBoxButton.OK);
 
             }
@@ -249,5 +249,6 @@ namespace PL
             DroneToList = (DroneToList)StatusDrone.SelectedItem;
 
         }
+
     }
 }

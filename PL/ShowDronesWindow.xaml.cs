@@ -38,6 +38,8 @@ namespace PL
             cmbWeightSelector.ItemsSource = Enum.GetValues(typeof(WeightCategories));
             this.getBL = getBL;
             lstDroneListView.ItemsSource = DronesToList;
+
+
         }
 
         private void cmbStatusSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -77,7 +79,6 @@ namespace PL
                 int Idrone = lstDroneListView.SelectedIndex;
                 new DroneWindow(getBL, this, drones, Idrone).Show();
             }
-           
         }
     }
 }

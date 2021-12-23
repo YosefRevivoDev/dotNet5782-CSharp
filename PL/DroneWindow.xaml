@@ -103,7 +103,6 @@
                     <Button x:Name="btnSendDroneToDeliver" Content="שליחת רחפן למשלוח" Grid.Row="1" Click="btnSendDroneToDeliver_Click" Margin="370,6,10,0" Grid.ColumnSpan="2"/>
                     <Button x:Name="btnCollectParcel" Content="איסוף חבילה" VerticalAlignment="Top" Click="btnCollectParcel_Click" Margin="197,3,71,0" Height="30" />
                     <Button x:Name="btnSupplyParcel" Content="אספקת חבילה" HorizontalAlignment="Left" VerticalAlignment="Top" Width="158" Margin="197,7,0,0" Height="30" Grid.Row="1"/>
-
                 </Grid>
             </GroupBox>
 
@@ -202,10 +201,5 @@
                
             </Grid>
         </Grid>
-       
-
-
-       
-
     </Grid>
 </Window>
