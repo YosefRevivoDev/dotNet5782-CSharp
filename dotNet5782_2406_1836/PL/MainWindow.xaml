@@ -10,10 +10,46 @@
         TextElement.FontSize="13"
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
-        Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
         Title="MainWindow" Height="450" Width="800">
-    <StackPanel Height="434" VerticalAlignment="Bottom">
-        <Button x:Name="btnListDrone" Content="הצג רחפנים" Margin="3,10,5,5" Click="btnListDrone_Click"/>
-    </StackPanel>
+    <Window.Background>
+        <ImageBrush ImageSource="/drone.jpg"/>
+    </Window.Background>
+    <Grid Background="Transparent">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="6*"/>
+        </Grid.RowDefinitions>
+
+        <!--<Grid x:Name="image">
+            <Image x:Name="imageBackGround" Source="/drone.jpg" HorizontalAlignment="Stretch" Height="Auto" VerticalAlignment="Stretch" Width="Auto"/>
+        </Grid>-->
+
+        <StackPanel Height="60" Grid.Row="0">
+            <Button x:Name="btnListDrone" Content="הצג רחפנים" Margin="3,10,5,5" Click="btnListDrone_Click"/>
+        </StackPanel>
+        <TabControl TabStripPlacement="Right" Grid.Row="1" Background="Transparent">
+            <TabItem Header="Admin">
+
+                <Grid Background="Transparent">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="126*"/>
+                        <ColumnDefinition Width="120*"/>
+                        <ColumnDefinition Width="350*"/>
+                        <ColumnDefinition Width="147*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock>
+                        Hello World
+                    </TextBlock>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Drones">
+                <Grid Background="Transparent">
+                    <TextBox Text="Hello Drones"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+
 </Window>

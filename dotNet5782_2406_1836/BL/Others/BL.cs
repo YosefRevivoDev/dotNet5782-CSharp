@@ -55,8 +55,11 @@ namespace BO
                     };
                     newDrone.Status = DroneStatus.maintenance;
                     baseStation.AvailableChargeSlots--;
-                    newDrone.CurrentLocation = new Location() { Latitude = baseStation.Latitude,
-                                                  Longtitude = baseStation.Longtitude };
+                    newDrone.CurrentLocation = new Location()
+                    {
+                        Latitude = baseStation.Latitude,
+                        Longtitude = baseStation.Longtitude
+                    };
                     dal.UpdateBaseStation(baseStation);
                     dal.AddDroneCharge(droneCharge);
                 }
@@ -233,10 +236,8 @@ namespace BO
                 }
                 else
                 {
-                  
-
                     //Index of parcel that assigned but not sent1
-                    DroneStatus result = (DroneStatus)random.Next(1,2);
+                    DroneStatus result = (DroneStatus)random.Next(1, 2);
                     switch (result)
                     {
                         case DroneStatus.available:
@@ -252,14 +253,17 @@ namespace BO
                         case DroneStatus.maintenance:
 
                             int indexRand = random.Next(0, baseStations.Count);
-                            item.CurrentLocation = new Location(){Latitude = baseStations[indexRand].Latitude,
-                                Longtitude= baseStations[indexRand].Longtitude};
+                            item.CurrentLocation = new Location()
+                            {
+                                Latitude = baseStations[indexRand].Latitude,
+                                Longtitude = baseStations[indexRand].Longtitude
+                            };
                             item.BattaryStatus = random.Next(0, 20);
                             break;
                         default:
                             break;
                     }
-                    
+
                 }
             }
         }
@@ -354,7 +358,7 @@ namespace BO
             BLdrone.CurrentLocation = droneToList.CurrentLocation;
             BLdrone.Status = droneToList.Status;
 
-            BLdrone.ParcelInDeliverd = GetParcelInDeliverd(droneToList.NumOfPackageDelivered);
+            //BLdrone.ParcelInDeliverd = GetParcelInDeliverd(droneToList.NumOfPackageDelivered);
             return BLdrone;
         }
 
@@ -548,7 +552,7 @@ namespace BO
 
         }
 
-        public void AssignmentOfPackageToDrone(int droneId,ParcelInDeliver parcelInDeliver) //שיוך חבילה לרחפן
+        public void AssignmentOfPackageToDrone(int droneId, ParcelInDeliver parcelInDeliver) //שיוך חבילה לרחפן
         {
             DroneToList drone = DroneToList.Find(x => x.DroneID == droneId);
             List<IDAL.DO.Parcel> parcels = dal.GetPackagesByPredicate(x => (int)x.ParcelWeight < (int)drone.DroneWeight).OrderBy(i => (int)i.ParcelPriority)
