@@ -12,7 +12,7 @@
         TextOptions.TextRenderingMode="Auto"
         FontFamily="{DynamicResource MaterialDesignFont}"
         Title="MainWindow" Height="450" Width="800">
-    
+
     <Window.Background>
         <ImageBrush ImageSource="/PacketFly.jpg"/>
     </Window.Background>
@@ -28,6 +28,7 @@
             <Button x:Name="btnListDrone" Content="הצג רחפנים" Margin="3,10,5,5" Click="btnListDrone_Click"/>
         </StackPanel>
 
+     
         <TabControl TabStripPlacement="Right" Grid.Row="1" Background="Transparent" Visibility="Hidden">
             <TabItem Header="Admin">
 
@@ -49,6 +50,26 @@
                 </Grid>
             </TabItem>
         </TabControl>
+
+        <Grid x:Name="btnEnterTheApp" Margin="487,10,89,100" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Button
+              Style="{StaticResource MaterialDesignRaisedDarkButton}" Grid.Row="0" Background="Transparent"
+                Height="40" Width="150" IsEnabled="{Binding DataContext.ControlsEnabled, 
+                RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}">
+                <TextBlock Text="כניסה" Foreground="#ff6331" Background="{DynamicResource MaterialDesignTextFieldBoxHoverBackground}" FontSize="28"/>
+            </Button>
+            <Button
+              Style="{StaticResource MaterialDesignRaisedDarkButton}" Background="Transparent" Width="150" Height="40" Grid.Row="1"
+                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" Click="Button_Click">
+                <TextBlock Text="הרשמה" Foreground="#ff6331" Background="{DynamicResource MaterialDesignTextFieldBoxHoverBackground}" TextAlignment="Center" TextWrapping="NoWrap" FontSize="28" />
+            </Button>
+        </Grid>
+
     </Grid>
-   
+
 </Window>

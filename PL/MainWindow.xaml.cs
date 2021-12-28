@@ -28,12 +28,15 @@ namespace PL
             InitializeComponent();
             getBL = new BL();
         }
-
+            
         private void btnListDrone_Click(object sender, RoutedEventArgs e)
         {
            new ShowDronesWindow(getBL).Show();
         }
 
-       
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
