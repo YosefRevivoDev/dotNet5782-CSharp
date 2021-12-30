@@ -34,9 +34,9 @@ namespace PL
            new ShowDronesWindow(getBL).Show();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void btnEnterApp_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
     }
 }
