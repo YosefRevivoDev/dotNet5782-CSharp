@@ -174,11 +174,13 @@ namespace PL
                     break;
             }
         }
-        private void btnSendDroneToCharge(object sender, RoutedEventArgs e)
+        private void SendDroneToCharge(object sender, RoutedEventArgs e)
         {
-            if (Drone.Status == DroneStatus.available && BaseStation != null)
+            if (Drone.CurrentLocation != BaseStation.Location && Drone.Status == DroneStatus.available && BaseStation != null)
             {
                 bL.SendDroneToCharge(Drone.DroneID, BaseStation.ID);
+                Drone = bL.GetDrone(Drone.DroneID);
+                DataContext = Drone;
             }
         }
 

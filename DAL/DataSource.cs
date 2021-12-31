@@ -13,6 +13,7 @@ namespace DalObject
         internal static List<Customer> Clients = new List<Customer>();
         internal static List<Parcel> Packages = new List<Parcel>();
         internal static List<DroneCharge> DroneCharges = new List<DroneCharge>();
+        internal static List<User> users = new List<User>();
         internal static Random rand = new Random();
         internal static DateTime currentTime = DateTime.Now;
 
@@ -37,6 +38,7 @@ namespace DalObject
             internal static int RunIdDrone = 1;
             internal static int RunCustomerId = 1;
             internal static int RunParcelId = 1;
+            internal static int RunUserId = 1;
 
             //---------------------static attributes--------------------
         }
@@ -50,12 +52,12 @@ namespace DalObject
             };
             #region initStation
             Stations.Add(new BaseStation { Name = "BaseA", StationID = Config.RunIdStation++, AvailableChargeSlots = 50,
-                Latitude = 33,
-                Longtitude = 34
+                Latitude = 33.3,
+                Longtitude = 34.5
             });
 
             Stations.Add(new BaseStation { Name = "BaseB", StationID = Config.RunIdStation++,
-            AvailableChargeSlots = 80, Latitude = 33, Longtitude = 34});
+            AvailableChargeSlots = 80, Latitude = 35, Longtitude = 34.2});
             #endregion
             for (int i = 0; i < 10; i++)
             {
@@ -99,14 +101,17 @@ namespace DalObject
                 );
             }
 
-            for (int i = 0; i < 10; i++)
-            {
-                DroneCharges.Add(new DroneCharge
-                {
-                    DroneID = Drones[i].DroneID,
-                    StationID = Stations[rand.Next(0, 2)].StationID
-                });
-            }
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    DroneCharges.Add(new DroneCharge
+            //    {
+            //        DroneID = Drones[i].DroneID,
+            //        StationID = Stations[rand.Next(0, 2)].StationID
+            //    });
+            //}
+
+            users.Add(new User {UserName = "ButterFly" , FirstName= "David" , LastName = "Revivo" , Password = "1" , UserId = Config.RunUserId++});
+            users.Add(new User {UserName = "1" , FirstName= "Manager" , LastName = "app" , Password = "1" , UserId = Config.RunUserId++});
         }
     }
 }

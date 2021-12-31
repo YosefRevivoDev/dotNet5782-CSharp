@@ -25,6 +25,7 @@ namespace BO
         void UpdateDrone(int id, string newNameModel);
         void UpdateBaseStation(int stationId, string newNameStation, int sumOfChargestation);
         void UpdateCustomr(int customerId, string newNameCustomer, string newPhoneCustomer);
-      //  void ChargeDrone(int droneIdAssociate, int baseStationId);
+        //  void ChargeDrone(int droneIdAssociate, int baseStationId);
+        User GetUser(string userName);
     }
 }

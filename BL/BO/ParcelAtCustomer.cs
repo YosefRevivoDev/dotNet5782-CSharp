@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BO
 {
-    class ParcelAtCustomer: ParcelPoly
+    public class ParcelAtCustomer : ParcelPoly
     {
         public ParcelStatus ParcelStatus { get; set; }
         public CustomerInParcel Sender { get; set; }

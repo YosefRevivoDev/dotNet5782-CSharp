@@ -342,23 +342,22 @@ namespace BO
 
         public Drone GetDrone(int id)
         {
-            IDAL.DO.Drone drone = dal.GetDrone(id);
+            DroneToList droneToList = DroneToList.Find(x => x.DroneID == id);
 
-            if (drone.DroneID == -1)
+            if (droneToList == null)
             {
                 throw new Exception("This Drone have not exist, please try again.");
             }
 
             Drone BLdrone = new();
-            DroneToList droneToList = DroneToList.Find(x => x.DroneID == id);
-            BLdrone.DroneID = drone.DroneID;
-            BLdrone.DroneModel = drone.DroneModel;
-            BLdrone.DroneWeight = (WeightCategories)drone.DroneWeight;
+            BLdrone.DroneID = droneToList.DroneID;
+            BLdrone.DroneModel = droneToList.DroneModel;
+            BLdrone.DroneWeight = droneToList.DroneWeight;
             BLdrone.BattaryStatus = droneToList.BattaryStatus;
             BLdrone.CurrentLocation = droneToList.CurrentLocation;
             BLdrone.Status = droneToList.Status;
 
-            //BLdrone.ParcelInDeliverd = GetParcelInDeliverd(droneToList.NumOfPackageDelivered);
+            BLdrone.ParcelInDeliverd = GetParcelInDeliverd(droneToList.NumOfPackageDelivered);
             return BLdrone;
         }
 
@@ -367,25 +366,78 @@ namespace BO
             Parcel parcel = GetParcel(NumOfPackageId);
 
             ParcelInDeliver ParcelInDeliverd = new ParcelInDeliver();
+
             ParcelInDeliverd.ID = parcel.Id;
             ParcelInDeliverd.Sender = parcel.Sender;
             ParcelInDeliverd.Target = parcel.Target;
             ParcelInDeliverd.Priorities = parcel.Priority;
-            ParcelInDeliverd.CollectionLocation = GetCustomer(parcel.Sender.CustomerId).LocationCustomer;
-            ParcelInDeliverd.DeliveryDestination = GetCustomer(parcel.Target.CustomerId).LocationCustomer;
             ParcelInDeliverd.WeightCategories = parcel.Weight;
+
+            IDAL.DO.Customer SenderCustomer = dal.GetCustomer(parcel.Sender.CustomerId);
+            IDAL.DO.Customer TargetCustomer = dal.GetCustomer(parcel.Target.CustomerId);
+            ParcelInDeliverd.CollectionLocation = new Location { Latitude = SenderCustomer.Latitude, Longtitude = SenderCustomer .Longtitude};
+            ParcelInDeliverd.DeliveryDestination = new Location { Latitude = TargetCustomer.Latitude, Longtitude = TargetCustomer .Longtitude};
+           
             ParcelInDeliverd.TransportDistance =
                 HelpFunction.Distance(ParcelInDeliverd.CollectionLocation.Latitude,
                  ParcelInDeliverd.DeliveryDestination.Latitude,
                  ParcelInDeliverd.CollectionLocation.Longtitude,
                  ParcelInDeliverd.DeliveryDestination.Longtitude);
+
             return ParcelInDeliverd;
+        }
+
+        private ParcelStatus getparcelStatus(IDAL.DO.Parcel parcel)
+        {
+            if (parcel.Delivered != null)
+            {
+                return ParcelStatus.provided;
+            }
+            if (parcel.PickedUp != null)
+            {
+                return ParcelStatus.collected;
+            }
+            if (parcel.Assignment != null)
+            {
+                return ParcelStatus.associated;
+            }
+            return ParcelStatus.Defined;
+        }
+
+        public ParcelAtCustomer GetParcelAtCustomer(IDAL.DO.Parcel parcel)
+        {
+            ParcelAtCustomer parcelAtCustomer = new ParcelAtCustomer();
+            parcelAtCustomer.Id = parcel.ParcelId;
+            parcelAtCustomer.Priority = (BO.Priorities)parcel.ParcelPriority;
+            parcelAtCustomer.Weight = (BO.WeightCategories)parcel.ParcelWeight;
+            parcelAtCustomer.ParcelStatus = getparcelStatus(parcel);
+
+            IDAL.DO.Customer SenderCustomer = dal.GetCustomer(parcel.SenderId);
+            parcelAtCustomer.Sender = new CustomerInParcel();
+            parcelAtCustomer.Sender.CustomerId = SenderCustomer.CustomerId;
+            parcelAtCustomer.Sender.NameCustomer = SenderCustomer.Name;
+
+            IDAL.DO.Customer Targetcustomer = dal.GetCustomer(parcel.TargetId);
+            parcelAtCustomer.Target = new CustomerInParcel();
+            parcelAtCustomer.Sender.CustomerId = Targetcustomer.CustomerId;
+            parcelAtCustomer.Target.NameCustomer = Targetcustomer.Name;
+
+            return parcelAtCustomer;
+        }
+
+        private IEnumerable<ParcelAtCustomer> GetParcelAtCustomers(IEnumerable<IDAL.DO.Parcel>DalPackagesIdCustomer, 
+            int id, bool flag)
+        {
+            return from package in DalPackagesIdCustomer
+                   where flag ? package.SenderId == id : package.TargetId == id
+                   select GetParcelAtCustomer(package);
         }
 
         public Customer GetCustomer(int id)
         {
             IDAL.DO.Customer DalCustomer = dal.GetCustomer(id);
             Customer BLCustomer = new();
+
             BLCustomer.LocationCustomer = new();
             BLCustomer.CustomerId = DalCustomer.CustomerId;
             BLCustomer.NameCustomer = DalCustomer.Name;
@@ -394,28 +446,27 @@ namespace BO
             BLCustomer.LocationCustomer.Longtitude = DalCustomer.Longtitude;
 
             //packages that the customer send
-            BLCustomer.PackagesFromCustomer = new List<Parcel>();
-            List<IDAL.DO.Parcel> DalPackagesFromCustomer = dal.GetPackagesByPredicate(x => x.SenderId == id).ToList();
-            foreach (var item in DalPackagesFromCustomer)
-            {
-                BLCustomer.PackagesFromCustomer.Add(GetParcel(item.ParcelId));
-            }
+            BLCustomer.PackagesFromCustomer = new List<ParcelAtCustomer>();
+            BLCustomer.PackagesToCustomer = new List<ParcelAtCustomer>();
+
+            IEnumerable<IDAL.DO.Parcel> DalPackagesIdCustomer = dal.GetPackagesByPredicate
+                (x => x.SenderId == id || x.TargetId == id);
 
             //packages that the customer recieve
-            BLCustomer.PackagesToCustomer = new List<Parcel>();
-            List<IDAL.DO.Parcel> DalPackagesToCustomer = dal.GetPackagesByPredicate(x => x.TargetId == id).ToList();
-            foreach (var item in DalPackagesToCustomer)
-            {
-                BLCustomer.PackagesToCustomer.Add(GetParcel(item.SenderId));
-            }
+            BLCustomer.PackagesFromCustomer = GetParcelAtCustomers(DalPackagesIdCustomer, id, true).ToList();
+
+            //packages that the customer get
+            BLCustomer.PackagesToCustomer = GetParcelAtCustomers(DalPackagesIdCustomer, id, false).ToList();
+           
             return BLCustomer;
         }
 
         public Parcel GetParcel(int id)
         {
             IDAL.DO.Parcel DalParcel = dal.GetParcel(id);
+
             Parcel BLParcel = new();
-            DroneToList drone = DroneToList.Find(i => i.DroneID == DalParcel.DroneId);
+
             BLParcel.Id = DalParcel.ParcelId;
             BLParcel.Sender = GetCustomer(DalParcel.SenderId);
             BLParcel.Target = GetCustomer(DalParcel.TargetId);
@@ -425,14 +476,44 @@ namespace BO
             BLParcel.Requested = DalParcel.Assignment;
             BLParcel.PickedUp = DalParcel.PickedUp;
             BLParcel.Delivered = DalParcel.Delivered;
-            BLParcel.Drone.DroneID = drone.DroneID;
-            BLParcel.Drone.BattaryStatus = drone.BattaryStatus;
-            BLParcel.Drone.CorrentLocation = new Location()
+
+           
+            if (DalParcel.DroneId != 0)
             {
-                Latitude = drone.CurrentLocation.Latitude,
-                Longtitude = drone.CurrentLocation.Longtitude
-            };
+                DroneToList drone = DroneToList.Find(i => i.DroneID == DalParcel.DroneId);
+                BLParcel.Drone = new DroneInParcel();
+                BLParcel.Drone.DroneID = drone.DroneID;
+                BLParcel.Drone.BattaryStatus = drone.BattaryStatus;
+                BLParcel.Drone.CorrentLocation = new Location()
+                {
+                    Latitude = drone.CurrentLocation.Latitude,
+                    Longtitude = drone.CurrentLocation.Longtitude
+                };
+            }
+            
             return BLParcel;
+        }
+
+        public User GetUser(string userName)
+        {
+            
+            try
+            {
+                IDAL.DO.User DalUser = dal.GetUser(userName);
+                User BlUser = new User();
+                BlUser.FirstName = DalUser.FirstName;
+                BlUser.LastName = DalUser.LastName;
+                BlUser.Password = DalUser.Password;
+                BlUser.UserId = DalUser.UserId;
+                BlUser.UserName = DalUser.UserName;
+
+                return BlUser;
+            }
+            catch (Exception)
+            {
+
+                throw new Exception("The User not exist");
+            }
         }
 
         //-------------------------------------------- UPDATE FUNC ------------------------------// 
@@ -504,6 +585,7 @@ namespace BO
             {
                 throw new Exception("Only available Drone can be sending to charge");
             }
+
             IDAL.DO.BaseStation baseStation = dal.GetBaseStation(stationId);
             BaseStation _baseStation = new BaseStation()
             {
@@ -512,13 +594,17 @@ namespace BO
                 AvailableChargingStations = baseStation.AvailableChargeSlots,
                 Location = new Location { Latitude = baseStation.Latitude, Longtitude = baseStation.Longtitude }
             };
-            double distanceBetweenStationToDrone = HelpFunction.BatteryStatusBetweenLocations(_baseStation.Location
-                          , droneToCharge, droneToCharge.DroneWeight);
+
+            double distanceBetweenStationToDrone = HelpFunction.Distance(_baseStation.Location.Latitude
+                          , droneToCharge.CurrentLocation.Latitude, _baseStation.Location.Longtitude,
+                         droneToCharge.CurrentLocation.Longtitude) * PowerConsumptionAvailable;
+
             if (distanceBetweenStationToDrone == default)
             {
                 throw new Exception("WRONG!, There are not enough battery to complete this mission");
             }
-            droneToCharge.BattaryStatus -= distanceBetweenStationToDrone * PowerConsumptionAvailable;
+
+            droneToCharge.BattaryStatus -= distanceBetweenStationToDrone;
             droneToCharge.CurrentLocation = _baseStation.Location;
             droneToCharge.Status = DroneStatus.maintenance;
             dal.MinusDroneCharge(stationId);// Lowering the number of charging stations by 1
@@ -642,5 +728,7 @@ namespace BO
         {
             return DroneToList.FindAll(i => predicate == null ? true : predicate(i));
         }
+
+
     }
 }

@@ -29,9 +29,10 @@ namespace PL
         {
             InitializeComponent();
             DronesToList = new();
-            foreach (var item in getBL.GetDroneToListsBLByPredicate())
+            IEnumerable<DroneToList> temp = getBL.GetDroneToListsBLByPredicate();
+            foreach (var item in temp)
             {
-                DronesToList.Add(item);
+                DronesToList.Add(item); 
             }
 
             cmbStatusSelector.ItemsSource = Enum.GetValues(typeof(DroneStatus));

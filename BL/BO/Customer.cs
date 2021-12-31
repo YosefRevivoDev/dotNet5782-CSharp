@@ -13,8 +13,8 @@ namespace BO
         public Location LocationCustomer { get; set; }
         public string Name { get; set; }
 
-        public List<Parcel> PackagesToCustomer = new List<Parcel>();
-        public List<Parcel> PackagesFromCustomer = new List<Parcel>();
+        public List<ParcelAtCustomer> PackagesToCustomer { get; set; }
+        public List<ParcelAtCustomer> PackagesFromCustomer { get; set; }
 
         public override string ToString()
         {

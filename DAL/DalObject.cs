@@ -41,7 +41,7 @@ namespace DalObject
         }
         public void AddDroneCharge(DroneCharge droneCharge)
         {
-            DataSource.DroneCharges.Add((DroneCharge)(DataSource.DroneCharges.FindIndex(i => i.StationID == droneCharge.StationID) == -1 ?
+            DataSource.DroneCharges.Add((DataSource.DroneCharges.FindIndex(i => i.StationID == droneCharge.StationID) == -1 ?
             droneCharge : throw new DroneChargeException($"This id {droneCharge.StationID} already exist")));
         }
 
@@ -90,6 +90,18 @@ namespace DalObject
                 }
             }
             return default;
+        }
+
+        public User GetUser(string userName)
+        {
+            for (int i = 0; i < DataSource.users.Count; i++)
+            {
+                if (userName == DataSource.users[i].UserName)
+                {
+                    return DataSource.users[i];
+                }
+            }
+            throw new Exception("The User not exist");
         }
 
         //--------------------------------------------------UPDATE FUNCTION---------------------------------------//

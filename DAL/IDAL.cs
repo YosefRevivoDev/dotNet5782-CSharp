@@ -22,6 +22,7 @@ namespace IDAL
         IEnumerable<Parcel> GetPackagesByPredicate(Predicate<Parcel> predicate = null);
         IEnumerable<DroneCharge> GetDroneChargesByPredicate(Predicate<DroneCharge> predicate = null);
         Parcel GetParcel(int Id);
+        User GetUser(string userName);
         void PackageCollectionByDrone(int parcelId, int droneId);
         void ReleasingChargeDrone(int droneId, int baseStationId);
         void RemoveBaseStation(int stationID);
@@ -37,6 +38,7 @@ namespace IDAL
         double[] RequetPowerConsumption();
         void MinusDroneCharge(int stationId);
         void PlusDroneCharge(int stationId);
+
 
     }
 }

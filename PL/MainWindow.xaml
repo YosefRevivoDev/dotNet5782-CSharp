@@ -22,40 +22,18 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="6*"/>
+          
         </Grid.RowDefinitions>
 
         <StackPanel Height="60" VerticalAlignment="Bottom" Grid.Row="0" Visibility="Visible">
             <Button x:Name="btnListDrone" Content="הצג רחפנים" Margin="3,10,5,5" Click="btnListDrone_Click"/>
         </StackPanel>
 
-
-        <TabControl TabStripPlacement="Right" Grid.Row="1" Background="Transparent" Visibility="Hidden">
-            <TabItem Header="Admin">
-
-                <Grid Background="Transparent">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="126*"/>
-                        <ColumnDefinition Width="120*"/>
-                        <ColumnDefinition Width="350*"/>
-                        <ColumnDefinition Width="147*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock><Run Text="Hello World"/></TextBlock>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Drones">
-                <Grid Background="Transparent">
-                    <TextBox Text="Hello Drones"/>
-                </Grid>
-            </TabItem>
-            <materialDesign:DrawerHost Content="DrawerHost"/>
-        </TabControl>
-
-        <Grid x:Name="btnEnterTheApp" Margin="487,10,89,100" Grid.Row="1">
+        <Grid x:Name="EnterTheApp" Margin="487,10,89,100" Grid.Row="1" Visibility="Visible">
             <StackPanel>
                 <TextBlock Text="ברוכים הבאים" TextAlignment="Center" TextWrapping="NoWrap" FontWeight="Bold" FontSize="24" Background="{DynamicResource MaterialDesignBackground}" />
                 <TextBlock x:Name="EnterUserName" Grid.Row="0" Text=": שם משתמש" Background="LightGray" Height="29" TextAlignment="Right" FontSize="16" />
-                <TextBox x:Name="UserNamm" MaxLength="20" Background="Azure" Text="" Height="29"/>
+                <TextBox x:Name="UserName" MaxLength="20" Background="Azure" Text="" Height="29"/>
                 <TextBlock x:Name="EnterPassword" Grid.Row="1" Text=": סיסמא" Background="LightGray" Height="25" TextAlignment="Right" FontSize="16"/>
                 <TextBox x:Name="Password" MaxLength="8" Background="Azure" Text="" Height="28"/>
                 <Button x:Name="btnEnterApp"
@@ -65,11 +43,35 @@
                 </Button>
                 <Button
               Style="{StaticResource MaterialDesignRaisedDarkButton}" Background="Transparent" Height="40"
-                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Click="Button_Click">
+                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
                     <TextBlock Text="הרשמה" Foreground="#ff6331" Background="{DynamicResource MaterialDesignTextFieldBoxHoverBackground}" TextAlignment="Center" TextWrapping="NoWrap" FontSize="24" />
                 </Button>
             </StackPanel>
+        </Grid>
 
+        <Grid x:Name="CompanyManagement" Visibility="Hidden" Grid.Row="1">
+
+            <TabControl TabStripPlacement="Right" Grid.Row="1" Background="Transparent">
+                <TabItem Header="Admin">
+
+                    <Grid Background="Transparent">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="126*"/>
+                            <ColumnDefinition Width="120*"/>
+                            <ColumnDefinition Width="350*"/>
+                            <ColumnDefinition Width="147*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock><Run Text="Hello World"/></TextBlock>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Drones">
+                    <Grid Background="Transparent">
+                        
+                        <TextBox Text="Hello Drones"/>
+                    </Grid>
+                </TabItem>
+                <materialDesign:DrawerHost Content="DrawerHost"/>
+            </TabControl>
         </Grid>
 
     </Grid>

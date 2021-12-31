@@ -36,7 +36,34 @@ namespace PL
 
         private void btnEnterApp_Click(object sender, RoutedEventArgs e)
         {
-            
+            if (UserName.Text == "" || Password.Text == "")
+            {
+                MessageBox.Show("You must fill all the fildes");
+                return;
+            }
+            try
+            {
+                User user = getBL.GetUser(UserName.Text);
+                if (user.UserName == UserName.Text && user.Password == Password.Text)
+                {
+                    CompanyManagement.Visibility = Visibility.Visible;
+                    EnterTheApp.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    MessageBox.Show("The Password not correct");
+
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("The User not exist");
+                return;
+            }
+
+
+
+
         }
     }
 }

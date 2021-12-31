@@ -69,7 +69,7 @@ namespace BO
             return (distances.FindIndex(i => i == distances.Min()), distances.Min());
         }
 
-        public static double BatteryStatusBetweenLocations(Location location, DroneToList drone, WeightCategories weight)
+        public static double BatteryStatusBetweenLocations(Location location, DroneToList drone, WeightCategories weight = default)
         {
 
             double BatteryStatusBetweenLocations =
@@ -86,6 +86,7 @@ namespace BO
                     BatteryStatusBetweenLocations *= BL.PowerConsumptionHeavyWeight;
                     break;
                 default:
+                    BatteryStatusBetweenLocations *= BL.PowerConsumptionAvailable;
                     break;
             }
             //Check if drone's way enough to pass the mession 

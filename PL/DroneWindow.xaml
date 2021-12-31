@@ -4,7 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
+      
         mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=local:MainWindow, IsDesignTimeCreatable=True}"
         Title="AddDroneWindow" Height="450" Width="800" WindowStyle="None" >
     <Window.Resources>
         <Style x:Key="styleForButtons" TargetType="Button">
@@ -98,7 +100,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Button x:Name="btnUpdateModel" Style="{StaticResource styleForButtons}" Content="עדכון" Click="btnUpdateModel_Click" Grid.ColumnSpan="2"/>
-                    <Button x:Name="btnDroneCharge" Content="שליחת רחפן לטעינה" HorizontalAlignment="Left" Width="175" Click="btnSendDroneToCharge" Margin="4,6,0,0" Grid.Row="1" />
+                    <Button x:Name="btnDroneCharge" Content="שליחת רחפן לטעינה" HorizontalAlignment="Left" Width="175" Click="SendDroneToCharge" Margin="4,6,0,0" Grid.Row="1" />
                     <Button x:Name="btnRealeseDrone" Content="שחרור רחפן מטעינה" HorizontalAlignment="Left" Width="175" Click="_btnRealeseDroneClick" Margin="4,2,0,5"/>
                     <Button x:Name="btnSendDroneToDeliver" Content="שליחת רחפן למשלוח" Grid.Row="1" Click="btnSendDroneToDeliver_Click" Margin="370,6,10,0" Grid.ColumnSpan="2"/>
                     <Button x:Name="btnCollectParcel" Content="איסוף חבילה" VerticalAlignment="Top" Click="btnCollectParcel_Click" Margin="197,3,71,0" Height="30" />
@@ -128,13 +130,14 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-
+                     
+        
                         <StackPanel x:Name="StackLeft" Grid.Column="0" Orientation="Vertical">
-                            <TextBlock FontWeight="Bold" FontSize="16" Height="21" Text="{Binding ElementName= ParcelInDeliverd.ParcelId, Path=Value}"/>
-                            <TextBlock FontWeight="Bold" FontSize="16" Height="29" Margin="0,10,0,0" />
-                            <TextBlock FontWeight="Bold" FontSize="16" Height="26" Margin="0,10,0,0" />
-                            <TextBlock FontWeight="Bold" FontSize="16" Height="26" Margin="0,10,0,0" />
-                            <TextBlock FontWeight="Bold" FontSize="16" Height="26" Margin="0,10,0,0" />
+                            <TextBlock FontWeight="Bold" FontSize="16" Height="21" Text="{Binding ParcelInDeliverd.ID}"/>
+                            <TextBlock FontWeight="Bold" FontSize="16" Height="29" Margin="0,10,0,0" Text="{Binding ParcelInDeliverd.Priorities}"/>
+                            <TextBlock FontWeight="Bold" FontSize="16" Height="26" Margin="0,10,0,0" Text="{Binding ParcelInDeliverd.WeightCategories}"/>
+                            <TextBlock FontWeight="Bold" FontSize="16" Height="26" Margin="0,10,0,0" Text="{Binding ParcelInDeliverd.StatusParcrlInDeliver}"/>
+                            <TextBlock FontWeight="Bold" FontSize="16" Height="26" Margin="0,10,0,0" Text="{Binding ParcelInDeliverd.TransportDistance}"/>
                             <TextBlock FontWeight="Bold" FontSize="16" Height="26" />
                             <TextBlock FontWeight="Bold" FontSize="16" Height="26" />
                             <TextBlock FontWeight="Bold" FontSize="16" Height="26" />
@@ -169,6 +172,10 @@
                         <Run Text="פרטי לקוח" Foreground="White"/></TextBlock>
                             </StackPanel>
                         </GroupBox.Header>
+                        <!--public CustomerInParcel Sender { get; set; }
+        public CustomerInParcel Target { get; set; }
+        public Location CollectionLocation { get; set; }
+        public Location DeliveryDestination { get; set; }-->
 
                         <Grid>
 
@@ -187,7 +194,7 @@
                             </StackPanel>
 
                             <StackPanel x:Name="RightStackRight" Grid.Column="1">
-                                <TextBlock HorizontalAlignment="Right">:מזהה לקוח</TextBlock>
+                                <TextBlock HorizontalAlignment="Right" Text="{Binding ParcelInDeliverd.Sender.CustomerId}">:מזהה לקוח</TextBlock>
                                 <TextBlock HorizontalAlignment="Right" Margin="0,7,0,0">: שם לקוח</TextBlock>
                                 <TextBlock HorizontalAlignment="Right" Margin="0,7,0,0">: טלפון</TextBlock>
                                 <TextBlock HorizontalAlignment="Right" Margin="0,7,0,0">: מיקום לקוח</TextBlock>
