@@ -1,0 +1,52 @@
+﻿<Window x:Class="PLGui.ParcelWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PLGui"
+        mc:Ignorable="d"
+        Title="ParcelWindow" Height="450" Width="400">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <GroupBox>
+            <Grid x:Name="ParcelGrid" Grid.Column="0">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Label Content="מזהה חבילה" FontSize="16" FontWeight="UltraBlack" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBox x:Name="ParcelID" PreviewTextInput="NumberValidationTextBox" Text="{Binding Id}"/>
+
+                <Label Content="שם שולח" Grid.Row="1" Grid.Column="1" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBox x:Name="NameSender" Grid.Row="1" Text="{Binding SenderId}"/>
+
+                <Label Content="שם מקבל" Grid.Row="2" Grid.Column="1" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBox x:Name="NameTarget" Grid.Row="2" Text="{Binding TargetId}"/>
+
+                <Label Content="עדיפות" Grid.Row="3" Grid.Column="1" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <ComboBox x:Name="Priority" Grid.Row="3" SelectedItem="{Binding Priority}"/>
+
+                <Label Content="משקל חבילה" Grid.Row="4" Grid.Column="1" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBox x:Name="WeightParcel" Grid.Row="4" Text="{Binding Weight}"/>
+
+                <Button x:Name="btnUpdateParcel" Content="עדכן" Grid.Row="5" Grid.Column="1" FontSize="18" Margin="5,0,0,0" Click="btnUpdateParcel_Click"/>
+                <Button x:Name="btnRemoveStation" Content="מחיקה" Grid.Row="5" FontSize="18" Margin="0,0,5,0" Click="btnRemoveStation_Click"/>
+                <Button x:Name="btnAddParcel" Content="אישור" Grid.Row="6" Click="btnAddParcel_Click" />
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Window>

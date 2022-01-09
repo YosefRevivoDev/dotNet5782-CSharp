@@ -1,9 +1,9 @@
-﻿<Window x:Class="PL.DroneWindow"
+﻿<Window x:Class="PLGui.DroneWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PL"
+        xmlns:local="clr-namespace:PLGui"
       
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=local:MainWindow, IsDesignTimeCreatable=True}"
@@ -13,7 +13,7 @@
             <Setter Property="Width" Value="165"></Setter>
             <Setter Property="Height" Value="30"></Setter>
         </Style>
-        
+
         <Style x:Key="styleForTextBox" TargetType="TextBox">
             <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
             <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
@@ -23,61 +23,61 @@
             <Setter Property="Foreground" Value="Green"></Setter>
         </Style>
     </Window.Resources>
-    
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="2.3*"/>
         </Grid.ColumnDefinitions>
-        
-        <Grid x:Name="droneGrid" Grid.Column="0">
+        <GroupBox Margin="0,1,0,0">
+            <Grid x:Name="droneGrid" Grid.Column="0">
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <Label Content="מזהה רחפן" FontSize="16" FontWeight="UltraBlack" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <TextBox x:Name="DroneId"  Style="{StaticResource styleForTextBox}" PreviewTextInput="NumberValidationTextBox" Text="{Binding DroneID}" TextChanged="DroneId_TextChanged" />
-            <Label Content="שם רחפן" Grid.Row="1" Grid.Column="1" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <TextBox x:Name="DroneModel"  Style="{StaticResource styleForTextBox}"  Grid.Row="1" Text="{Binding DroneModel, Mode=TwoWay}"/>
-            <Label Content="משקל רחפן" Grid.Row="2" Grid.Column="1" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <ComboBox x:Name="DroneWeight"   Grid.Row="2" SelectedItem="{Binding DroneWeight}" />
-            <Label Name="NumberOfStation" Content="מספר תחנה" Grid.Row="3" Grid.Column="1" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <ComboBox x:Name="NumberOfStations" DisplayMemberPath="ID" Grid.Row="2" SelectionChanged="NumberOfStation_SelectionChanged" Width="83" HorizontalAlignment="Left" Margin="0,42,0,0" Grid.RowSpan="2" />
-            <Button x:Name="addDrone" Content="הוסף" Grid.Row="7"
-                    Margin="42,0,46,0" VerticalAlignment="Center" Width="128" Click="addDrone_Click" Grid.ColumnSpan="2"/>
-            <Label Content="מיקום רחפן" Grid.Column="1" Grid.Row="4" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <TextBox x:Name="Location" Style="{StaticResource styleForTextBox}" Grid.Row="4" Width="64" PreviewTextInput="NumberValidationTextBox" Text="{Binding Location}"/>
-            <Label Content="מצב סוללה" Grid.Row="5" Grid.Column="1" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center" />
-            <ProgressBar x:Name="BatteryStatus"  Grid.Row="5" Value="{Binding BattaryStatus}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="64" Height="22" 
+                <Label Content="מזהה רחפן" FontSize="16" FontWeight="UltraBlack" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBox x:Name="DroneId"  Style="{StaticResource styleForTextBox}" PreviewTextInput="NumberValidationTextBox" Text="{Binding DroneID}" TextChanged="DroneId_TextChanged" />
+                <Label Content="שם רחפן" Grid.Row="1" Grid.Column="1" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBox x:Name="DroneModel"  Style="{StaticResource styleForTextBox}"  Grid.Row="1" Text="{Binding DroneModel, Mode=TwoWay}"/>
+                <Label Content="משקל רחפן" Grid.Row="2" Grid.Column="1" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <ComboBox x:Name="DroneWeight" Grid.Row="2" SelectedItem="{Binding DroneWeight}" />
+                <Label Name="NumberOfStation" Content="מספר תחנה" Grid.Row="3" Grid.Column="1" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <ComboBox x:Name="NumberOfStations" DisplayMemberPath="ID" Grid.Row="2" SelectionChanged="NumberOfStation_SelectionChanged" Width="83" HorizontalAlignment="Left" Margin="0,42,0,0" Grid.RowSpan="2" />
+                <Label Content="מיקום רחפן" Grid.Column="1" Grid.Row="4" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBox x:Name="Location" Style="{StaticResource styleForTextBox}" Grid.Row="4" Width="64" PreviewTextInput="NumberValidationTextBox" Text="{Binding Location}"/>
+                <Label Content="מצב סוללה" Grid.Row="5" Grid.Column="1" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <ProgressBar x:Name="BatteryStatus"  Grid.Row="5" Value="{Binding BattaryStatus}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="64" Height="22" 
                          Minimum="0" Maximum="100" Background="GreenYellow"/>
-            <TextBlock Text="{Binding ElementName=BatteryStatus, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="5"/>
-            <Label Content="מצב רחפן" Grid.Row="6" Grid.Column="1" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <ComboBox x:Name="StatusDrone" Grid.Row="6" SelectedItem="{Binding DroneStatus}" SelectionChanged="StatusDrone_SelectionChanged"
+                <TextBlock Text="{Binding ElementName=BatteryStatus, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="5"/>
+                <Label Content="מצב רחפן" Grid.Row="6" Grid.Column="1" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <ComboBox x:Name="StatusDrone" Grid.Row="6" SelectedItem="{Binding DroneStatus}" SelectionChanged="StatusDrone_SelectionChanged"
                       DisplayMemberPath="DroneStatus"/>
+                <Button x:Name="addDrone" Content="הוסף" Grid.Row="7"
+                    Margin="42,0,46,0" VerticalAlignment="Center" Width="128" Click="addDrone_Click" Grid.ColumnSpan="2"/>
+            </Grid>
+        </GroupBox>
 
-        </Grid>
 
-        
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="2.3*"/>
             </Grid.RowDefinitions>
 
-            <GroupBox x:Name="DroneSituateGrid" Grid.Row="0"  FontWeight="Bold" FontSize="18" Padding="10">
+            <GroupBox x:Name="DroneSituateGrid" Grid.Row="0"  FontWeight="Bold" FontSize="18" Padding="10" Margin="0,1,1,0">
 
                 <GroupBox.Header>
                     <StackPanel Orientation="Horizontal" Height="23" MaxHeight="23">
@@ -99,16 +99,16 @@
                         <ColumnDefinition Width="107*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button x:Name="btnUpdateModel" Style="{StaticResource styleForButtons}" Content="עדכון" Click="btnUpdateModel_Click" Grid.ColumnSpan="2"/>
+                    <Button x:Name="btnUpdateModel" Content="עדכון" Click="btnUpdateModel_Click" Grid.ColumnSpan="2" Margin="373,2,0,5"/>
                     <Button x:Name="btnDroneCharge" Content="שליחת רחפן לטעינה" HorizontalAlignment="Left" Width="175" Click="SendDroneToCharge" Margin="4,6,0,0" Grid.Row="1" />
                     <Button x:Name="btnRealeseDrone" Content="שחרור רחפן מטעינה" HorizontalAlignment="Left" Width="175" Click="_btnRealeseDroneClick" Margin="4,2,0,5"/>
-                    <Button x:Name="btnSendDroneToDeliver" Content="שליחת רחפן למשלוח" Grid.Row="1" Click="btnSendDroneToDeliver_Click" Margin="370,6,10,0" Grid.ColumnSpan="2"/>
-                    <Button x:Name="btnCollectParcel" Content="איסוף חבילה" VerticalAlignment="Top" Click="btnCollectParcel_Click" Margin="197,3,71,0" Height="30" />
+                    <Button x:Name="btnSendDroneToDeliver" Content="שליחת רחפן למשלוח" Grid.Row="1" Click="btnSendDroneToDeliver_Click" Margin="370,6,0,-1" Grid.ColumnSpan="2"/>
+                    <Button x:Name="btnCollectParcel" Content="איסוף חבילה" VerticalAlignment="Center" Click="btnCollectParcel_Click" Margin="195,0,73,0" Height="30" />
                     <Button x:Name="btnSupplyParcel" Content="אספקת חבילה" HorizontalAlignment="Left" VerticalAlignment="Top" Width="158" Margin="197,7,0,0" Height="30" Grid.Row="1"/>
                 </Grid>
             </GroupBox>
 
-            
+
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -130,8 +130,8 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                     
-        
+
+
                         <StackPanel x:Name="StackLeft" Grid.Column="0" Orientation="Vertical">
                             <TextBlock FontWeight="Bold" FontSize="16" Height="21" Text="{Binding ParcelInDeliverd.ID}"/>
                             <TextBlock FontWeight="Bold" FontSize="16" Height="29" Margin="0,10,0,0" Text="{Binding ParcelInDeliverd.Priorities}"/>
@@ -163,19 +163,15 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    
+
                     <GroupBox x:Name="RightGroupBox"
-                  FontWeight="Bold" FontSize="18" Padding="10">
+                  FontWeight="Bold" FontSize="18" Padding="10" Margin="0,0,1,0">
                         <GroupBox.Header>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock FontWeight="Bold" Margin="75,0,0,0" FontStyle="Normal" FontSize="16">
                         <Run Text="פרטי לקוח" Foreground="White"/></TextBlock>
                             </StackPanel>
                         </GroupBox.Header>
-                        <!--public CustomerInParcel Sender { get; set; }
-        public CustomerInParcel Target { get; set; }
-        public Location CollectionLocation { get; set; }
-        public Location DeliveryDestination { get; set; }-->
 
                         <Grid>
 
@@ -202,10 +198,8 @@
 
                             </StackPanel>
                         </Grid>
-
                     </GroupBox>
                 </Grid>
-               
             </Grid>
         </Grid>
     </Grid>

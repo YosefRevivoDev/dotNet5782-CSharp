@@ -1,26 +1,23 @@
 ﻿//Yosef Revivo
 using System;
-using DalObject;
 using System.Linq;
 using System.Text;
-using IDAL.DO;
 using System.Collections.Generic;
-using IDAL;
-
-
+using DAL;
+using DO;
 
 namespace ConsoleUI
 {
     class Program
     {
-        static IDAL.IDal DeliversByDroneCompany = new DalObject.DalObject();
+        static DalAPI.IDal DeliversByDroneCompany = new DalObject();
         static void Main(string[] args)
         {
-            DalObject.DalObject dal = new DalObject.DalObject();
+            DalObject dal = new DalObject();
             MenuStartAplication(dal);
         }
 
-        public static void MenuStartAplication(DalObject.DalObject dal)
+        public static void MenuStartAplication(DalObject dal)
         {
             int Options;
             int SubOptions;
@@ -91,7 +88,7 @@ namespace ConsoleUI
         }
 
         //--------------------------------------------ADD FUNCTIONS---------------------------------------------//
-        public static void AddOptions(int SubOptions, DalObject.DalObject dal)
+        public static void AddOptions(int SubOptions, DalObject dal)
         {
             switch (SubOptions)
             {
@@ -111,7 +108,7 @@ namespace ConsoleUI
                     break;
             }
         }
-        public static void AddBaseStation(DalObject.DalObject dal)
+        public static void AddBaseStation(DalObject dal)
         {
             int StationID, ChargeSlots;
             double Longtitude, Latitude;
@@ -140,7 +137,7 @@ namespace ConsoleUI
 
             Console.WriteLine("A new base station has been added");
         }
-        public static void AddNewParcel(DalObject.DalObject dal)
+        public static void AddNewParcel(DalObject dal)
         {
             int ParcelId, SenderId, TargetId, DroneId;
 
@@ -191,7 +188,7 @@ namespace ConsoleUI
 
             Console.WriteLine("A new parcel has been added");
         }
-        public static void AddNewCustomer(DalObject.DalObject dal)
+        public static void AddNewCustomer(DalObject dal)
         {
             int CustomerId;
             double Longtitude, Latitude;
@@ -219,7 +216,7 @@ namespace ConsoleUI
 
             Console.WriteLine("A new base customer has been added");
         }
-        public static void AddDrone(DalObject.DalObject dal)
+        public static void AddDrone(DalObject dal)
         {
             Drone drone = new();
             Console.WriteLine();
@@ -242,7 +239,7 @@ namespace ConsoleUI
 
         //--------------------------------------------Display OBJ FUNCTIONS---------------------------------------------//
 
-        public static void ViewOptions(int SubOptions, DalObject.DalObject dal)
+        public static void ViewOptions(int SubOptions, DalObject dal)
         {
             switch (SubOptions)
             {
@@ -261,7 +258,7 @@ namespace ConsoleUI
             }
         }
         //Print BaseStation by string.Format
-        public static void DisplayBaseStation(DalObject.DalObject dal)
+        public static void DisplayBaseStation(DalObject dal)
         {
             int stationID;
             Console.WriteLine("Please enter station ID");
@@ -270,7 +267,7 @@ namespace ConsoleUI
             Console.WriteLine(string.Format("Station Details: {0}", station));
         }
         //Print Drone by string.Format
-        public static void DisplayDrone(DalObject.DalObject dal)
+        public static void DisplayDrone(DalObject dal)
         {
             int DroneID;
             Console.WriteLine("Please enter Drone ID");
@@ -280,7 +277,7 @@ namespace ConsoleUI
             Console.WriteLine(string.Format("Drone Details: {0}", new_drone));
         }
         //Print Customer by string.Format
-        public static void DisplayCustomer(DalObject.DalObject dal)
+        public static void DisplayCustomer(DalObject dal)
         {
             int CustomerID;
             Console.WriteLine("Please enter Customer ID");
@@ -289,7 +286,7 @@ namespace ConsoleUI
             Console.WriteLine(string.Format("Customer Details: {0}", new_customer));
         }
         //Print Parcel by string.Format
-        public static void DisplayParcel(DalObject.DalObject dal)
+        public static void DisplayParcel(DalObject dal)
         {
             int ParcelID;
             Console.WriteLine("Please enter Parcel ID");
@@ -299,7 +296,7 @@ namespace ConsoleUI
         }
 
         //--------------------------------------------UPDATE OBJ FUNCTIONS---------------------------------------------//
-        static void UpdateOptions(int SubOptions, DalObject.DalObject dal)
+        static void UpdateOptions(int SubOptions, DalObject dal)
         {
             switch (SubOptions)
             {
@@ -347,7 +344,7 @@ namespace ConsoleUI
 
 
         // Call PackageCollectionByDrone function by parcel ID & drone ID paramters
-        private static void ReleaseDroneFromCharged(DalObject.DalObject dal)
+        private static void ReleaseDroneFromCharged(DalObject dal)
         {
             int pacelIdAssociate, droneIdAssociate;
 
@@ -360,7 +357,7 @@ namespace ConsoleUI
         }
 
         //Call DliveredPackageToCustumer function by parcel ID & drone ID paramters
-        private static void SendingDroneToCharge(DalObject.DalObject dal)
+        private static void SendingDroneToCharge(DalObject dal)
         {
             Console.WriteLine("Please enter BaseStation Id that you what to associate with your drone");
             int.TryParse(Console.ReadLine(), out int baseStationId);
@@ -373,7 +370,7 @@ namespace ConsoleUI
         }
 
         //Call ChargeDrone function by parcel ID & drone ID paramters
-        private static void DeliveredParcel(DalObject.DalObject dal)
+        private static void DeliveredParcel(DalObject dal)
         {
             Console.WriteLine("Please enter parcel ID that you what to associate with your drone");
             int.TryParse(Console.ReadLine(), out int pacelIdAssociate);
@@ -386,7 +383,7 @@ namespace ConsoleUI
         }
 
         //Call ChargeDrone function by baseStationId & drone ID paramters
-        private static void packageCollectByDrone(DalObject.DalObject dal)
+        private static void packageCollectByDrone(DalObject dal)
         {
             int baseStationId, droneIdAssociate;
 
@@ -399,7 +396,7 @@ namespace ConsoleUI
         }
 
         //Call ReleasingChargeDrone function by drone_id & baseStationId paramters
-        public static void AssociateParcel(DalObject.DalObject dal)
+        public static void AssociateParcel(DalObject dal)
         {
             int baseStationId, droneIdAssociate;
 
@@ -413,7 +410,7 @@ namespace ConsoleUI
 
 
         //--------------------------------------------DISPLAY  LIST OBJ FUNCTIONS---------------------------------------------//
-        public static void viewOptionsList(int SubOptions, DalObject.DalObject dal)
+        public static void viewOptionsList(int SubOptions, DalObject dal)
         {
             //Print list by choice (switch)
             switch (SubOptions)
@@ -443,7 +440,7 @@ namespace ConsoleUI
             }
         }
         //Print a generic list by object 
-        public static void DisplayList<T>(DalObject.DalObject dal,IEnumerable <T> ts) where T : struct
+        public static void DisplayList<T>(DalObject dal,IEnumerable <T> ts) where T : struct
         {
             foreach (T s in ts)
             {

@@ -3,14 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IDAL.DO;
-using IDAL;
+using System.Runtime.CompilerServices;
 
-namespace DalObject
+using DO;
+using DalAPI.DO;
+using DS;
+using DalAPI;
+
+namespace DAL
 {
     public class DalObject : IDal
     {
+        //#region Singleton
+        //static readonly Lazy<DalObject> lazy = new Lazy<DalObject>(() => new DalObject());
+        //public static DalObject Instance => lazy.Value;
+
+        //private DalObject() { }
+        //#endregion
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public DalObject() { DataSource.Initialize(); }
+
+
         //----------------------------------------ADD FUNCTIONS---------------------------------------//
         /// <summary>
         /// Checks if the object the user is looking for is in the list, then throws an error if it does not add to the list 

@@ -1,0 +1,31 @@
+﻿<Window x:Class="PLGui.LoginApp"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PLGui"
+        mc:Ignorable="d"
+        Title="LoginApp" Height="450" Width="300">
+    <Grid>
+        <Grid x:Name="EnterTheApp" Visibility="Visible">
+            <StackPanel>
+                <TextBlock x:Name="EnterUserName" Grid.Row="0" Text=": שם משתמש" Background="LightGray" Height="29" TextAlignment="Right" FontSize="16" />
+                <TextBox x:Name="UserName" MaxLength="20" Background="Azure" Text="" Height="29"/>
+                <TextBlock x:Name="EnterPassword" Grid.Row="1" Text=": סיסמא" Background="LightGray" Height="28" TextAlignment="Right" FontSize="16"/>
+                <TextBox x:Name="PasswordBox1"  MaxLength="8" Background="Azure" Height="28"/>
+                <Button x:Name="btnEnterApp"
+              Style="{StaticResource MaterialDesignRaisedDarkButton}" Background="Transparent"
+                Height="40" IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Click="btnEnterApp_Click" Margin="0,10,0,0">
+                    <TextBlock Text="כניסה" Foreground="#ff6331" Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" FontSize="28"/>
+                </Button>
+            </StackPanel>
+        </Grid>
+        <Grid x:Name="RegisterApp">
+            <Button
+              Style="{StaticResource MaterialDesignRaisedDarkButton}" Background="Transparent" Height="40"
+                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Margin="0,253,0,107">
+                <TextBlock Text="הרשמה" Foreground="#ff6331" Background="{DynamicResource MaterialDesignTextFieldBoxHoverBackground}" TextAlignment="Center" TextWrapping="NoWrap" FontSize="24" />
+            </Button>
+        </Grid>
+    </Grid>
+</Window>

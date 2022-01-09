@@ -117,7 +117,7 @@ namespace ConsoleUI_BL
         public static void AddBaseStation()
         {
             BaseStation station = new();
-            station.Location = new Location();
+            station.location = new Location();
             Console.WriteLine("Please enter baseStation Id: ");
             int.TryParse(Console.ReadLine(), out int stationID);
             station.ID = stationID;
@@ -131,11 +131,11 @@ namespace ConsoleUI_BL
 
             Console.WriteLine("Please enter the longitude: ");
             double.TryParse(Console.ReadLine(), out double longtitude);
-            station.Location.Longtitude = longtitude;
+            station.location.Longtitude = longtitude;
 
             Console.WriteLine("Please enter the latitude: ");
             double.TryParse(Console.ReadLine(), out double latitude);
-            station.Location.Latitude = latitude;
+            station.location.Latitude = latitude;
 
             // list of DroneCharge & initiolize the list to empty list 
             station.droneCharges = new List<DroneCharge>();

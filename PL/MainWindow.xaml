@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PL"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" x:Class="PL.MainWindow"
+        xmlns:local="clr-namespace:PLGui"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" x:Class="PLGui.MainWindow"
         mc:Ignorable="d" 
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
@@ -22,58 +22,213 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-          
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Height="60" VerticalAlignment="Bottom" Grid.Row="0" Visibility="Visible">
-            <Button x:Name="btnListDrone" Content="הצג רחפנים" Margin="3,10,5,5" Click="btnListDrone_Click"/>
-        </StackPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.5*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <Grid x:Name="EnterTheApp" Margin="487,10,89,100" Grid.Row="1" Visibility="Visible">
-            <StackPanel>
-                <TextBlock Text="ברוכים הבאים" TextAlignment="Center" TextWrapping="NoWrap" FontWeight="Bold" FontSize="24" Background="{DynamicResource MaterialDesignBackground}" />
-                <TextBlock x:Name="EnterUserName" Grid.Row="0" Text=": שם משתמש" Background="LightGray" Height="29" TextAlignment="Right" FontSize="16" />
-                <TextBox x:Name="UserName" MaxLength="20" Background="Azure" Text="" Height="29"/>
-                <TextBlock x:Name="EnterPassword" Grid.Row="1" Text=": סיסמא" Background="LightGray" Height="25" TextAlignment="Right" FontSize="16"/>
-                <TextBox x:Name="Password" MaxLength="8" Background="Azure" Text="" Height="28"/>
-                <Button x:Name="btnEnterApp"
-              Style="{StaticResource MaterialDesignRaisedDarkButton}" Background="Transparent"
-                Height="40" IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Click="btnEnterApp_Click">
-                    <TextBlock Text="כניסה" Foreground="#ff6331" Background="{DynamicResource MaterialDesignTextAreaBorder}" FontSize="28"/>
-                </Button>
-                <Button
-              Style="{StaticResource MaterialDesignRaisedDarkButton}" Background="Transparent" Height="40"
-                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
-                    <TextBlock Text="הרשמה" Foreground="#ff6331" Background="{DynamicResource MaterialDesignTextFieldBoxHoverBackground}" TextAlignment="Center" TextWrapping="NoWrap" FontSize="24" />
-                </Button>
-            </StackPanel>
-        </Grid>
+        <DockPanel x:Name="LoginButtons" Grid.Column="1" Visibility="Hidden">
+            <Button x:Name="LoginApp" Height="50" Width="100" 
+                Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                   materialDesign:ButtonAssist.CornerRadius="25 25 25 25" 
+                       IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" Click="LoginApp_Click">
+                <TextBlock
+                   Text="כניסה" />
+            </Button>
+            <Button x:Name="RegisterApp" Height="50" Width="100"
+                Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                   materialDesign:ButtonAssist.CornerRadius="25 25 25 25" 
+                       IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}">
+                <TextBlock
+                   Text="הרשמה" />
+            </Button>
+        </DockPanel>
 
-        <Grid x:Name="CompanyManagement" Visibility="Hidden" Grid.Row="1">
+        <Grid x:Name="CompanyManagement" Visibility="Visible" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
+            <TabControl
+                  Style="{StaticResource MaterialDesignNavigatilRailTabControl}" materialDesign:ColorZoneAssist.Mode="Standard"
+                            materialDesign:ShadowAssist.ShadowDepth="Depth0">
 
-            <TabControl TabStripPlacement="Right" Grid.Row="1" Background="Transparent">
-                <TabItem Header="Admin">
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Height="auto" Width="auto">
+                            <materialDesign:PackIcon Kind="HomeAccount" Height="24" Width="24" HorizontalAlignment="Center" />
+                            <TextBlock  Text="Home" HorizontalAlignment="Center" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <StackPanel x:Name="GeneralInfo" HorizontalAlignment="Center" VerticalAlignment="Top" Width="750" Height="60"
+                                Background="Yellow" Margin="0,0,2.5,0" >
+                    </StackPanel>
+                </TabItem>
 
-                    <Grid Background="Transparent">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="126*"/>
-                            <ColumnDefinition Width="120*"/>
-                            <ColumnDefinition Width="350*"/>
-                            <ColumnDefinition Width="147*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock><Run Text="Hello World"/></TextBlock>
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel  Height="auto" Width="auto">
+                            <materialDesign:PackIcon Kind="Octahedron" Width="24"  Height="24"  HorizontalAlignment="Center" />
+                            <TextBlock Text="Drones" HorizontalAlignment="Center" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid x:Name="MainGridDrone">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="8*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Name="UpGridDrone" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                  Height="auto" Width="auto" Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="txtLable" Text="TBD" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Background="Transparent" />
+                            <ComboBox x:Name="cmbStatusSelector" Grid.Column="1" Text="Choose status: " IsEditable="True" IsReadOnly="True" 
+                                 HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="Choose status: " SelectionChanged="cmbStatusSelector_SelectionChanged"/>
+                            <ComboBox x:Name="cmbWeightSelector" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="2"
+                                 IsEditable="True" IsReadOnly="True" Height="auto" Width="auto" ToolTip="Choose Weight"
+                                 Text="Choose Weight: " SelectionChanged="cmbWeightSelector_SelectionChanged" Grid.ColumnSpan="4" Margin="48,0,0,0"/>
+                            <Button x:Name="btnAddDrone" Content="הוסף רחפן" Click="btnAddDrone_Click" Grid.Column="3"
+                                     HorizontalAlignment="Left" VerticalAlignment="Center" Margin="28,0,0,0"/>
+                        </Grid>
+                        <ListView x:Name="lstDroneListView" Grid.Row="1" 
+                              MouseDoubleClick="lstDroneListView_MouseDoubleClick" ItemsSource="{Binding Path = dronesToLists}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="מזהה" Width="150" DisplayMemberBinding="{Binding DroneID}"/>
+                                    <GridViewColumn Header="דגם" Width="150" DisplayMemberBinding="{Binding DroneModel}"/>
+                                    <GridViewColumn Header="סוללה" Width="150" DisplayMemberBinding="{Binding BattaryStatus, StringFormat=0.00}"/>
+                                    <GridViewColumn Header="מיקום" Width="150" DisplayMemberBinding="{Binding CurrentLocation}"/>
+                                    <GridViewColumn Header="משקל" Width="150" DisplayMemberBinding="{Binding DroneWeight}"/>
+                                    <GridViewColumn Header="סטטוס" Width="150" DisplayMemberBinding="{Binding Status}"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
+                    <!-- <Button x:Name="btnListDrone" Content="הצג רחפנים" Click="btnListDrone_Click" HorizontalAlignment="Center"
+                              materialDesign:ButtonAssist.CornerRadius="15" </Button> -->
+
+                </TabItem>
+
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Height="auto" Width="auto">
+                            <materialDesign:PackIcon Kind="PackageVariant" Width="24" Height="24" HorizontalAlignment="Center" />
+                            <TextBlock Text="Parcels" HorizontalAlignment="Center" />
+                        </StackPanel>
+                    </TabItem.Header>
+
+                    <Grid x:Name="MainGridParcel">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="8*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Name="UpGridParcel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                  Height="auto" Width="auto" Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <ComboBox x:Name="SenderTarget" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="16" Margin="0,0,0,5"
+                                  IsEditable="True" IsReadOnly="True" SelectionChanged="SenderTarget_SelectionChanged"/>
+                            <ComboBox Name="cmbParcelStatus" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="16" Margin="0,0,0,5"
+                                      IsEditable="True" IsReadOnly="True" SelectionChanged="cmbParcelStatus_SelectionChanged" />
+                            <DatePicker Grid.Column="2" Width="100" materialDesign:HintAssist.Hint="Pick Date"
+                                                 materialDesign:TextFieldAssist.HasClearButton="True" Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+
+                        </Grid>
+                        <ListView x:Name="lstParcelListView" Grid.Row="1" 
+                                  MouseDoubleClick="lstParcelListView_MouseDoubleClick" ItemsSource="{Binding Path = parcelToLists}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="מזהה" Width="150" DisplayMemberBinding="{Binding Id}"/>
+                                    <GridViewColumn Header="שולח\מקבל" Width="150" DisplayMemberBinding="{Binding SenderOrTarget}"/>
+                                    <GridViewColumn Header="משקל חבילה" Width="150" DisplayMemberBinding="{Binding Weight}"/>
+                                    <GridViewColumn Header="עדיפות" Width="150" DisplayMemberBinding="{Binding Priority}"/>
+                                    <GridViewColumn Header="סטטוס" Width="150" DisplayMemberBinding="{Binding parcelStatus}"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
+
+                </TabItem>
+
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Height="auto" Width="auto">
+                            <materialDesign:PackIcon Kind="CustomerService" Width="24" Height="24" HorizontalAlignment="Center" />
+                            <TextBlock  Text="Customers" HorizontalAlignment="Center" FontSize="14"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid x:Name="MainGridCustomer">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="8*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Name="UpGridCustomer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                  Height="auto" Width="auto" Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="addingCustomer" Content="הוסף לקוח" Grid.Column="3" Click="addingCustomer_Click"/>
+                        </Grid>
+                        <ListView x:Name="lstCustomerListView" Grid.Row="1" 
+                            MouseDoubleClick="lstCustomerListView_MouseDoubleClick" ItemsSource="{Binding Path=customer}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="מזהה" Width="150" DisplayMemberBinding="{Binding CustomerId}"/>
+                                    <GridViewColumn Header="שם לקוח" Width="150" DisplayMemberBinding="{Binding NameCustomer}"/>
+                                    <GridViewColumn Header="טלפון" Width="150" DisplayMemberBinding="{Binding Phone}"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Drones">
-                    <Grid Background="Transparent">
-                        
-                        <TextBox Text="Hello Drones"/>
+
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Height="auto" Width="auto">
+                            <materialDesign:PackIcon Kind="ChargingStation" Width="24" Height="24" HorizontalAlignment="Center" />
+                            <TextBlock  Text="Basetation" HorizontalAlignment="Center" FontSize="14"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid x:Name="MainGridBaseStation">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="8*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Name="UpGridBaseStation" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                  Height="auto" Width="auto" Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="addBaseStation" Content="הוסף תחנה" Grid.Column="3" Click="addBaseStation_Click"/>
+                        </Grid>
+                        <ListView x:Name="lstBaseStationListView" Grid.Row="1"      
+                                  MouseDoubleClick="lstBaseStationListView_MouseDoubleClick" ItemsSource="{Binding Path=BaseStation}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="מזהה" Width="150" DisplayMemberBinding="{Binding ID}"/>
+                                    <GridViewColumn Header="שם תחנה" Width="150" DisplayMemberBinding="{Binding Name}"/>
+                                    <GridViewColumn Header="עמדות פנויות" Width="180" DisplayMemberBinding="{Binding AvailableChargingStations}"/>
+                                    <GridViewColumn Header="מיקום" Width="180" DisplayMemberBinding="{Binding location}"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
                     </Grid>
                 </TabItem>
-                <materialDesign:DrawerHost Content="DrawerHost"/>
             </TabControl>
         </Grid>
-
     </Grid>
 
 </Window>

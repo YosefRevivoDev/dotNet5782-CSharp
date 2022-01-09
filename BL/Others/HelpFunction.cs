@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
-namespace BO
+namespace BL
 {
     public partial class HelpFunction
     {
@@ -58,7 +57,7 @@ namespace BO
             return c * r;
         }
 
-        public static (int, double) IndexOfMinDistancesBetweenLocations(List<IDAL.DO.BaseStation> baseStations, Location location)
+        public static (int, double) IndexOfMinDistancesBetweenLocations(List<DO.BaseStation> baseStations, Location location)
         {
             List<double> distances = new List<double>();
             foreach (var b in baseStations)
@@ -77,7 +76,7 @@ namespace BO
             switch (weight)
             {
                 case WeightCategories.light:
-                    BatteryStatusBetweenLocations *= BL.PowerConsumptionLightWeight;
+                    BatteryStatusBetweenLocations *=  BL.PowerConsumptionLightWeight;
                     break;
                 case WeightCategories.medium:
                     BatteryStatusBetweenLocations *= BL.PowerConsumptionMediumWeight;

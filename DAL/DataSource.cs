@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using IDAL.DO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DO;
 
-//namespace DAL
-//{
-namespace DalObject
+namespace DS
 {
-    internal class DataSource
+    static class DataSource
     {
         internal static List<Drone> Drones = new List<Drone>();
         internal static List<BaseStation> Stations = new List<BaseStation>();
@@ -21,7 +22,7 @@ namespace DalObject
         // Empty Constractor for Default
         static DataSource()
         {
-
+            Initialize();
         }
         internal class Config
         {
@@ -45,6 +46,9 @@ namespace DalObject
         
         public static void Initialize()
         {
+
+            users.Add(new User { UserName = "ButterFly", FirstName = "David", LastName = "Revivo", Password = "1", UserId = Config.RunUserId++ });
+            users.Add(new User { UserName = "1", FirstName = "Manager", LastName = "app", Password = "1", UserId = Config.RunUserId++ });
             Random random = new Random(DateTime.Now.Millisecond);
             string[] DronesModels = new string[]
             {
@@ -66,7 +70,7 @@ namespace DalObject
                     DroneID = ++Config.RunIdDrone,
                     DroneModel = DronesModels[i],
                     DroneWeight = (WeightCategories)random.Next(0, 2)
-                                    }
+                }
                 );
             }
 
@@ -101,17 +105,7 @@ namespace DalObject
                 );
             }
 
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    DroneCharges.Add(new DroneCharge
-            //    {
-            //        DroneID = Drones[i].DroneID,
-            //        StationID = Stations[rand.Next(0, 2)].StationID
-            //    });
-            //}
-
-            users.Add(new User {UserName = "ButterFly" , FirstName= "David" , LastName = "Revivo" , Password = "1" , UserId = Config.RunUserId++});
-            users.Add(new User {UserName = "1" , FirstName= "Manager" , LastName = "app" , Password = "1" , UserId = Config.RunUserId++});
+            
         }
     }
 }

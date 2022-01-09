@@ -1,0 +1,52 @@
+﻿<Window x:Class="PLGui.BaseStationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PLGui"
+
+        mc:Ignorable="d"
+        Title="BaseStationWindow" Height="450" Width="400">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <GroupBox>
+            <Grid x:Name="BaseStationGrid" Grid.Column="0">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Label Content="מזהה תחנה" FontSize="16" FontWeight="UltraBlack" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBox x:Name="StationID" PreviewTextInput="NumberValidationTextBox" Text="{Binding ID}"/>
+
+                <Label Content="שם תחנה" Grid.Row="1" Grid.Column="1" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBox x:Name="NameStation" Grid.Row="1" Text="{Binding Name}"/>
+
+                <Label Content="מיקום" Grid.Row="2" Grid.Column="1" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBox x:Name="LocationStation" Grid.Row="2" Text="{Binding location}"/>
+
+                <Label Content="עמדות פנויות" Grid.Row="3" Grid.Column="1" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBox x:Name="NumberOfStations" Grid.Row="3" Text="{Binding AvailableChargingStations}"/>
+
+                <Button x:Name="RemoveStation" Content="מחיקה" Grid.Row="5" FontSize="18" Margin="0,0,5,0" Click="RemoveStation_Click"/>
+                <Button x:Name="UpdateBaseStation" Content="עדכון" Grid.Column="1" Grid.Row="5" Click="UpdateBaseStation_Click"/>
+                <Button x:Name="addStation" Content="הוסף" Grid.Column="0" Grid.Row="6" Click="addStation_Click"/>
+
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Window>
