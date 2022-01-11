@@ -12,7 +12,7 @@ namespace BL
         public string Name { get; set; }
         public int AvailableChargingStations { get; set; }
         public Location location { get; set; }
-        public List<DroneCharge> droneCharges = new List<DroneCharge>();
+        public List<DroneInCharging> droneCharges = new List<DroneInCharging>();
         
         public override string ToString()
         {

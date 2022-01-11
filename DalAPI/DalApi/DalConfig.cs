@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace DalAPI
+namespace DalApi
 {
     static class DalConfig
     {
@@ -26,9 +24,9 @@ namespace DalAPI
         ///</summary> 
         static DalConfig()
         {
-            XElement dalConfig = XElement.Load(@"config.xml");
+            XElement dalConfig = XElement.Load(@"dal-config.xml");
             DaLName = dalConfig.Element("dal").Value;
-            DaLPackages = (from pkg in dalConfig.Element("dal-LPackages").Elements()
+            DaLPackages = (from pkg in dalConfig.Element("dal-packages").Elements()
                            let temp1 = pkg.Attribute("namespace")
                            let nameSpace = temp1 == null ? "DAL" : temp1.Value
                            let temp2 = pkg.Attribute("class")

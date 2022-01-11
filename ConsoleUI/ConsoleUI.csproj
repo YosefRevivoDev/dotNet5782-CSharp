@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BL\BL.csproj" />
-    <ProjectReference Include="..\DAL\DalObject.csproj" />
   </ItemGroup>
 
 </Project>

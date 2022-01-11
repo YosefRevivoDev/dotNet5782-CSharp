@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BL
 {
-    public class DroneCharge
+    public class DroneInCharging
     {
         public int DroneID { get; set; }
         public double BattaryStatus { get; set; }

@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reflection;
 
 
-namespace DalAPI
+namespace DalApi
 {
     /// <summary>
     /// Static Factory class for creating Dal tier implementation object according to
@@ -29,8 +26,11 @@ namespace DalAPI
         {
             // get dal implementation name from config.xml according to <data> element
             string DalType = DalConfig.DaLName;
+
+
             // bring package name (dll file name) for the dal name (above) from the list of packages in config.xml
             DalConfig.DalPackage dalPackage;
+
             try // get dal package info according to <dal> element value in config file
             {
                 dalPackage = DalConfig.DaLPackages[DalType];

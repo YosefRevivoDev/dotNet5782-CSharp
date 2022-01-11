@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace BL
 {
-    public class DroneInParcel : DroneInCharging
+    public class Location
     {
-        public Location CorrentLocation { get; set; }
-        
+        public double Longtitude { get; set; }
+        public double Latitude { get; set; }
+
         public override string ToString()
         {
-            return base.ToString() + string.Format("Location: " + "\r\n" +CorrentLocation);
+            return string.Format( "Location:" + Longtitude + "\r\n" + Latitude);
         }
     }
 }

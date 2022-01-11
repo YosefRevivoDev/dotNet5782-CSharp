@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DalAPI\DalAPI.csproj" />
+    <ProjectReference Include="..\DalAPI\DalFacade.csproj" />
   </ItemGroup>
 
 </Project>

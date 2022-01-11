@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BL
 {
-    public class DroneToList : DroneCharge
+    public class DroneToList : DroneInCharging
     {
         public string DroneModel { get; set; }
         public WeightCategories DroneWeight { get; set; }

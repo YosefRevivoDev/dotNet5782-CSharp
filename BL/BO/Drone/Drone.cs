@@ -8,7 +8,7 @@ using System.ComponentModel;
 
 namespace BL
 {
-    public class Drone : DroneCharge, INotifyPropertyChanged
+    public class Drone : DroneInCharging, INotifyPropertyChanged
     {
         public string DroneModel { get; set; }
         public WeightCategories DroneWeight { get; set; }

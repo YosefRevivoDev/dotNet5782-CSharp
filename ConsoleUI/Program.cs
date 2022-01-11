@@ -10,7 +10,7 @@ namespace ConsoleUI
 {
     class Program
     {
-        static DalAPI.IDal DeliversByDroneCompany = new DalObject();
+        static DalApi.IDal DeliversByDroneCompany = new DalObject();
         static void Main(string[] args)
         {
             DalObject dal = new DalObject();
