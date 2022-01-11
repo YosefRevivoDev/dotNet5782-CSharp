@@ -126,7 +126,7 @@ namespace PLGui
 
             else
             {
-                MessageBox.Show("חמור יקר אנא בחר תחנה", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("משתמש יקר אנא בחר תחנה", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
