@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using System.ComponentModel;
 
-namespace BL
+namespace BO
 {
     public class Drone : DroneInCharging, INotifyPropertyChanged
     {

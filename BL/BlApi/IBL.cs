@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic; 
+using System.Collections.Generic;
+using BO;
 
-
-namespace BL
+namespace BlApi
 {
     public partial interface IBL
     {
@@ -10,15 +10,15 @@ namespace BL
         IEnumerable<ParcelToList> GetParcelToLists();
         IEnumerable<CustomerToList> GetCustomerToList();
         IEnumerable<BaseStationToList> GetBasetationToLists();
-      //  IEnumerable<DroneToList> GetDroneToListsBLByPredicate();
+        //  IEnumerable<DroneToList> GetDroneToListsBLByPredicate();
 
+        #region Operations of Drone
         void InitDroneToLists();
         void ReleaseDroneFromCharge(int droneId, int stationId, DateTime dateTime);
         void SendDroneToCharge(int droneId, int stationId);
         void CollectParcelByDrone(int droneID);
         void AssignmentOfPackageToDrone(int droneID, ParcelInDeliver parcelInDeliverd);
-
-
+        #endregion
 
         #region GetObject
         BaseStation GetBaseStation(int stationID);

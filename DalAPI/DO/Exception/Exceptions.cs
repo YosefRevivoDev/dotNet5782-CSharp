@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Serialization;
 //Throw Exception Classes 
-namespace DalApi.DO
+namespace DO
 {
     // [Serializable]
     public class DroneException : Exception { public DroneException(string message) : base(message) { } }

@@ -142,7 +142,7 @@
 
                         </Grid>
                         <ListView x:Name="lstParcelListView" Grid.Row="1" 
-                                  MouseDoubleClick="lstParcelListView_MouseDoubleClick" ItemsSource="{Binding Path = parcelToLists}">
+                                  MouseDoubleClick="lstParcelListView_MouseDoubleClick" ItemsSource="{Binding Path = Parcel}">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="מזהה" Width="150" DisplayMemberBinding="{Binding Id}"/>

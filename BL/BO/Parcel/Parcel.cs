@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BL
+namespace BO
 {
     public class Parcel : ParcelPoly
     {

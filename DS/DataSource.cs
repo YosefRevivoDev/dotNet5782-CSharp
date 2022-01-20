@@ -7,38 +7,40 @@ using DO;
 
 namespace DS
 {
-    static class DataSource
+    public static class DataSource
     {
-        internal static List<Drone> Drones = new List<Drone>();
-        internal static List<BaseStation> Stations = new List<BaseStation>();
-        internal static List<Customer> Clients = new List<Customer>();
-        internal static List<Parcel> Packages = new List<Parcel>();
-        internal static List<DroneCharge> DroneCharges = new List<DroneCharge>();
-        internal static List<User> users;
-        internal static Random rand = new Random();
-        internal static DateTime currentTime = DateTime.Now;
+        public static List<Drone> Drones = new List<Drone>();
+        public static List<BaseStation> Stations = new List<BaseStation>();
+        public static List<Customer> Clients = new List<Customer>();
+        public static List<Parcel> Packages = new List<Parcel>();
+        public static List<DroneCharge> DroneCharges = new List<DroneCharge>();
+        public static List<User> users;
+        public static Random rand = new Random();
+        public static DateTime currentTime = DateTime.Now;
 
 
         // Empty Constractor for Default
         static DataSource()
         {
             Initialize();
+
+            
         }
-        internal class Config
+        public static class Config
         {
             // ------------- PowerConsumption by Drone -----------------//
-            internal static double PowerConsumptionAvailable = 0.01;
-            internal static double PowerConsumptionLightWeight = 0.04;
-            internal static double PowerConsumptionMediumWeight = 0.07;
-            internal static double PowerConsumptionHeavyWeight = 0.1;
-            internal static double LoadingDrone = 2;
+            public static double PowerConsumptionAvailable = 0.01;
+            public static double PowerConsumptionLightWeight = 0.04;
+            public static double PowerConsumptionMediumWeight = 0.07;
+            public static double PowerConsumptionHeavyWeight = 0.1;
+            public static double LoadingDrone = 2;
 
             //------------------RunID---------------------------//
 
-            internal static int RunIdStation = 1;
-            internal static int RunIdDrone = 1;
-            internal static int RunCustomerId = 1;
-            internal static int RunParcelId = 1;
+            public static int RunIdStation = 1;
+            public static int RunIdDrone = 1;
+            public static int RunCustomerId = 1;
+            public static int RunParcelId = 1;
 
         }
         

@@ -12,9 +12,11 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using BL;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Specialized;
+
+using BO;
+
 
 namespace PLGui
 {

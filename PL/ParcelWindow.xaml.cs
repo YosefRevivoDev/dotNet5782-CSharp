@@ -12,7 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using BL;
+using BO;
 
 namespace PLGui
 {
@@ -21,7 +21,6 @@ namespace PLGui
     /// </summary>
     public partial class ParcelWindow : Window
     {
-
         BL.BL GetBL;
         public ParcelToList parcelToList;
         public Parcel parcel { set; get; }
@@ -29,12 +28,12 @@ namespace PLGui
         public int index;
         private MainWindow mainWindow;
 
-        public ParcelWindow(BL.BL getBL, MainWindow mainWindow, BL.BL getBl, MainWindow _mainWindow)
+        public ParcelWindow(BL.BL getBL, MainWindow mainWindow, MainWindow _mainWindow)
         {
             InitializeComponent();
-            GetBL = getBl;
+            GetBL = getBL;
             parcel = new Parcel();
-            parcel = getBl.GetParcel(parcel.Id);
+            parcel = getBL.GetParcel(parcel.Id);
             DataContext = parcel;
             ParcelGrid.VerticalAlignment = VerticalAlignment.Center;
             ParcelGrid.HorizontalAlignment = HorizontalAlignment.Center;
@@ -43,7 +42,7 @@ namespace PLGui
 
         }
         
-        public ParcelWindow(BL.BL bL, MainWindow _mainWindow, Parcel _parcel, int _index)
+        public ParcelWindow(BL.BL bL, MainWindow _mainWindow, ParcelToList _parcel, int _index)
         {
             InitializeComponent();
             ParcelGrid.Visibility = Visibility.Visible;
@@ -77,34 +76,34 @@ namespace PLGui
 
         //private void btnUpdateParcel_Click(object sender, RoutedEventArgs e)
         //{
-        //    MessageBoxResult messageBoxResult = MessageBox.Show("האם אתה בטוח שאתה רוצה לעדכן את תחנה?"
-        //     , "הכנס תחנה", MessageBoxButton.YesNoCancel);
+        //    //MessageBoxResult messageBoxResult = MessageBox.Show("האם אתה בטוח שאתה רוצה לעדכן את החבילה?"
+        //    // , "הכנס חבילה", MessageBoxButton.YesNoCancel);
 
-        //    switch (messageBoxResult)
-        //    {
-        //        case MessageBoxResult.Yes:
-        //            try
-        //            {
-        //                GetBL.up(parcel.Id, parcel., baseStation.AvailableChargingStations);
-        //                baseStationToList.Name = baseStation.Name;
-        //                mainWindow.baseStationToLists[index] = baseStationToList;
-        //                mainWindow.lstBaseStationListView.Items.Refresh();
-        //                MessageBox.Show(baseStation.ToString(), "התחנה עודכנה בהצלחה");
-        //                Close();
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                MessageBox.Show(ex.Message);
-        //            }
-        //            break;
-        //        case MessageBoxResult.Cancel:
-        //            Close();
-        //            break;
-        //        case MessageBoxResult.No:
-        //            break;
-        //        default:
-        //            break;
-        //    }
+        //    //switch (messageBoxResult)
+        //    //{
+        //    //    case MessageBoxResult.Yes:
+        //    //        try
+        //    //        {
+        //    //            GetBL.();
+        //    //            baseStationToList.Name = baseStation.Name;
+        //    //            mainWindow.baseStationToLists[index] = baseStationToList;
+        //    //            mainWindow.lstBaseStationListView.Items.Refresh();
+        //    //            MessageBox.Show(baseStation.ToString(), "התחנה עודכנה בהצלחה");
+        //    //            Close();
+        //    //        }
+        //    //        catch (Exception ex)
+        //    //        {
+        //    //            MessageBox.Show(ex.Message);
+        //    //        }
+        //    //        break;
+        //    //    case MessageBoxResult.Cancel:
+        //    //        Close();
+        //    //        break;
+        //    //    case MessageBoxResult.No:
+        //    //        break;
+        //    //    default:
+        //    //        break;
+        //    //}
         //}
 
         private void btnRemoveStation_Click(object sender, RoutedEventArgs e)
@@ -168,11 +167,6 @@ namespace PLGui
                 default:
                     break;
             }
-        }
-
-        private void btnUpdateParcel_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

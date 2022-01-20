@@ -43,7 +43,7 @@
                 <Label Content="משקל חבילה" Grid.Row="4" Grid.Column="1" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <TextBox x:Name="WeightParcel" Grid.Row="4" Text="{Binding Weight}"/>
 
-                <Button x:Name="btnUpdateParcel" Content="עדכן" Grid.Row="5" Grid.Column="1" FontSize="18" Margin="5,0,0,0" Click="btnUpdateParcel_Click"/>
+                <Button x:Name="btnUpdateParcel" Content="עדכן" Grid.Row="5" Grid.Column="1" FontSize="18" Margin="5,0,0,0"/>
                 <Button x:Name="btnRemoveStation" Content="מחיקה" Grid.Row="5" FontSize="18" Margin="0,0,5,0" Click="btnRemoveStation_Click"/>
                 <Button x:Name="btnAddParcel" Content="אישור" Grid.Row="6" Click="btnAddParcel_Click" />
             </Grid>

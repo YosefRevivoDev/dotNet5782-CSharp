@@ -13,7 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using BL;
+using BO;
 
 
 namespace PLGui
@@ -31,7 +31,7 @@ namespace PLGui
         public ObservableCollection<BaseStationToList> baseStationToLists;
         public BaseStation baseStation;
         public Customer customer;
-        public Parcel _parcel;
+        public Parcel parcel;
 
 
         public MainWindow()
@@ -134,11 +134,11 @@ namespace PLGui
 
         private void lstParcelListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            ParcelToList parcel = (ParcelToList)lstParcelListView.SelectedItem;
-            if (parcel != null)
+            ParcelToList parcelToList = (ParcelToList)lstParcelListView.SelectedItem;
+            if (parcelToList != null)
             {
                 int indexParcel = lstParcelListView.SelectedIndex;
-                new ParcelWindow(getBL, this, _parcel, indexParcel).Show();
+                new ParcelWindow(getBL, this, parcelToList, indexParcel).Show();
             }
         }
 
