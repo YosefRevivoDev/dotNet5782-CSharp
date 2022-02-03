@@ -354,7 +354,7 @@ namespace Console_Dal
 
             Console.WriteLine("Please enter drone ID that you what to associate with your parcel");
             int.TryParse(Console.ReadLine(), out droneIdAssociate);
-            dal.PackageCollectionByDrone(pacelIdAssociate, droneIdAssociate);
+            dal.PackageCollectionByDrone(pacelIdAssociate);
         }
 
         //Call DliveredPackageToCustumer function by parcel ID & drone ID paramters
@@ -366,7 +366,7 @@ namespace Console_Dal
             Console.WriteLine("Please enter drone ID that you what to associate with your parcel");
             int.TryParse(Console.ReadLine(), out int droneIdAssociate);
             // dal.DeliveredPackageToCustumer(pacelIdAssociate, droneIdAssociate);
-            dal.ChargeDrone(baseStationId, droneIdAssociate);
+            dal.GetDroneChargeByStation(baseStationId);
 
         }
 
@@ -379,7 +379,7 @@ namespace Console_Dal
             Console.WriteLine("Please enter drone ID that you what to associate with your parcel");
             int.TryParse(Console.ReadLine(), out int droneIdAssociate);
             //dal.ChargeDrone(droneIdAssociate, baseStationId);
-            dal.DeliveredPackageToCustumer(droneIdAssociate, pacelIdAssociate);
+            dal.DeliveredPackageToCustumer(pacelIdAssociate);
 
         }
 
@@ -393,7 +393,7 @@ namespace Console_Dal
 
             Console.WriteLine("Please enter drone ID that you what to associate with your parcel");
             int.TryParse(Console.ReadLine(), out droneIdAssociate);
-            dal.ChargeDrone(droneIdAssociate, baseStationId);
+            dal.GetDroneChargeByStation(baseStationId);
         }
 
         //Call ReleasingChargeDrone function by drone_id & baseStationId paramters

@@ -10,10 +10,11 @@ namespace DO
     {
         public int DroneID { get; set; }
         public int StationID { get; set; }
+        public DateTime CurrentTime { get; set; }
 
         public override string ToString()
         {
-            return $"ID:{DroneID}, StationID:{StationID}";
+            return $"ID: {DroneID}, StationID: {StationID},DateTime: {CurrentTime}";
         }
     }
 

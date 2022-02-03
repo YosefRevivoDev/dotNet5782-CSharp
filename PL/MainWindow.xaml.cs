@@ -14,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using BO;
-
+using BlApi;
 
 namespace PLGui
 {
@@ -22,40 +22,28 @@ namespace PLGui
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, INotifyCollectionChanged
+    public partial class MainWindow : Window
     {
-        BL.BL getBL;
+        IBL getBL;
         public ObservableCollection<DroneToList> dronesToLists;
         public ObservableCollection<ParcelToList> parcelToLists;
         public ObservableCollection<CustomerToList> customerToLists;
         public ObservableCollection<BaseStationToList> baseStationToLists;
-        public BaseStation baseStation;
-        public Customer customer;
-        public Parcel parcel;
-
+        private BaseStation baseStation;
+        private Customer customer;
+        private Parcel parcel;
 
         public MainWindow()
         {
+            getBL = BlFactory.GetBl();
             InitializeComponent();
-            getBL = new BL.BL();
             InitDrones();
             InitParcels();
             InitCustomer();
             InitBaseStation();
         }
 
-        public event NotifyCollectionChangedEventHandler CollectionChanged
-        {
-            add
-            {
-                ((INotifyCollectionChanged)dronesToLists).CollectionChanged += value;
-            }
-
-            remove
-            {
-                ((INotifyCollectionChanged)dronesToLists).CollectionChanged -= value;
-            }
-        }
+        
         #region Init Object
         private void InitDrones()
         {
@@ -156,7 +144,12 @@ namespace PLGui
         }
         private void btnAddDrone_Click(object sender, RoutedEventArgs e)
         {
-            new DroneWindow(getBL, this).Show();
+           var x = new DroneWindow(getBL, this);
+            x.GridAddDrone.Visibility = Visibility.Visible;
+            x.GridUpdateDrone.Visibility = Visibility.Hidden;
+            x.Height = 350;
+            x.Width = 500;
+            x.ShowDialog();
         }
 
         private void btnCloseWindow_Click(object sender, RoutedEventArgs e)

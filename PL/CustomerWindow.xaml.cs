@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using BlApi;
 using BO;
 
 namespace PLGui
@@ -21,7 +22,7 @@ namespace PLGui
     /// </summary> 
     public partial class CustomerWindow : Window
     {
-        BL.BL GetBL;
+        IBL GetBL;
         public CustomerToList customerToList;
         public Customer customer { set; get; }
         public int index;
@@ -32,7 +33,7 @@ namespace PLGui
         /// </summary>
         /// <param name="getBl"></param>
         /// <param name="_mainWindow"></param>
-        public CustomerWindow(BL.BL getBl, MainWindow _mainWindow)
+        public CustomerWindow(IBL getBl, MainWindow _mainWindow)
         {
             InitializeComponent();
             GetBL = getBl;
@@ -55,7 +56,7 @@ namespace PLGui
         /// <param name="_mainWindow"></param>
         /// <param name="_customer"></param>
         /// <param name="_index"></param>
-        public CustomerWindow(BL.BL bL, MainWindow _mainWindow, CustomerToList _customer, int _index)
+        public CustomerWindow(IBL bL, MainWindow _mainWindow, CustomerToList _customer, int _index)
         {
             InitializeComponent();
             CustomrtGrid.Visibility = Visibility.Visible;
@@ -66,6 +67,7 @@ namespace PLGui
             DataContext = customer;
             UpdateGridVisibility();
         }
+
 
         private void UpdateGridVisibility()
         {

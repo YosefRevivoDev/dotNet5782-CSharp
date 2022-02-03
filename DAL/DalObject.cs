@@ -19,8 +19,6 @@ namespace DAL
         DalObject() { }
         #endregion
 
-
-
         [MethodImpl(MethodImplOptions.Synchronized)]
         
         #region Add object
@@ -32,138 +30,190 @@ namespace DAL
 
         public void AddDrone(Drone newDrone)
         {
-            DataSource.Drones.Add((Drone)(DataSource.Drones.FindIndex(i => i.DroneID == newDrone.DroneID) == -1 ?
+            DataSource.Drones.Add((DataSource.Drones.FindIndex(i => i.DroneID == newDrone.DroneID) == -1 ?
                 newDrone : throw new DroneException($"This id {newDrone.DroneID} already exist")));
         }
 
         public void AddCustomer(Customer newCustomer)
         {
-            DataSource.Clients.Add(DataSource.Clients.FindIndex(i => i.CustomerId == newCustomer.CustomerId) == -1 ?
+            DataSource.Customer.Add(DataSource.Customer.FindIndex(i => i.CustomerId == newCustomer.CustomerId) == -1 ?
             newCustomer : throw new CustumerException($"This id {newCustomer.CustomerId} already exist"));
         }
 
         public void AddParcel(Parcel newParcel)
         {
-            DataSource.Packages.Add(DataSource.Packages.FindIndex(i => i.ParcelId == newParcel.ParcelId) == -1 ?
+            DataSource.Parcels.Add(DataSource.Parcels.FindIndex(i => i.ParcelId == newParcel.ParcelId) == -1 ?
             newParcel : throw new ParcelException($"This id {newParcel.ParcelId} already exist"));
         }
+
         public void AddDroneCharge(DroneCharge droneCharge)
         {
-            DataSource.DroneCharges.Add((DataSource.DroneCharges.FindIndex(i => i.StationID == droneCharge.StationID) == -1 ?
-            droneCharge : throw new DroneChargeException($"This id {droneCharge.StationID} already exist")));
+            DataSource.DroneCharges.Add(droneCharge);
+            //    DataSource.DroneCharges.Add(DataSource.DroneCharges.FindIndex(i => i.StationID == droneCharge.StationID) == -1 ?
+            //    droneCharge : throw new DroneChargeException($"This id {droneCharge.StationID} already exist"));
+            //
+        }
+
+            public void AddUser(User newUser)
+        {
+            DataSource.users.Add((DataSource.users.FindIndex(i => i.UserId == newUser.UserId) == -1 ?
+                newUser : throw new UserException($"This id {newUser.UserId} already exist")));
         }
         #endregion
 
         #region Get Object
         public Drone GetDrone(int Id)
         {
-            for (int i = 0; i < DataSource.Drones.Count; i++)
-            {
-                if (Id == DataSource.Drones[i].DroneID)
-                {
-                    return DataSource.Drones[i];
-                }
-            }
-            return default;
+            Drone drone = DataSource.Drones.Find(i => i.DroneID == Id);
+            return drone.DroneID != default ? drone : throw new DroneException("Drone not found");
         }
         public BaseStation GetBaseStation(int Id)
         {
-            for (int i = 0; i < DataSource.Stations.Count; i++)
-            {
-                if (Id == DataSource.Stations[i].StationID)
-                {
-                    return DataSource.Stations[i];
-                }
-            }
-            return default;
+            BaseStation station = DataSource.Stations.Find(i => i.StationID == Id);
+            return station.StationID != default ? station : throw new BaseStationException("Station not found");
         }
         public Customer GetCustomer(int Id)
         {
-            for (int i = 0; i < DataSource.Clients.Count; i++)
-            {
-                if (Id == DataSource.Clients[i].CustomerId)
-                {
-                    return DataSource.Clients[i];
-                }
-            }
-            return default;
+            Customer customer = DataSource.Customer.Find(i => i.CustomerId == Id);
+            return customer.CustomerId != default ? customer : throw new CustumerException("Customer not found");
         }
         public Parcel GetParcel(int Id)
         {
-            for (int i = 0; i < DataSource.Packages.Count; i++)
-            {
-                if (Id == DataSource.Packages[i].ParcelId)
-                {
-                    return DataSource.Packages[i];
-                }
-            }
-            return default;
+            Parcel parcel = DataSource.Parcels.Find(i => i.ParcelId == Id);
+            return parcel.ParcelId != default ? parcel : throw new ParcelException("Parcel not found");
         }
         public User GetUser(string userName)
         {
-            for (int i = 0; i < DataSource.users.Count; i++)
+            User user = DataSource.users.Find(i => i.UserName == userName);
+            return user.UserName != default ? user : throw new UserException("User not found");
+        }
+        public void GetDroneChargeByStation(int baseStationId)
+        {
+            int index = DataSource.DroneCharges.ToList().FindIndex(i => i.StationID == baseStationId);
+            if (index != -1)
             {
-                if (userName == DataSource.users[i].UserName)
-                {
-                    return DataSource.users[i];
-                }
+                throw new Exception("The Station have not exists");
             }
-            throw new Exception("The User not exist");
+            AddDroneCharge(new DroneCharge {StationID = baseStationId });
+        }
+        public DroneCharge GetDroneChargeByDrone(int droneId)
+        {
+            int index = DataSource.DroneCharges.ToList().FindIndex(i => i.DroneID == droneId);
+
+            DroneCharge droneCharge = DataSource.DroneCharges.Find(i => i.DroneID == droneId);
+            return droneCharge.StationID != default ? droneCharge : throw new CheckIfIdNotException("sorry, this Drone is not found.");
+
         }
         #endregion
 
         #region Operations of drone
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void SetDroneForParcel(int parcelId, int droneId)
         {
-            int index = DataSource.Packages.ToList().FindIndex(i => i.ParcelId == parcelId);
-            Parcel parcel = DataSource.Packages[index];
-            parcel.DroneId = droneId;
-            parcel.PickedUp = DateTime.Now;
-            DataSource.Packages[index] = parcel;
+            int index = DataSource.Parcels.ToList().FindIndex(i => i.ParcelId == parcelId);
+            Parcel parcel = DataSource.Parcels[index];
+            int droneIndex = DataSource.Drones.FindIndex(i => i.DroneID == droneId);
+            if (index != -1 && droneIndex != -1)
+            {
+                parcel.DroneId = droneId;
+                parcel.PickedUp = DateTime.Now;
+                DataSource.Parcels[index] = parcel;
+            }
+            else
+            {
+                throw new CheckIdException("There is no match between the package and the drone");
+            }
         }
 
-        public void PackageCollectionByDrone(int parcelId, int droneId)
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public void PackageCollectionByDrone(int parcelId)
         {
-            int index = DataSource.Packages.ToList().FindIndex(i => i.ParcelId == parcelId);
-            Parcel parcel = DataSource.Packages[index];
-            parcel.DroneId = droneId;
-            parcel.PickedUp = DateTime.Now;
-            DataSource.Packages[index] = parcel;
+            int index = DataSource.Parcels.ToList().FindIndex(i => i.ParcelId == parcelId);
+            Parcel parcel = DataSource.Parcels[index];
+            if(index != -1)
+            {
+                parcel.PickedUp = DateTime.Now;
+                DataSource.Parcels[index] = parcel;
+            }
+            else
+            {
+                throw new CheckIdException("Parcel not found");
+            }
         }
 
-        public void DeliveredPackageToCustumer(int parcelId, int droneId)
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public void DeliveredPackageToCustumer(int parcelId)
         {
-
-            int index = DataSource.Packages.ToList().FindIndex(i => i.ParcelId == parcelId);
-            Parcel parcel = DataSource.Packages[index];
-            parcel.DroneId = droneId;
-            parcel.Delivered = DateTime.Now;
-            DataSource.Packages[index] = parcel;
-        }
-
-
-        public void ChargeDrone(int droneId, int baseStationId)
-        {
-            //DataSource.Drones[DataSource.Drones.ToList().
-            //FindIndex(i => i.DroneID == droneId)].status = DroneStatus.maintenance;
-
-            int index = DataSource.DroneCharges.ToList().FindIndex(i => i.DroneID == droneId);
+            int index = DataSource.Parcels.ToList().FindIndex(i => i.ParcelId == parcelId);
+            Parcel parcel = DataSource.Parcels[index];
             if (index != -1)
             {
-                throw new Exception("The charge Drone have not exists");
+                parcel.Delivered = DateTime.Now;
+                DataSource.Parcels[index] = parcel;
             }
-            AddDroneCharge(new DroneCharge { DroneID = droneId, StationID = baseStationId });
+            else
+            {
+                throw new CheckIdException("Parcel not found");
+            }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void ReleasingChargeDrone(int droneId, int baseStationId)
         {
+            int index = DataSource.DroneCharges.FindIndex(i => i.DroneID == droneId && i.StationID == baseStationId);
+            if (index != -1)
+            {
+                DataSource.DroneCharges.RemoveAt(index);
+            }
+            else
+            {
+                throw new CheckIdException("Drone not found");
+            }
+        }
 
-            DataSource.DroneCharges.RemoveAt(DataSource.DroneCharges.FindIndex(i => i.DroneID == droneId
-                        && i.StationID == baseStationId));
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public void MinusDroneCharge(int stationId)
+        {
+            BaseStation station = DataSource.Stations.Find(x => x.StationID == stationId);
+            int index = DataSource.Stations.FindIndex(i => i.StationID == stationId);
+            if (index != -1)
+            {
+                station.AvailableChargeSlots--;
+                DataSource.Stations[index] = station;
+            }
+            else
+            {
+                throw new CheckIdException("Station not found");
+            }
+        }
 
-            //FindIndex(i => i.DroneID == droneId)].status = DroneStatus.available;
-            //DataSource.Stations[DataSource.Stations.ToList().
-            //FindIndex(i => i.StationID == baseStationId)].ChargeSlots++;
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public void PlusDroneCharge(int stationId)
+        {
+            BaseStation station = DataSource.Stations.Find(x => x.StationID == stationId);
+            int index = DataSource.Stations.FindIndex(i => i.StationID == stationId);
+            if (index != -1)
+            {
+                station.AvailableChargeSlots++;
+                DataSource.Stations[index] = station;
+            }
+            else
+            {
+                throw new CheckIdException("Station not found");
+            }
+        }
+
+        public double[] RequetPowerConsumption()
+        {
+            double[] arr = new double[]
+           {
+                DataSource.Config.PowerConsumptionAvailable ,
+                DataSource.Config.PowerConsumptionHeavyWeight ,
+                DataSource.Config.PowerConsumptionMediumWeight ,
+                DataSource.Config.PowerConsumptionHeavyWeight,
+                DataSource.Config.LoadingDrone
+            };
+            return arr;
         }
         #endregion
 
@@ -178,29 +228,28 @@ namespace DAL
                 throw new Exception($"This drone have not exist, Please try again.");
             }
             DataSource.Drones.RemoveAt(index);
-            //DataSource.Drones.RemoveAt(DataSource.Drones.FindIndex(i => i.DroneID == droneID));
         }
 
         public void RemoveCustomer(int customerId)
         {
-            int index = DataSource.Clients.FindIndex(i => i.CustomerId == customerId);
-            DataSource.Clients.RemoveAt(DataSource.Clients.FindIndex(i => i.CustomerId == customerId));
+            int index = DataSource.Customer.FindIndex(i => i.CustomerId == customerId);
+            DataSource.Customer.RemoveAt(DataSource.Customer.FindIndex(i => i.CustomerId == customerId));
             if (index == -1)
             {
                 throw new Exception($"This customer have not exist, Please try again.");
             }
-            DataSource.Clients.RemoveAt(index);
+            DataSource.Customer.RemoveAt(index);
         }
 
         public void RemoveParcel(int parcelId)
         {
-            int index = DataSource.Packages.FindIndex(i => i.ParcelId == parcelId);
-            DataSource.Packages.RemoveAt(DataSource.Packages.FindIndex(i => i.ParcelId == parcelId));
+            int index = DataSource.Parcels.FindIndex(i => i.ParcelId == parcelId);
+            DataSource.Parcels.RemoveAt(DataSource.Parcels.FindIndex(i => i.ParcelId == parcelId));
             if (index == -1)
             {
                 throw new Exception($"This parcel have not exist, Please try again.");
             }
-            DataSource.Packages.RemoveAt(index);
+            DataSource.Parcels.RemoveAt(index);
         }
 
         public void RemoveBaseStation(int stationID)
@@ -212,6 +261,18 @@ namespace DAL
             }
             DataSource.Stations.RemoveAt(index);
         }
+
+        public void RemoveUser (int UserID)
+        {
+            int index = DataSource.users.FindIndex(i => i.UserId == UserID);
+            DataSource.users.RemoveAt(DataSource.users.FindIndex(i => i.UserId == UserID));
+            if (index == -1)
+            {
+                throw new Exception($"This User have not exist, Please try again.");
+            }
+            DataSource.users.RemoveAt(index);
+        }
+
         #endregion
 
         #region Update object
@@ -237,22 +298,22 @@ namespace DAL
 
         public void UpdateCustomer(Customer customer)
         {
-            int index = DataSource.Clients.FindIndex(i => i.CustomerId == customer.CustomerId);
+            int index = DataSource.Customer.FindIndex(i => i.CustomerId == customer.CustomerId);
             if (index == -1)
             {
                 throw new Exception($"This Customer have not exist, Please try again.");
             }
-            DataSource.Clients[index] = customer;
+            DataSource.Customer[index] = customer;
         }
 
         public void UpdateParcel(Parcel parcel)
         {
-            int index = DataSource.Packages.FindIndex(i => i.ParcelId == parcel.ParcelId);
+            int index = DataSource.Parcels.FindIndex(i => i.ParcelId == parcel.ParcelId);
             if (index == -1)
             {
                 throw new Exception($"This Parcel have not exist, Please try again.");
             }
-            DataSource.Packages[index] = parcel;
+            DataSource.Parcels[index] = parcel;
         }
 
         public void UpdateDroneCharge(DroneCharge droneCharge)
@@ -264,23 +325,17 @@ namespace DAL
             }
             DataSource.DroneCharges[index] = droneCharge;
         }
+
+        public void UpdateUser(User user)
+        {
+            int index = DataSource.users.FindIndex(i => i.UserId == user.UserId);
+            if (index == -1)
+            {
+                throw new Exception($"This User have not exist, Please try again.");
+            }
+            DataSource.users[index] = user;
+        }
         #endregion
-
-        public void MinusDroneCharge(int stationId)
-        {
-            BaseStation station = DataSource.Stations.Find(x => x.StationID == stationId);
-            DataSource.Stations.Remove(station);
-            station.AvailableChargeSlots--;
-            DataSource.Stations.Add(station);
-        }
-
-        public void PlusDroneCharge(int stationId)
-        {
-            BaseStation station = DataSource.Stations.Find(x => x.StationID == stationId);
-            DataSource.Stations.Remove(station);
-            station.AvailableChargeSlots++;
-            DataSource.Stations.Add(station);
-        }
 
         #region Display lists
         public IEnumerable<Drone> GetDronesByPredicate(Predicate<Drone> predicate = null)
@@ -289,11 +344,11 @@ namespace DAL
         }
         public IEnumerable<Customer> GetCustomersByPredicate(Predicate<Customer> predicate = null)
         {
-            return DataSource.Clients.FindAll(i => predicate == null ? true : predicate(i));
+            return DataSource.Customer.FindAll(i => predicate == null ? true : predicate(i));
         }
         public IEnumerable<Parcel> GetPackagesByPredicate(Predicate<Parcel> predicate = null)
         {
-            return DataSource.Packages.FindAll(i => predicate == null ? true : predicate(i));
+            return DataSource.Parcels.FindAll(i => predicate == null ? true : predicate(i));
         }
         public IEnumerable<BaseStation> GetBaseStationByPredicate(Predicate<BaseStation> predicate = null)
         {
@@ -306,18 +361,6 @@ namespace DAL
         #endregion
 
         // Returns an array of power consumption per mile
-        public double[] RequetPowerConsumption()
-        {
-            double[] arr =
-           {
-                DataSource.Config.PowerConsumptionAvailable ,
-                DataSource.Config.PowerConsumptionHeavyWeight ,
-                DataSource.Config.PowerConsumptionMediumWeight ,
-                DataSource.Config.PowerConsumptionHeavyWeight,
-                DataSource.Config.LoadingDrone
-            };
-            return arr;
-        }
 
     }
 }

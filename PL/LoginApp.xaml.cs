@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using BlApi;
 using BO;
 
 namespace PLGui
@@ -22,12 +23,21 @@ namespace PLGui
     {
         BL.BL getBL;
         MainWindow mainWindow;
+        private IBL getBL1;
+
         public LoginApp(MainWindow _mainWindow, BL.BL bL)
         {
             getBL = bL;
             InitializeComponent();
             mainWindow = _mainWindow;
         }
+
+        public LoginApp(MainWindow mainWindow, IBL getBL1)
+        {
+            this.mainWindow = mainWindow;
+            this.getBL1 = getBL1;
+        }
+
         private void btnEnterApp_Click(object sender, RoutedEventArgs e)
         {
             if (UserName.Text == "" || PasswordBox1.Text == "")

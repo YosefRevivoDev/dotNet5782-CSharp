@@ -16,7 +16,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Collections.Specialized;
 
 using BO;
-
+using BlApi;
+using System.ComponentModel;
 
 namespace PLGui
 {
@@ -25,22 +26,27 @@ namespace PLGui
     /// </summary>
     public partial class DroneWindow : Window
     {
+        public IBL bL;
+        BackgroundWorker backgroundWorker;
         private Drone drone { set; get; }
-        public BL.BL bL;
         private DroneToList droneToList;
         private ParcelInDeliver parcelInDeliverd;
         private BaseStationToList baseStationToList { set; get; }
-        public NotifyCollectionChangedEventHandler OnCollectionChanged { get; private set; }
+        public int Idrone;
+        private MainWindow mainWindow;
+        private int StationID;
+
+
 
         /// <summary>
         /// Constructor for add drone
         /// </summary>
         /// <param name="getBl"></param>
         /// <param name="_showDronesWindow"></param>
-        public DroneWindow(BL.BL getBl, MainWindow _mainWindow)
+        public DroneWindow(IBL getBL, MainWindow _mainWindow)
         {
             InitializeComponent();
-            bL = getBl;
+            bL = getBL;
             drone = new Drone();
             DataContext = drone;
             DroneSituateGrid.Visibility = Visibility.Collapsed;
@@ -48,13 +54,9 @@ namespace PLGui
             droneGrid.HorizontalAlignment = HorizontalAlignment.Center;
             ItemsSourceStations();
             mainWindow = _mainWindow;
-            DroneWeight.ItemsSource = Enum.GetValues(typeof(WeightCategories));
-            StatusDrone.SelectedItem = Enum.GetValues(typeof(DroneStatus));
+            cbxDroneWeight.ItemsSource = Enum.GetValues(typeof(WeightCategories));
+            //StatusDrone.SelectedItem = Enum.GetValues(typeof(DroneStatus));
         }
-
-
-        public int Idrone;
-        private MainWindow mainWindow;
 
         /// <summary>
         /// Constructor for update drone
@@ -63,7 +65,7 @@ namespace PLGui
         /// <param name="_ShowDronesWindow"></param>
         /// <param name="drone"></param>
         /// <param name="_Idrone"></param>
-        public DroneWindow(BL.BL _bL, MainWindow _mainWindow, DroneToList drone, int _Idrone)
+        public DroneWindow(IBL _bL, MainWindow _mainWindow, DroneToList drone, int _Idrone)
         {
             InitializeComponent();
             DroneSituateGrid.Visibility = Visibility.Visible;
@@ -72,66 +74,24 @@ namespace PLGui
             this.drone = _bL.GetDrone(drone.DroneID);
             mainWindow = _mainWindow;
             DataContext = this.drone;
-            UpdateGridVisibility();
             ItemsSourceStations();
             droneToList = drone;
         }
 
         private void ItemsSourceStations()
         {
-            NumberOfStations.ItemsSource = bL.GetBasetationToLists();
+            lvStations.ItemsSource = bL.GetBasetationToLists();
         }
 
-        private void UpdateGridVisibility()
+        private void refreshThisWindow()
         {
-            DroneId.IsReadOnly = true;
-            DroneModel.IsReadOnly = true;
-            DroneWeight.IsReadOnly = true;
-            /*  NumberOfStations.Visibility = Visibility.Hidden;
-              NumberOfStation.Visibility = Visibility.Hidden;*/
-            addDrone.Visibility = Visibility.Hidden;
-        }
 
-        private void addDrone_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBoxResult messageBoxResult = MessageBox.Show("האם אתה בטוח שאתה רוצה להוסיף את הרחפן?"
-                , "הכנס רחפן", MessageBoxButton.YesNoCancel);
-
-            if (baseStationToList != null)
+            if (mainWindow != null)
             {
-                switch (messageBoxResult)
-                {
-                    case MessageBoxResult.Yes:
-                        try
-                        {
-                            bL.AddNewDrone(drone, bL.GetDroneToListsBLByPredicate().ToList().Count);
-                            mainWindow.dronesToLists.Add(bL.GetDroneToListsBLByPredicate()
-                                .First(i => i.DroneID == drone.DroneID));
-                            //mainWindow.dronesToList.CollectionChanged += mainWindow.OnCollectionChanged;
-                            MessageBox.Show(drone.ToString(), "הרחפן נוסף בהצלחה");
-                            Close();
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(ex.Message);
-                        }
-                        break;
-                    case MessageBoxResult.Cancel:
-                        Close();
-                        break;
-                    case MessageBoxResult.No:
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            else
-            {
-                MessageBox.Show("משתמש יקר אנא בחר תחנה", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                mainWindow.lstDroneListView.Items.Refresh();
+                // mainWindow.AddGrouping();
             }
         }
-
         private void DroneId_TextChanged(object sender, TextChangedEventArgs e)
         {
 
@@ -176,13 +136,40 @@ namespace PLGui
         }
         private void SendDroneToCharge(object sender, RoutedEventArgs e)
         {
-            if (drone.CurrentLocation != baseStationToList.location && drone.Status == DroneStatus.available && baseStationToList != null)
+            try
             {
-                bL.SendDroneToCharge(drone.DroneID, baseStationToList.ID);
-                drone = bL.GetDrone(drone.DroneID);
-                DataContext = drone;
+                if (!bL.SendDroneToCharge(drone.DroneID))
+                {
+                    MessageBox.Show("שליחה לטעינה נכשלה", "אישור");
+                }
+                else
+                {
+                    refreshThisWindow();
+                    DataContext = drone;
+                    // UpdatingWindow(drone.Id);
+                }
+            }
+
+            catch (BO.ChargExeptions ex)
+            {
+                MessageBox.Show(ex.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error,
+                                  MessageBoxResult.None, MessageBoxOptions.RightAlign);
+                Close();
+            }
+            catch (BO.CheckIdException ex)
+            {
+                MessageBox.Show(ex.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error,
+                    MessageBoxResult.None, MessageBoxOptions.RightAlign);
+                Close();
+            }
+            catch (BO.CheckIfIdNotException ex)
+            {
+                MessageBox.Show(ex.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error,
+                    MessageBoxResult.None, MessageBoxOptions.RightAlign);
+                Close();
             }
         }
+
 
         private void _btnRealeseDroneClick(object sender, RoutedEventArgs e)
         {
@@ -196,23 +183,57 @@ namespace PLGui
             }
         }
 
-        private void NumberOfStation_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            baseStationToList = (BaseStationToList)NumberOfStations.SelectedItem;
-        }
+        //private void NumberOfStation_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    BaseStationToList stations = (BaseStationToList)NumberOfStations.SelectedItem;
+        //    StationID = stations.ID;
+        //}
 
         private void btnSendDroneToDeliver_Click(object sender, RoutedEventArgs e)
         {
-            if (drone.Status == DroneStatus.available)
+            try
             {
-                bL.AssignmentOfPackageToDrone(drone.DroneID, parcelInDeliverd);
-                MessageBox.Show("הרחפן שויך בהצלחה", "אישור", MessageBoxButton.OK);
-
+                MessageBoxResult messageBoxResult = MessageBox.Show("האם ברצונך לשייך חבילה ", "אישור", MessageBoxButton.OKCancel);
+                switch (messageBoxResult)
+                {
+                    case MessageBoxResult.OK:
+                        bool test = bL.AssignmentOfPackageToDrone(drone.DroneID);
+                        if (test)
+                        {
+                            //NoParcel.Visibility = Visibility.Hidden;
+                            //YesParcel.Visibility = Visibility.Visible;
+                            drone = bL.GetDrone(drone.DroneID);
+                            refreshThisWindow();
+                            //UpdatingWindow(drone.Id);
+                        }
+                        else
+                        {
+                            MessageBox.Show("לא נמצאה חבילה מתאימה", "אישור");
+                        }
+                        break;
+                    case MessageBoxResult.Cancel:
+                        break;
+                    default:
+                        break;
+                }
             }
-            else
+            catch (BO.CheckIfIdNotException ex)
             {
-                MessageBox.Show("הרחפן לא פנוי", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
-
+                MessageBox.Show(ex.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error,
+                    MessageBoxResult.None, MessageBoxOptions.RightAlign);
+                Close();
+            }
+            catch (BO.CheckIdException ex)
+            {
+                MessageBox.Show(ex.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error,
+                    MessageBoxResult.None, MessageBoxOptions.RightAlign);
+                Close();
+            }
+            catch (BO.ParcelAssociationExeptions ex)
+            {
+                MessageBox.Show(ex.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error,
+                    MessageBoxResult.None, MessageBoxOptions.RightAlign);
+                Close();
             }
         }
 
@@ -226,9 +247,9 @@ namespace PLGui
                 MessageBoxResult result = MessageBox.Show("נכנסת בהצלחה", "מידע", MessageBoxButton.OK, MessageBoxImage.Information);
                 switch (result)
                 {
-                    
+
                     case MessageBoxResult.OK:
-                        
+
                         bL.CollectParcelByDrone(drone.DroneID);
                         drone = bL.GetDrone(drone.DroneID);
                         DataContext = drone;
@@ -246,11 +267,54 @@ namespace PLGui
             }
         }
 
-        private void StatusDrone_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void btnAddDrone_Click(object sender, RoutedEventArgs e)
         {
-            droneToList = (DroneToList)StatusDrone.SelectedItem;
+            MessageBoxResult messageBoxResult = MessageBox.Show("האם אתה בטוח שאתה רוצה להוסיף את הרחפן?"
+               , "הכנס רחפן", MessageBoxButton.YesNoCancel);
 
+            if (baseStationToList != null)
+            {
+                switch (messageBoxResult)
+                {
+                    case MessageBoxResult.Yes:
+                        try
+                        {
+                            bL.AddNewDrone(drone, bL.GetDroneToListsBLByPredicate().ToList().Count);
+                            mainWindow.dronesToLists.Add(bL.GetDroneToListsBLByPredicate()
+                                .First(i => i.DroneID == drone.DroneID));
+                            //mainWindow.dronesToList.CollectionChanged += mainWindow.OnCollectionChanged;
+                            lvStations.ItemsSource = bL.GetDroneToListsBLByPredicate(i => i. > 0);
+
+                            MessageBox.Show(drone.ToString(), "הרחפן נוסף בהצלחה");
+                            Close();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+                        break;
+                    case MessageBoxResult.Cancel:
+                        Close();
+                        break;
+                    case MessageBoxResult.No:
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            else
+            {
+                MessageBox.Show("משתמש יקר אנא בחר תחנה", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
+        private void lvStations_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+            baseStationToList = (BO.BaseStationToList)lvStations.SelectedItem;
+            StationID = baseStationToList.ID;
+
+        }
     }
 }

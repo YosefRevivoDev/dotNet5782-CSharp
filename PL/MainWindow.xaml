@@ -17,7 +17,13 @@
     <Window.Background>
         <ImageBrush ImageSource="/PacketFly.jpg"/>
     </Window.Background>
+    
+    <!--<Window.Resources>
+        <con:ConertLattedue x:Key="ConertLattedue"/>
+        <con:ConertLongetude x:Key="ConertLongetude"/>
+    </Window.Resources>-->
 
+   
     <Grid Background="Transparent">
 
         <Grid.RowDefinitions>
@@ -64,6 +70,7 @@
                     </StackPanel>
                 </TabItem>
 
+                <!--#region Dornes-->
                 <TabItem>
                     <TabItem.Header>
                         <StackPanel  Height="auto" Width="auto">
@@ -97,7 +104,7 @@
                               MouseDoubleClick="lstDroneListView_MouseDoubleClick" ItemsSource="{Binding Path = dronesToLists}">
                             <ListView.View>
                                 <GridView>
-                                    <GridViewColumn Header="מזהה" Width="150" DisplayMemberBinding="{Binding DroneID}"/>
+                                    <GridViewColumn Header="מזהה" DisplayMemberBinding="{Binding DroneID}"/>
                                     <GridViewColumn Header="דגם" Width="150" DisplayMemberBinding="{Binding DroneModel}"/>
                                     <GridViewColumn Header="סוללה" Width="150" DisplayMemberBinding="{Binding BattaryStatus, StringFormat=0.00}"/>
                                     <GridViewColumn Header="מיקום" Width="150" DisplayMemberBinding="{Binding CurrentLocation}"/>
@@ -111,7 +118,9 @@
                               materialDesign:ButtonAssist.CornerRadius="15" </Button> -->
 
                 </TabItem>
+                <!--#endregion-->
 
+                <!--#region Parcels-->
                 <TabItem>
                     <TabItem.Header>
                         <StackPanel Height="auto" Width="auto">
@@ -142,10 +151,20 @@
 
                         </Grid>
                         <ListView x:Name="lstParcelListView" Grid.Row="1" 
-                                  MouseDoubleClick="lstParcelListView_MouseDoubleClick" ItemsSource="{Binding Path = Parcel}">
+                                  MouseDoubleClick="lstParcelListView_MouseDoubleClick" 
+                                  ItemsSource="{Binding Path = Parcel}"
+                                  >
+
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            
+                           
                             <ListView.View>
                                 <GridView>
-                                    <GridViewColumn Header="מזהה" Width="150" DisplayMemberBinding="{Binding Id}"/>
+                                    <GridViewColumn Header="מזהה"  DisplayMemberBinding="{Binding Id}"/>
                                     <GridViewColumn Header="שולח\מקבל" Width="150" DisplayMemberBinding="{Binding SenderOrTarget}"/>
                                     <GridViewColumn Header="משקל חבילה" Width="150" DisplayMemberBinding="{Binding Weight}"/>
                                     <GridViewColumn Header="עדיפות" Width="150" DisplayMemberBinding="{Binding Priority}"/>
@@ -156,11 +175,13 @@
                     </Grid>
 
                 </TabItem>
+                <!--#endregion-->
 
+                <!--#region Customers-->
                 <TabItem>
                     <TabItem.Header>
                         <StackPanel Height="auto" Width="auto">
-                            <materialDesign:PackIcon Kind="CustomerService" Width="24" Height="24" HorizontalAlignment="Center" />
+                            <materialDesign:PackIcon Kind="CustomerService" Width="24" Height="24" HorizontalAlignment="Center"/>
                             <TextBlock  Text="Customers" HorizontalAlignment="Center" FontSize="14"/>
                         </StackPanel>
                     </TabItem.Header>
@@ -191,7 +212,9 @@
                         </ListView>
                     </Grid>
                 </TabItem>
+                <!--#endregion-->
 
+                <!--#region BaseStation-->
                 <TabItem>
                     <TabItem.Header>
                         <StackPanel Height="auto" Width="auto">
@@ -227,6 +250,9 @@
                         </ListView>
                     </Grid>
                 </TabItem>
+                <!--#endregion-->
+                
+                
             </TabControl>
         </Grid>
     </Grid>

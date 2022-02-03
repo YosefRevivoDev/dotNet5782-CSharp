@@ -6,26 +6,31 @@ namespace BlApi
 {
     public partial interface IBL
     {
-        List<DroneToList> DroneToList { get; set; }
-        IEnumerable<ParcelToList> GetParcelToLists();
-        IEnumerable<CustomerToList> GetCustomerToList();
-        IEnumerable<BaseStationToList> GetBasetationToLists();
-        //  IEnumerable<DroneToList> GetDroneToListsBLByPredicate();
+        public IEnumerable<ParcelToList> GetParcelToLists();
+        public IEnumerable<CustomerToList> GetCustomerToList(Predicate<CustomerToList> p = null);
+        public IEnumerable<BaseStationToList> GetBasetationToLists();
+        public IEnumerable<DroneToList> GetDroneToListsBLByPredicate(Predicate<DroneToList> predicate = null);
+
+        
 
         #region Operations of Drone
         void InitDroneToLists();
-        void ReleaseDroneFromCharge(int droneId, int stationId, DateTime dateTime);
-        void SendDroneToCharge(int droneId, int stationId);
-        void CollectParcelByDrone(int droneID);
-        void AssignmentOfPackageToDrone(int droneID, ParcelInDeliver parcelInDeliverd);
+        bool ReleaseDroneFromCharge(int droneId, int stationId, DateTime dateTime);
+        bool SendDroneToCharge(int droneId);
+        bool CollectParcelByDrone(int droneID);
+        bool AssignmentOfPackageToDrone(int droneID);
+        public ParcelAtCustomer GetParcelAtCustomer(int parcelID, int customrID);
+        public CustomerInParcel GetCustomerInParcel(int customerID);
+        public Location LocationOfTheNearestStation(Location customerLocation, List<DO.BaseStation> stations);
+        public ParcelInDeliver GetParcelInDeliverd(Location firstLocation, int NumOfPackageId);
         #endregion
 
         #region GetObject
-        BaseStation GetBaseStation(int stationID);
-        Customer GetCustomer(int id);
-        Drone GetDrone(int id);
-        Parcel GetParcel(int id);
-        User GetUser(string userName);
+        public BaseStation GetBaseStation(int stationID);
+        public Customer GetCustomer(int id);
+        public Drone GetDrone(int id);
+        public Parcel GetParcel(int id);
+        public User GetUser(string userName);
         #endregion
 
         #region AddObject

@@ -23,7 +23,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DS", "DS\DS.csproj", "{997A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xml", "xml", "{A6687ABD-DB6D-4068-8656-23C8F9BA4E87}"
 	ProjectSection(SolutionItems) = preProject
+		xml\BaseStationXml.xml = xml\BaseStationXml.xml
+		xml\CustomerXml.xml = xml\CustomerXml.xml
 		xml\dal-config.xml = xml\dal-config.xml
+		xml\DroneChargesXml.xml = xml\DroneChargesXml.xml
+		xml\DroneXml.xml = xml\DroneXml.xml
+		xml\ParcelXml.xml = xml\ParcelXml.xml
+		xml\RunNumbers.xml = xml\RunNumbers.xml
+		xml\UserXml.xml = xml\UserXml.xml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 Data Layer", "1 Data Layer", "{B3963B9E-A387-4478-9887-9124BA06E1CD}"
@@ -32,7 +39,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 Logic Layer", "2 Logic La
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 Gui Layer", "3 Gui Layer", "{117B660C-8F4A-4CD9-BAE7-03E3F5F31818}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console_BL", "Console_BL\Console_BL.csproj", "{D63B23E5-86B4-4460-81FF-703E20D5F48C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Console_BL", "Console_BL\Console_BL.csproj", "{D63B23E5-86B4-4460-81FF-703E20D5F48C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

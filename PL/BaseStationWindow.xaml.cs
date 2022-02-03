@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using BO;
+using BlApi;
 
 namespace PLGui
 {
@@ -21,18 +22,20 @@ namespace PLGui
     /// </summary>
     public partial class BaseStationWindow : Window
     {
-        BL.BL GetBL;
+        IBL GetBL;
         public BaseStationToList baseStationToList;
         public BaseStation baseStation { set; get; }
         public int index;
         private MainWindow mainWindow;
+        private BaseStationToList basetation;
+        private int indexBaseStation;
 
         /// <summary>
         /// Constructor for add baseStation
         /// </summary>
         /// <param name = "getBl" ></ param >
         /// < param name="BaseStationWindow"></param>
-        public BaseStationWindow(BL.BL getBL, MainWindow _mainWindow)
+        public BaseStationWindow(IBL getBL, MainWindow _mainWindow)
         {
             InitializeComponent();
             GetBL = getBL;
@@ -52,14 +55,14 @@ namespace PLGui
         /// <param name="_baseStation"></param>
         /// <param name="baseStation"></param>
         /// <param name="_index"></param>
-        public BaseStationWindow(BL.BL bL, MainWindow _mainWindow, BaseStation _baseStation, int _index)
+        public BaseStationWindow(IBL getBL, MainWindow _mainWindow, BaseStation _baseStation, int _index)
         {
             InitializeComponent();
             BaseStationGrid.Visibility = Visibility.Visible;
-            GetBL = bL;
+            GetBL = getBL;
             index = _index;
             mainWindow = _mainWindow;
-            baseStation = bL.GetBaseStation(_baseStation.ID);
+            baseStation = getBL.GetBaseStation(_baseStation.ID);
             DataContext = baseStation;
             UpdateGridVisibility();
 

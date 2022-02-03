@@ -10,6 +10,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        
         <GroupBox>
             <Grid x:Name="ParcelGrid" Grid.Column="0">
 

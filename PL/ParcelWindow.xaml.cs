@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using BO;
-
+using BlApi;
 namespace PLGui
 {
     /// <summary>
@@ -21,14 +21,14 @@ namespace PLGui
     /// </summary>
     public partial class ParcelWindow : Window
     {
-        BL.BL GetBL;
+        IBL GetBL;
         public ParcelToList parcelToList;
         public Parcel parcel { set; get; }
         public CustomerInParcel customerInParcel { set; get; }
         public int index;
         private MainWindow mainWindow;
 
-        public ParcelWindow(BL.BL getBL, MainWindow mainWindow, MainWindow _mainWindow)
+        public ParcelWindow(IBL getBL, MainWindow mainWindow, MainWindow _mainWindow)
         {
             InitializeComponent();
             GetBL = getBL;
@@ -42,7 +42,7 @@ namespace PLGui
 
         }
         
-        public ParcelWindow(BL.BL bL, MainWindow _mainWindow, ParcelToList _parcel, int _index)
+        public ParcelWindow(IBL bL, MainWindow _mainWindow, ParcelToList _parcel, int _index)
         {
             InitializeComponent();
             ParcelGrid.Visibility = Visibility.Visible;

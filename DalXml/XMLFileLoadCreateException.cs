@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace DO
+namespace DAL
 {
     [Serializable]
     internal class XMLFileLoadCreateException : Exception

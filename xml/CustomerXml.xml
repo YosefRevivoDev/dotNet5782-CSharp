@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<ArrayOfCustomer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Customer>
+    <CustomerId>200532406</CustomerId>
+    <Name>יוסף רביבו</Name>
+    <Phone>057-1117665</Phone>
+    <Longtitude>32.0932627</Longtitude>
+    <Latitude>34.830636</Latitude>
+  </Customer>
+  <Customer>
+    <CustomerId>309865341</CustomerId>
+    <Name>פיני איינהורן</Name>
+    <Phone>052-5824631</Phone>
+    <Longtitude>32.093495</Longtitude>
+    <Latitude>34.8415697</Latitude>
+  </Customer>
+  <Customer>
+    <CustomerId>203548976</CustomerId>
+    <Name>יוני רבינוביץ</Name>
+    <Phone>054-4376615</Phone>
+    <Longtitude>32.093744</Longtitude>
+    <Latitude>34.8364607</Latitude>
+  </Customer>
+  <Customer>
+    <CustomerId>349927608</CustomerId>
+    <Name>דניאל שרם</Name>
+    <Phone>053-7557467</Phone>
+    <Longtitude>32.0878331</Longtitude>
+    <Latitude>34.890106</Latitude>
+  </Customer>
+  <Customer>
+    <CustomerId>200786113</CustomerId>
+    <Name>שוקי אלבירט</Name>
+    <Phone>058-9432005</Phone>
+    <Longtitude>32.0940572</Longtitude>
+    <Latitude>34.8362261</Latitude>
+  </Customer>
+  <Customer>
+    <CustomerId>201344879</CustomerId>
+    <Name>ליאור וענונו</Name>
+    <Phone>050-1177742</Phone>
+    <Longtitude>32.0993644</Longtitude>
+    <Latitude>34.8361656</Latitude>
+  </Customer>
+  <Customer>
+    <CustomerId>301242853</CustomerId>
+    <Name>אפרים שוובר</Name>
+    <Phone>050-7109683</Phone>
+    <Longtitude>32.0943398</Longtitude>
+    <Latitude>34.828906</Latitude>
+  </Customer>
+  <Customer>
+    <CustomerId>209433871</CustomerId>
+    <Name>אבנר לבייב</Name>
+    <Phone>050-9730020</Phone>
+    <Longtitude>32.0856264</Longtitude>
+    <Latitude>34.8227299</Latitude>
+  </Customer>
+  <Customer>
+    <CustomerId>311890522</CustomerId>
+    <Name>יענקי סלוד</Name>
+    <Phone>052-6540832</Phone>
+    <Longtitude>32.0963894</Longtitude>
+    <Latitude>34.8322994</Latitude>
+  </Customer>
+  <Customer>
+    <CustomerId>200996586</CustomerId>
+    <Name>משה הורוביץ</Name>
+    <Phone>051-1374633</Phone>
+    <Longtitude>32.0948123</Longtitude>
+    <Latitude>34.8293454</Latitude>
+  </Customer>
+</ArrayOfCustomer>

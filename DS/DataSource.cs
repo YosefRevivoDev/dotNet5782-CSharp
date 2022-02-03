@@ -7,25 +7,17 @@ using DO;
 
 namespace DS
 {
-    public static class DataSource
+    public class DataSource
     {
         public static List<Drone> Drones = new List<Drone>();
         public static List<BaseStation> Stations = new List<BaseStation>();
-        public static List<Customer> Clients = new List<Customer>();
-        public static List<Parcel> Packages = new List<Parcel>();
+        public static List<Customer> Customer = new List<Customer>();
+        public static List<Parcel> Parcels = new List<Parcel>();
         public static List<DroneCharge> DroneCharges = new List<DroneCharge>();
-        public static List<User> users;
-        public static Random rand = new Random();
-        public static DateTime currentTime = DateTime.Now;
-
+        public static List<User> users = new List<User>();
 
         // Empty Constractor for Default
-        static DataSource()
-        {
-            Initialize();
-
-            
-        }
+      
         public static class Config
         {
             // ------------- PowerConsumption by Drone -----------------//
@@ -33,19 +25,19 @@ namespace DS
             public static double PowerConsumptionLightWeight = 0.04;
             public static double PowerConsumptionMediumWeight = 0.07;
             public static double PowerConsumptionHeavyWeight = 0.1;
-            public static double LoadingDrone = 2;
+            public static double LoadingDrone = 1.0;
 
             //------------------RunID---------------------------//
 
-            public static int RunIdStation = 1;
-            public static int RunIdDrone = 1;
-            public static int RunCustomerId = 1;
-            public static int RunParcelId = 1;
+            public static int RunIdDrone = 0;
+            public static int RunParcelId = 0;
 
         }
-        
-        public static void Initialize()
+
+        public void Initialize()
         {
+            Random random = new Random(DateTime.Now.Millisecond);
+            #region User
             users = new List<User>
             {
                 new User{FirstName = "Yosef", LastName = "Revivo", Password = "1"},
@@ -53,21 +45,13 @@ namespace DS
                 new User{FirstName = "user", LastName = "user", Password = "1"},
                 new User{FirstName = "admin", LastName = "admin", Password = "1"},
             };
-            
-            Random random = new Random(DateTime.Now.Millisecond);
+            #endregion
 
+            #region Drones
             string[] DronesModels = new string[]
             {
-                    "Alpha1", "Alpha2", "Alpha3", "Beta1", "Beta2", "Beta3", "Beta4", "Beta5", "Beta6", "Beta7"
+                    "Alpha1", "Alpha2", "Alpha3", "Alpha4", "Alpha5", "Beta1", "Beta2", "Beta3", "Beta4", "Beta5"
             };
-            
-            Stations.Add(new BaseStation { Name = "BaseA", StationID = Config.RunIdStation++, AvailableChargeSlots = 50,
-                Latitude = 33.3,
-                Longtitude = 34.5
-            });
-
-            Stations.Add(new BaseStation { Name = "BaseB", StationID = Config.RunIdStation++,
-            AvailableChargeSlots = 80, Latitude = 35, Longtitude = 34.2});
 
             for (int i = 0; i < 10; i++)
             {
@@ -78,40 +62,142 @@ namespace DS
                     DroneWeight = (WeightCategories)random.Next(0, 2)
                 });
             }
+            #endregion
 
-            string[] NameCustomers = new string[10] { "Tomer", "Yosef", "Yehuda", "Avi", "David", "Adi", "Moria", "Omer", "Ravit", "Eliyahu" };
-            for (int i = 0; i < 10; i++)
+            #region BaseStation
+            Stations.Add(new BaseStation
             {
-                Clients.Add(new Customer
-                {
-                    CustomerId = Config.RunCustomerId++,
-                    Name = NameCustomers[i],
-                    Phone = "05" + rand.Next(0, 9) + '-' + rand.Next(1000000, 10000000),
-                    Latitude = rand.Next(0, 180),
-                    Longtitude = rand.Next(0, 180)
-                });
-            }
-            for (int i = 0; i < 7; i++)
+                Name = "B.S.R 4",
+                StationID = random.Next(1,20),
+                Latitude = 32.0931651,
+                Longtitude = 34.8247758,
+                AvailableChargeSlots = 50,
+            });
+
+            Stations.Add(new BaseStation
             {
-                Packages.Add(new Parcel
+                Name = "מתנס קהילתי - ק.הרצוג",
+                StationID = random.Next(21, 60),
+                AvailableChargeSlots = 80,
+                Latitude = 32.0964575,
+                Longtitude = 34.8377433
+
+            });
+            #endregion
+            
+            #region Clients
+            Customer.Add(new Customer
+            {
+                CustomerId = 200532406,
+                Name = "יוסף רביבו",
+                Phone = "05" + random.Next(0, 9) + '-' + random.Next(1000000, 10000000),
+                Longtitude = 32.0932627,
+                Latitude = 34.8306360
+
+            });
+            Customer.Add(new Customer()
+            {
+                CustomerId = 309865341,
+                Name = "פיני איינהורן",
+                Phone = "05" + random.Next(0, 9) + '-' + random.Next(1000000, 10000000),
+                Longtitude = 32.0934950,
+                Latitude = 34.8415697
+            });
+            Customer.Add(new Customer()
+            {
+                CustomerId = 203548976,
+                Name = "יוני רבינוביץ",
+                Phone = "05" + random.Next(0, 9) + '-' + random.Next(1000000, 10000000),
+                Longtitude = 32.0937440,
+                Latitude = 34.8364607
+            });
+            Customer.Add(new Customer()
+            {
+                CustomerId = 349927608,
+                Name = "דניאל שרם",
+                Phone = "05" + random.Next(0, 9) + '-' + random.Next(1000000, 10000000),
+                Longtitude = 32.0878331,
+                Latitude = 34.8901060
+            });
+            Customer.Add(new Customer()
+            {
+                CustomerId = 200786113,
+                Name = "שוקי אלבירט",
+                Phone = "05" + random.Next(0, 9) + '-' + random.Next(1000000, 10000000),
+                Longtitude = 32.0940572,
+                Latitude = 34.8362261
+            });
+            Customer.Add(new Customer()
+            {
+                CustomerId = 201344879,
+                Name = "ליאור וענונו",
+                Phone = "05" + random.Next(0, 9) + '-' + random.Next(1000000, 10000000),
+                Longtitude = 32.0993644,
+                Latitude = 34.8361656
+            });
+            Customer.Add(new Customer()
+            {
+                CustomerId = 301242853,
+                Name = "אפרים שוובר",
+                Phone = "05" + random.Next(0, 9) + '-' + random.Next(1000000, 10000000),
+                Longtitude = 32.0943398,
+                Latitude = 34.8289060
+            });
+            Customer.Add(new Customer()
+            {
+                CustomerId = 209433871,
+                Name = "אבנר לבייב",
+                Phone = "05" + random.Next(0, 9) + '-' + random.Next(1000000, 10000000),
+                Longtitude = 32.0856264,
+                Latitude = 34.8227299
+            });
+            Customer.Add(new Customer()
+            {
+                CustomerId = 311890522,
+                Name = "יענקי סלוד",
+                Phone = "05" + random.Next(0, 9) + '-' + random.Next(1000000, 10000000),
+                Longtitude = 32.0963894,
+                Latitude = 34.8322994
+            });
+            Customer.Add(new Customer()
+            {
+                CustomerId = 200996586,
+                Name = "משה הורוביץ",
+                Phone = "05" + random.Next(0, 9) + '-' + random.Next(1000000, 10000000),
+                Longtitude = 32.0948123,
+                Latitude = 34.8293454
+            });
+            #endregion
+
+            #region Paecels
+            for (int i = 0; i< 20; i++)
+            {
+                Parcels.Add(new Parcel
                 {
                     ParcelId = Config.RunParcelId++,
-                    SenderId = Clients[i].CustomerId,
-                    TargetId = Clients[i + 1].CustomerId,
-                    ParcelPriority = (Priorities)rand.Next(0, 2),
-                    ParcelWeight = (WeightCategories)rand.Next(0, 2),
+                    SenderId = Customer[i].CustomerId,
+                    TargetId = Customer[i + 1].CustomerId,
+                    ParcelPriority = (Priorities) random.Next(0, 2),
+                    ParcelWeight = (WeightCategories) random.Next(0, 2),
                     DroneId = Drones[i].DroneID,
-                    Assignment = currentTime,
-                    Delivered = i % 2 == 0 ? null : currentTime.AddDays(1),
-                    PickedUp = currentTime.AddDays(2),
-                    Created = currentTime.AddDays(3),
-                }
-                );
+                    Created = DateTime.Now,
+                    Assignment = DateTime.MinValue,
+                    PickedUp = DateTime.MinValue,
+                    Delivered = i % 2 == 0 ? null : DateTime.MinValue,
+                });
             }
+            #endregion
 
-            
         }
     }
 }
 
-
+/*static DalXml()
+{
+    XMLTools.SaveListToXMLSerializer(DataSource.Drones, dronePath);
+    XMLTools.SaveListToXMLSerializer(DataSource.Customer, customerPath);
+    XMLTools.SaveListToXMLSerializer(DataSource.Stations, baseStationPath);
+    XMLTools.SaveListToXMLSerializer(DataSource.Parcels, parcelPath);
+    XMLTools.SaveListToXMLSerializer(DataSource.users, userPath);
+    XMLTools.SaveListToXMLSerializer(DataSource.DroneCharges, droneChargesPath);
+}*/
