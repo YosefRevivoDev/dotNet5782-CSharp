@@ -322,7 +322,7 @@ namespace BL
 
         }
 
-        public bool AssignmentOfPackageToDrone(int droneId)/*, ParcelInDeliver parcelInDeliver*/ //שיוך חבילה לרחפן
+        public bool AssignmentOfPackageToDrone(int droneId)//שיוך חבילה לרחפן
         {
             try
             {

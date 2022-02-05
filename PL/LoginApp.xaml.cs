@@ -21,21 +21,14 @@ namespace PLGui
     /// </summary>
     public partial class LoginApp : Window
     {
-        BL.BL getBL;
         MainWindow mainWindow;
-        private IBL getBL1;
+        private IBL getBL;
 
-        public LoginApp(MainWindow _mainWindow, BL.BL bL)
+        public LoginApp(MainWindow _mainWindow, IBL bL)
         {
             getBL = bL;
             InitializeComponent();
             mainWindow = _mainWindow;
-        }
-
-        public LoginApp(MainWindow mainWindow, IBL getBL1)
-        {
-            this.mainWindow = mainWindow;
-            this.getBL1 = getBL1;
         }
 
         private void btnEnterApp_Click(object sender, RoutedEventArgs e)

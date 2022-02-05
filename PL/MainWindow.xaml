@@ -36,7 +36,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <DockPanel x:Name="LoginButtons" Grid.Column="1" Visibility="Hidden">
+        <DockPanel x:Name="LoginButtons" Grid.Column="1" Visibility="Visible">
             <Button x:Name="LoginApp" Height="50" Width="100" 
                 Style="{StaticResource MaterialDesignRaisedAccentButton}"
                    materialDesign:ButtonAssist.CornerRadius="25 25 25 25" 
@@ -53,7 +53,7 @@
             </Button>
         </DockPanel>
 
-        <Grid x:Name="CompanyManagement" Visibility="Visible" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
+        <Grid x:Name="CompanyManagement" Visibility="Hidden" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
             <TabControl
                   Style="{StaticResource MaterialDesignNavigatilRailTabControl}" materialDesign:ColorZoneAssist.Mode="Standard"
                             materialDesign:ShadowAssist.ShadowDepth="Depth0">
@@ -249,8 +249,6 @@
                     </Grid>
                 </TabItem>
                 <!--#endregion-->
-
-
             </TabControl>
         </Grid>
     </Grid>

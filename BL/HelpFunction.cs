@@ -10,17 +10,6 @@ namespace BL
 {
     internal class HelpFunction
     {
-        //internal static double ShortDistance(double latitude1, double latitude2, double longtitude1, double longtitude2)
-        //{
-        //    double Dtemp;
-        //    Dtemp = Distance(latitude1, latitude2, longtitude1, longtitude2);
-        //    if (shortDistance > Dtemp)
-        //    {
-        //        shortDistance = Dtemp;
-        //    }
-        //    return shortDistance;
-        //}
-
         const double PIx = 3.141592653589793;
         const double Radius = 6378.16;
 
@@ -71,29 +60,6 @@ namespace BL
             Location location = new() { Longtitude = closeStation.Longtitude, Latitude = closeStation.Latitude };
             return location;
         }
-        //public static double BatteryStatusBetweenLocations(Location location, DroneToList drone, WeightCategories weight = default)
-        //{
-
-        //    double BatteryStatusBetweenLocations =
-        //        Distance(location.Latitude, drone.CurrentLocation.Latitude, location.Longtitude, drone.CurrentLocation.Longtitude);
-        //    switch (weight)
-        //    {
-        //        case WeightCategories.light:
-        //            BatteryStatusBetweenLocations *=  BL.PowerConsumptionLightWeight;
-        //            break;
-        //        case WeightCategories.medium:
-        //            BatteryStatusBetweenLocations *= BL.PowerConsumptionMediumWeight;
-        //            break;
-        //        case WeightCategories.heavy:
-        //            BatteryStatusBetweenLocations *= BL.PowerConsumptionHeavyWeight;
-        //            break;
-        //        default:
-        //            BatteryStatusBetweenLocations *= BL.PowerConsumptionAvailable;
-        //            break;
-        //    }
-        //    //Check if drone's way enough to pass the mession 
-        //    return drone.BattaryStatus - BatteryStatusBetweenLocations > 0 ? BatteryStatusBetweenLocations : default;
-        //}
 
     }
 }

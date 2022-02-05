@@ -36,6 +36,7 @@ namespace PLGui
         public MainWindow()
         {
             getBL = BlFactory.GetBl();
+            
             InitializeComponent();
             InitDrones();
             InitParcels();

@@ -108,27 +108,8 @@ namespace BL
             {
                 throw new CheckIfIdNotException("ERORR", Ex);
             }
-            //List<BaseStationToList> BLStation = new();
-            //List<DO.BaseStation> DalStation = dal.GetBaseStationByPredicate().ToList();
-
-            //foreach (var item in DalStation)
-            //{
-            //    BLStation.Add(new BaseStationToList
-            //    {
-            //        ID = item.StationID,
-            //        Name = item.Name,
-            //        AvailableChargingStations = item.AvailableChargeSlots,
-            //        NotAvailableChargingStations = dal.GetDroneChargesByPredicate(x => x.StationID == item.StationID).ToList().Count,
-            //        location = new()
-            //        {
-            //            Latitude = item.Latitude,
-            //            Longtitude = item.Longtitude
-            //        }
-            //    });
-        //};
-
-        //    return BLStation;
         }
+
         public Location LocationOfTheNearestStation(Location customerLocation, List<DO.BaseStation> stations)
         {
             DO.BaseStation nearStation = stations[0];

@@ -34,7 +34,7 @@ namespace BL
         {
             try
             {
-                dal = DalFactory.GetDal(); // Access to summon methods from Datasource
+                dal = DalFactory.GetDal(); 
                 DroneToList = new List<DroneToList>();
                 helpFunction = new();
                 random = new Random(DateTime.Now.Millisecond);
@@ -54,7 +54,7 @@ namespace BL
                     });
                 }
 
-                InitDroneToLists(); // Initialize the list from DAL layer
+                InitDroneToLists(); 
             }
             catch (DO.CheckIdException Ex)
             {
