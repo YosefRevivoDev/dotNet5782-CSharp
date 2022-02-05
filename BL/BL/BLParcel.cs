@@ -31,62 +31,96 @@ namespace BL
             }
             catch { }
         }
-        public IEnumerable<ParcelToList> GetParcelToLists()
-        {
-            List<DO.Parcel> parcels = dal.GetPackagesByPredicate().ToList();
-            List<ParcelToList> BLparcels = new();
-
-            foreach (var item in parcels)
-            {
-                BLparcels.Add(new ParcelToList
-                {
-                    Id = item.ParcelId,
-                    SenderId = item.SenderId,
-                    TargetId = item.TargetId,
-                    Weight = (WeightCategories)item.ParcelWeight,
-                    Priority = (Priorities)item.ParcelPriority,
-                    ParcelAreNotAssighmentToDrone = dal.GetPackagesByPredicate(x => x.DroneId == item.DroneId && x.Assignment == null).ToList().Count
-                });
-            }
-            return BLparcels;
-        }
         public Parcel GetParcel(int id)
         {
-            DO.Parcel DalParcel = dal.GetParcel(id);
-
-            Parcel BLParcel = new();
-
-            BLParcel.Id = DalParcel.ParcelId;
-            BLParcel.Sender = GetCustomer(DalParcel.SenderId);
-            BLParcel.Target = GetCustomer(DalParcel.TargetId);
-            BLParcel.Weight = (WeightCategories)DalParcel.ParcelWeight;
-            BLParcel.Priority = (Priorities)DalParcel.ParcelPriority;
-            BLParcel.CreateTime = DalParcel.Created;
-            BLParcel.Requested = DalParcel.Assignment;
-            BLParcel.PickedUp = DalParcel.PickedUp;
-            BLParcel.Delivered = DalParcel.Delivered;
-
-
-            if (DalParcel.DroneId != 0)
+            try
             {
-                DroneToList drone = DroneToList.Find(i => i.DroneID == DalParcel.DroneId);
-                BLParcel.Drone = new DroneInParcel();
-                BLParcel.Drone.DroneID = drone.DroneID;
-                BLParcel.Drone.BattaryStatus = drone.BattaryStatus;
-                BLParcel.Drone.CorrentLocation = new Location()
+                DO.Parcel DalParcel = dal.GetParcel(id);
+
+                Parcel BLParcel = new();
+
+                BLParcel.Id = DalParcel.ParcelId;
+                //BLParcel.Sender = GetCustomer(DalParcel.SenderId);
+                //BLParcel.Target = GetCustomer(DalParcel.TargetId);
+                BLParcel.Weight = (WeightCategories)DalParcel.ParcelWeight;
+                BLParcel.Priority = (Priorities)DalParcel.ParcelPriority;
+                BLParcel.assigned = DalParcel.Created;
+                BLParcel.Requested = DalParcel.Assignment;
+                BLParcel.PickedUp = DalParcel.PickedUp;
+                BLParcel.Delivered = DalParcel.Delivered;
+
+                BLParcel.Sender = GetCustomerInParcel(DalParcel.SenderId);
+                BLParcel.Target = GetCustomerInParcel(DalParcel.TargetId);
+
+                if (DalParcel.DroneId != 0)
                 {
-                    Latitude = drone.CurrentLocation.Latitude,
-                    Longtitude = drone.CurrentLocation.Longtitude
-                };
+                    DroneToList drone = DroneToList.Find(i => i.DroneID == DalParcel.DroneId);
+
+                    DroneInParcel droneInParcel = new DroneInParcel()
+                    {
+                        DroneID = drone.DroneID,
+                        BattaryStatus = drone.BattaryStatus,
+                        CorrentLocation = new Location()
+                        {
+                            Latitude = drone.CurrentLocation.Latitude,
+                            Longtitude = drone.CurrentLocation.Longtitude
+                        }
+                    };
+                }
+                return BLParcel;
+            }
+            catch (DO.CheckIfIdNotException Ex)
+            {
+                throw new CheckIfIdNotException("ERORR", Ex);
             }
 
-            return BLParcel;
         }
         public void RemoveParcelBL(int id)
         {
             //IDAL.DO.BaseStation baseStationRemove = dal.GetBaseStation(id);
             dal.RemoveParcel(id);
         }
+
+        public ParcelToList GetParcelToList(int parcelID)
+        {
+            try
+            {
+                Parcel parcel = GetParcel(parcelID);
+
+                ParcelToList BLparcels = new()
+                {
+                    Id = parcel.Id,
+                    SenderId = parcel.Sender.CustomerId,
+                    TargetId = parcel.Target.CustomerId,
+                    Weight = parcel.Weight,
+                    Priority = parcel.Priority,
+                };
+                BLparcels.parcelStatus = (parcel.assigned == DateTime.MinValue) ? ParcelStatus.Defined :
+                    (parcel.PickedUp == DateTime.MinValue) ? ParcelStatus.associated :
+                    (parcel.Delivered == DateTime.MinValue) ? ParcelStatus.collected : ParcelStatus.provided;
+
+                return BLparcels;
+            }
+            catch (DO.CheckIfIdNotException Ex)
+            {
+                throw new CheckIfIdNotException("ERORR", Ex);
+            }
+        }
+        public IEnumerable<ParcelToList> GetParcelToListsByPredicate(Predicate<ParcelToList> p = null)
+        {
+            List<ParcelToList> parcelToLists = new();
+
+            List<DO.Parcel> parcels = dal.GetPackagesByPredicate().ToList();
+            foreach (DO.Parcel item in parcels)
+            {
+                parcelToLists.Add(GetParcelToList(item.ParcelId));
+            }
+            return parcelToLists.Where(i => p == null ? true : p(i)).ToList();
+
+
+        }
+
+
         public ParcelInDeliver GetParcelInDeliverd(Location firstLocation, int NumOfPackageId)
         {
             Parcel parcel = GetParcel(NumOfPackageId);
@@ -123,7 +157,7 @@ namespace BL
 
             return ParcelInDeliverd;
         }
-        private ParcelStatus GetparcelStatus(DO.Parcel parcel)
+        public ParcelStatus GetparcelStatus(DO.Parcel parcel)
         {
             if (parcel.Delivered != null)
             {
@@ -155,7 +189,7 @@ namespace BL
                 parcelAtCustomer.ParcelStatus = (parcel.Assignment == DateTime.MinValue) ? ParcelStatus.Defined :
                     (parcel.PickedUp == DateTime.MinValue) ? ParcelStatus.associated :
                     (parcel.Delivered == DateTime.MinValue) ? ParcelStatus.collected : ParcelStatus.provided;
-              
+
                 parcelAtCustomer.Sender = GetCustomerInParcel((parcel.SenderId == customrID) ? parcel.TargetId : parcel.SenderId);
                 parcelAtCustomer.Target = GetCustomerInParcel((parcel.TargetId == customrID) ? parcel.SenderId : parcel.TargetId);
 
@@ -170,11 +204,6 @@ namespace BL
                 throw new CheckIfIdNotException("ERORR", ex);
             }
         }
-        //private IEnumerable<ParcelAtCustomer> GetParcelAtCustomers(IEnumerable<DO.Parcel> DalPackagesIdCustomer, int id, bool flag)
-        //{
-        //    return from package in DalPackagesIdCustomer
-        //           where flag ? package.SenderId == id : package.TargetId == id
-        //           select GetParcelAtCustomer(package, id);
-        //}
     }
 }
+

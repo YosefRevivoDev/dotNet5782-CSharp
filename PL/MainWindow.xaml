@@ -17,13 +17,13 @@
     <Window.Background>
         <ImageBrush ImageSource="/PacketFly.jpg"/>
     </Window.Background>
-    
+
     <!--<Window.Resources>
         <con:ConertLattedue x:Key="ConertLattedue"/>
         <con:ConertLongetude x:Key="ConertLongetude"/>
     </Window.Resources>-->
 
-   
+
     <Grid Background="Transparent">
 
         <Grid.RowDefinitions>
@@ -98,7 +98,7 @@
                                  IsEditable="True" IsReadOnly="True" Height="auto" Width="auto" ToolTip="Choose Weight"
                                  Text="Choose Weight: " SelectionChanged="cmbWeightSelector_SelectionChanged" Grid.ColumnSpan="4" Margin="48,0,0,0"/>
                             <Button x:Name="btnAddDrone" Content="הוסף רחפן" Click="btnAddDrone_Click" Grid.Column="3"
-                                     HorizontalAlignment="Left" VerticalAlignment="Center" Margin="28,0,0,0"/>
+                                     HorizontalAlignment="Left" VerticalAlignment="Top" Margin="28,8,0,0"/>
                         </Grid>
                         <ListView x:Name="lstDroneListView" Grid.Row="1" 
                               MouseDoubleClick="lstDroneListView_MouseDoubleClick" ItemsSource="{Binding Path = dronesToLists}">
@@ -143,32 +143,30 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <ComboBox x:Name="SenderTarget" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="16" Margin="0,0,0,5"
-                                  IsEditable="True" IsReadOnly="True" SelectionChanged="SenderTarget_SelectionChanged"/>
+                                  IsEditable="True" IsReadOnly="True"/>
                             <ComboBox Name="cmbParcelStatus" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="16" Margin="0,0,0,5"
                                       IsEditable="True" IsReadOnly="True" SelectionChanged="cmbParcelStatus_SelectionChanged" />
                             <DatePicker Grid.Column="2" Width="100" materialDesign:HintAssist.Hint="Pick Date"
                                                  materialDesign:TextFieldAssist.HasClearButton="True" Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
-
+                            <Button x:Name="btnAddParcel" Content="הוסף חבילה" Grid.Column="3" Click="btnAddParcel_Click" />
                         </Grid>
-                        <ListView x:Name="lstParcelListView" Grid.Row="1" 
-                                  MouseDoubleClick="lstParcelListView_MouseDoubleClick" 
-                                  ItemsSource="{Binding Path = Parcel}"
-                                  >
+                        <ListView x:Name="lstParcelListView" Grid.Row="1" MouseDoubleClick="lstParcelListView_MouseDoubleClick" 
+                                  ItemsSource="{Binding Path = parcelToLists}">
 
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
                                     <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
                                 </Style>
                             </ListView.ItemContainerStyle>
-                            
-                           
+
                             <ListView.View>
                                 <GridView>
-                                    <GridViewColumn Header="מזהה"  DisplayMemberBinding="{Binding Id}"/>
-                                    <GridViewColumn Header="שולח\מקבל" Width="150" DisplayMemberBinding="{Binding SenderOrTarget}"/>
+                                    <GridViewColumn Header="מזהה" Width="100" DisplayMemberBinding="{Binding Id}"/>
+                                    <GridViewColumn Header="שולח" Width="100" DisplayMemberBinding="{Binding SenderId}"/>
+                                    <GridViewColumn Header="מקבל" Width="100" DisplayMemberBinding="{Binding TargetId}"/>
                                     <GridViewColumn Header="משקל חבילה" Width="150" DisplayMemberBinding="{Binding Weight}"/>
-                                    <GridViewColumn Header="עדיפות" Width="150" DisplayMemberBinding="{Binding Priority}"/>
-                                    <GridViewColumn Header="סטטוס" Width="150" DisplayMemberBinding="{Binding parcelStatus}"/>
+                                    <GridViewColumn Header="עדיפות" Width="110" DisplayMemberBinding="{Binding Priority}"/>
+                                    <GridViewColumn Header="סטטוס" Width="120" DisplayMemberBinding="{Binding parcelStatus}"/>
                                 </GridView>
                             </ListView.View>
                         </ListView>
@@ -251,8 +249,8 @@
                     </Grid>
                 </TabItem>
                 <!--#endregion-->
-                
-                
+
+
             </TabControl>
         </Grid>
     </Grid>

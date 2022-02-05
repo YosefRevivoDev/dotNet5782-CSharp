@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PLGui"
         mc:Ignorable="d"
-        Title="CustomerWindow" Height="450" Width="400">
-    <Grid>
+        Title="CustomerWindow" Height="600" Width="700">
+    <!--<Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
@@ -44,5 +44,173 @@
                 <Button x:Name="btnaddCustomer" Content="הוסף" Grid.Row="6" Click="addCustomer_Click"/>
             </Grid>
         </GroupBox>
+    </Grid>-->
+
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Button x:Name="btnAddCustomer" Content="אישור" FontSize="20" Height="45" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" Click="btnAddCustomer_Click"/>
+        <Button x:Name="btnClose" Content="סגור" FontSize="20" Height="45" Grid.Row="1" VerticalAlignment="Bottom" FontWeight="Bold" Click="btnClose_Click"/>
+
+        <Border Name="List" Visibility="Hidden" Grid.Row="0">
+            <Grid Name="CustomrtGrid">
+                <ListView x:Name="CustomerListView" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{x:Null}" SelectionChanged="CustomerListView_SelectionChanged">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="מזהה"  Width="100" DisplayMemberBinding="{Binding CustomerId}"/>
+                            <GridViewColumn Header="שם" Width="130" DisplayMemberBinding="{Binding NameCustomer}"/>
+                            <GridViewColumn Header="פלאפון" Width="120" DisplayMemberBinding="{Binding PhoneCustomer}"/>
+                            <GridViewColumn Header="שסופקו" Width="70" DisplayMemberBinding="{Binding SendParcelAndSupplied}"/>
+                            <GridViewColumn Header="שלא סופקו" Width="80" DisplayMemberBinding="{Binding SendParcelAndNotSupplied}"/>
+                            <GridViewColumn Header="שהתקבלו" Width="70" DisplayMemberBinding="{Binding ParcelsReciever}"/>
+                            <GridViewColumn Header="שלא התקבלו" Width="100" DisplayMemberBinding="{Binding ParcelOweyToCustomer}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+        </Border>
+        <Border Name="GridAddCustomer" Grid.Row="0" Visibility="Hidden">
+            <Grid x:Name="add" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.2*"/>
+                    <RowDefinition Height="*"/>
+
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Label  Content="הכנס פרטי לקוח "  HorizontalAlignment="Center" FontSize="20" FontWeight="Bold" Background="{x:Null}" />
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+
+                    </Grid.RowDefinitions>
+                    <Label Grid.Column="2" Grid.Row="0" Content=":מזהה"    FontWeight="Bold"  />
+                    <Label Grid.Column="2" Grid.Row="1" Content=":שם"    FontWeight="Bold"  />
+                    <Label Grid.Column="2" Grid.Row="2" Content=":פלאפון" FontWeight="Bold" />
+                    <Label Grid.Column="2" Grid.Row="3" Content="מיקום-קו אורך" FontWeight="Bold"  />
+                    <Label Grid.Column="2" Grid.Row="4" Content="מיקום-קו רוחב" FontWeight="Bold"  />
+                    <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding CustomerId}" Background="{x:Null}" PreviewTextInput="onlyNumbersForID" />
+                    <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding NameCustomer}" Background="{x:Null}" PreviewTextInput="onlyAlphaBeta"/>
+                    <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding PhoneCustomer}" Background="{x:Null}" PreviewTextInput="phonePattren"/>
+                    <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding LocationCustomer.Longtitude}" Background="{x:Null}" PreviewTextInput="lungetudePattren"/>
+                    <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding LocationCustomer.Latitude}" Background="{x:Null}" PreviewTextInput="lattitudePattren"/>
+                </Grid>
+
+            </Grid>
+        </Border>
+
+        <Border Name="Updating" Grid.Row="0" Visibility="Visible">
+               
+            <Grid  Margin="0,2,0,-2" Name="MainGrid1">
+                <Border  Name="BorderEnterNumber" BorderThickness="2" BorderBrush="Yellow" Background="{x:Null}"  CornerRadius="5" Padding="10" Visibility="Hidden">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions >
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Content="בחירת לקוח לעדכון" VerticalContentAlignment="Center"  HorizontalContentAlignment="Center" FontWeight="Bold" FontSize="16" />
+                            <Label Grid.Row="2" Content="הכנס מספר" VerticalContentAlignment="Center"  HorizontalContentAlignment="Center" />
+                            <ComboBox x:Name="comboID" Grid.Row="3" SelectedItem="{Binding CustomerId}" />
+                        </Grid>
+                    </Grid>
+                </Border>
+                <Grid x:Name="GridUpdateCustomer" Visibility="Visible">
+                    <Border BorderThickness="2"  Grid.Column="1" Grid.Row="0" BorderBrush="Yellow"  CornerRadius="5" Padding="20" >
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.5*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="2*"/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Content="פרטי הלקוח" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontWeight="Bold" />
+                            <Grid Grid.Row="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="3" Grid.Row="0" Content="ת.ז"   />
+                                <Label Grid.Column="3" Grid.Row="1" Content="שם"  />
+                                <Label Grid.Column="1" Grid.Row="0" Content="פלאפון"  />
+                                <Label Grid.Column="1" Grid.Row="1" Content="מיקום"  />
+
+                                <TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding CustomerId}"  />
+                                <TextBox Grid.Column="2" Grid.Row="1" Text="{Binding NameCustomer}"  />
+                                <TextBox Grid.Column="0" Grid.Row="0" Text="{Binding PhoneCustomer}"  />
+                                <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding LocationCustomer}"  />
+                            </Grid>
+                            <Grid Grid.Row="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="0.35*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Label Content="משלוחים שנשלחו" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontWeight="Bold"/>
+                                <Grid Grid.Row="1">
+                                    <ListView x:Name="fromCustomer" HorizontalAlignment="Right" Background="{x:Null}" SelectionChanged="fromCustomer_SelectionChanged" Grid.ColumnSpan="2"  Grid.RowSpan="2" >
+                                        <ListView.View>
+                                            <GridView >
+                                                <GridViewColumn Header="מזהה משלוח" Width="150" DisplayMemberBinding="{Binding CustomerId}"/>
+                                                <GridViewColumn Header="מצב משלוח" Width="150" DisplayMemberBinding="{Binding ParcelStatus}"/>
+                                                <GridViewColumn Header="מזהה לקוח" Width="150" DisplayMemberBinding="{Binding CustomerInParcel.CustomerId}"/>
+                                                <GridViewColumn Header="שם לקוח" Width="150" DisplayMemberBinding="{Binding CustomerInParcel.NameCustomer}"/>
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+                                </Grid>
+                            </Grid>
+                            <Grid Grid.Row="3">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="0.35*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Label Content="משלוחים שהתקבלו"  VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontWeight="Bold" />
+                                <Grid Grid.Row="1">
+                                    <ListView x:Name="toCustomer" HorizontalAlignment="Right" Background="{x:Null}" SelectionChanged="toCustomer_SelectionChanged" Grid.ColumnSpan="2"  Grid.RowSpan="2" >
+                                        <ListView.View>
+                                            <GridView >
+                                                <GridViewColumn Header="מזהה משלוח" Width="150" DisplayMemberBinding="{Binding CustomerId}"/>
+                                                <GridViewColumn Header="מצב משלוח" Width="150" DisplayMemberBinding="{Binding ParcelStatus}"/>
+                                                <GridViewColumn Header="מזהה לקוח" Width="150" DisplayMemberBinding="{Binding CustomerInParcel.CustomerId}"/>
+                                                <GridViewColumn Header="שם לקוח" Width="150" DisplayMemberBinding="{Binding CustomerInParcel.NameCustomer}"/>
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Border>
     </Grid>
 </Window>

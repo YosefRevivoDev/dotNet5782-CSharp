@@ -65,7 +65,6 @@ namespace BL
             catch { }
 
         }
-
         /// <summary>
         /// 
         /// </summary>
@@ -267,8 +266,7 @@ namespace BL
                         dal.AddDroneCharge(new()
                         {
                             DroneID = droneFromListToCharge.DroneID,
-                            StationID =
-                            nearBaseStation.StationID,
+                            StationID = nearBaseStation.StationID,
                             CurrentTime = DateTime.Now
                         });
                         return true;
@@ -287,7 +285,7 @@ namespace BL
 
         }
 
-        public bool ReleaseDroneFromCharge(int droneId, int stationId, DateTime dateTime)
+        public bool ReleaseDroneFromCharge(int droneId)
         {
             try
             {
@@ -299,17 +297,17 @@ namespace BL
                 else
                 {
                     int droneIndex = DroneToList.FindIndex(i => i.DroneID == droneId);
-                    //calculate the time that drone was in charging
-                    var droneCarge = dal.GetDroneChargeByDrone(droneId);
+                   
+                    DO.DroneCharge droneCarge = dal.GetDroneChargeByDrone(droneId);
                     TimeSpan chargingTime = DateTime.Now - droneCarge.CurrentTime;
 
-                    //add to drone battery (charging time)*(charging per hour)  or max value  for battery "100"
                     drone.BattaryStatus = Math.Min(100, (double)drone.BattaryStatus + chargingTime.TotalSeconds * LoadingDrone);
                     drone.Status = DroneStatus.available;
                     DroneToList[droneIndex] = drone;
 
                     dal.PlusDroneCharge(droneCarge.StationID);
-                    dal.MinusDroneCharge(droneId);
+                    dal.ReleasingChargeDrone(droneId, droneCarge.StationID);
+                   // dal.MinusDroneCharge(droneId);
                     return true;
                 }
             }
@@ -439,6 +437,23 @@ namespace BL
         {
             //IDAL.DO.BaseStation baseStationRemove = dal.GetBaseStation(id);
             dal.RemoveDrone(id);
+        }
+        public DroneInParcel GetDroneAtParcel(int droneId)
+        {
+            DroneToList droneToList = DroneToList.Find(i => i.DroneID == droneId);
+            if (droneToList.DroneID == 0)
+            {
+                throw new CheckIfIdNotExceptions("אין רחפן עם מזהה זה");
+
+            }
+
+            DroneInParcel droneInParcel = new()
+            {
+                DroneID = droneToList.DroneID,
+                BattaryStatus = droneToList.BattaryStatus,
+                CorrentLocation = droneToList.CurrentLocation
+            };
+            return droneInParcel;
         }
 
         //public DO.Parcel TheNearestParcelToAssign(DroneToList droneToList, List<DO.Parcel> parcels)

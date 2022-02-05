@@ -50,8 +50,6 @@ namespace PLGui
             drone = new Drone();
             DataContext = drone;
             DroneSituateGrid.Visibility = Visibility.Collapsed;
-            droneGrid.VerticalAlignment = VerticalAlignment.Center;
-            droneGrid.HorizontalAlignment = HorizontalAlignment.Center;
             ItemsSourceStations();
             mainWindow = _mainWindow;
             cbxDroneWeight.ItemsSource = Enum.GetValues(typeof(WeightCategories));
@@ -75,22 +73,62 @@ namespace PLGui
             mainWindow = _mainWindow;
             DataContext = this.drone;
             ItemsSourceStations();
+            DroneVisibility();
             droneToList = drone;
         }
 
         private void ItemsSourceStations()
         {
-            lvStations.ItemsSource = bL.GetBasetationToLists();
+            lvStations.ItemsSource = bL.GetBasetationToListsByPredicate();
         }
-
+        public void DroneVisibility()
+        {
+            if (drone.Status == DroneStatus.available)
+            {
+                btnDroneCharge.Visibility = Visibility.Visible;
+                btnSendDroneToDeliver.Visibility = Visibility.Visible;
+                btnCollectParcel.Visibility = Visibility.Hidden;
+                btnSupplyParcel.Visibility = Visibility.Hidden;
+                btnRealeseDrone.Visibility = Visibility.Hidden;
+            }
+            else if(drone.Status == DroneStatus.maintenance)
+            {
+                btnRealeseDrone.Visibility = Visibility.Visible;
+                btnDroneCharge.Visibility = Visibility.Hidden;
+                btnSendDroneToDeliver.Visibility = Visibility.Hidden;
+                btnCollectParcel.Visibility = Visibility.Hidden;
+                btnSupplyParcel.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                if (drone.ParcelInDeliverd.StatusParcrlInDeliver == StatusParcrlInDeliver.AwaitingCollection)
+                {
+                    btnRealeseDrone.Visibility = Visibility.Hidden;
+                    btnDroneCharge.Visibility = Visibility.Hidden;
+                    btnSendDroneToDeliver.Visibility = Visibility.Hidden;
+                    btnCollectParcel.Visibility = Visibility.Visible;
+                    btnSupplyParcel.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    btnRealeseDrone.Visibility = Visibility.Hidden;
+                    btnDroneCharge.Visibility = Visibility.Hidden;
+                    btnSendDroneToDeliver.Visibility = Visibility.Hidden;
+                    btnCollectParcel.Visibility = Visibility.Hidden;
+                    btnSupplyParcel.Visibility = Visibility.Visible;
+                }
+            }
+        }
         private void refreshThisWindow()
         {
 
-            if (mainWindow != null)
-            {
+            //if (mainWindow != null)
+            //{
                 mainWindow.lstDroneListView.Items.Refresh();
+            this.Close();
+            new DroneWindow(bL, mainWindow, droneToList, Idrone).Show();
                 // mainWindow.AddGrouping();
-            }
+            //}
         }
         private void DroneId_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -146,7 +184,7 @@ namespace PLGui
                 {
                     refreshThisWindow();
                     DataContext = drone;
-                    // UpdatingWindow(drone.Id);
+                    //UpdatingWindow(drone.Id);
                 }
             }
 
@@ -175,7 +213,8 @@ namespace PLGui
         {
             if (drone.Status == DroneStatus.maintenance)
             {
-                bL.ReleaseDroneFromCharge(drone.DroneID, baseStationToList.ID, DateTime.Now);
+                bL.ReleaseDroneFromCharge(drone.DroneID);
+                refreshThisWindow();
             }
             else
             {
@@ -200,11 +239,8 @@ namespace PLGui
                         bool test = bL.AssignmentOfPackageToDrone(drone.DroneID);
                         if (test)
                         {
-                            //NoParcel.Visibility = Visibility.Hidden;
-                            //YesParcel.Visibility = Visibility.Visible;
                             drone = bL.GetDrone(drone.DroneID);
                             refreshThisWindow();
-                            //UpdatingWindow(drone.Id);
                         }
                         else
                         {
@@ -283,7 +319,7 @@ namespace PLGui
                             mainWindow.dronesToLists.Add(bL.GetDroneToListsBLByPredicate()
                                 .First(i => i.DroneID == drone.DroneID));
                             //mainWindow.dronesToList.CollectionChanged += mainWindow.OnCollectionChanged;
-                            lvStations.ItemsSource = bL.GetDroneToListsBLByPredicate(i => i. > 0);
+                            lvStations.ItemsSource = bL.GetBasetationToListsByPredicate(i => i.AvailableChargingStations > 0);
 
                             MessageBox.Show(drone.ToString(), "הרחפן נוסף בהצלחה");
                             Close();
@@ -318,3 +354,5 @@ namespace PLGui
         }
     }
 }
+
+

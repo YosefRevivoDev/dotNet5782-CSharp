@@ -11,6 +11,7 @@ namespace BO
         public int CustomerId { get; set; }
         public string NameCustomer { get; set; }
 
+
         public override string ToString()
         {
             return $"CustomerId: {CustomerId} , NameCustomer: {NameCustomer} ";

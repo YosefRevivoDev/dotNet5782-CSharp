@@ -17,7 +17,6 @@ namespace BL
         /// <param name="newBaseStation"></param>
         public void AddBaseStation(BaseStation newBaseStation)
         {
-            //Set drone information from DAL layer 
             DO.BaseStation baseStation = new()
             {
                 StationID = newBaseStation.ID,
@@ -92,7 +91,7 @@ namespace BL
                 throw new Exception(" ");
             }
         }
-        public IEnumerable<BaseStationToList> GetBasetationToLists(Predicate<BaseStationToList> p = null)
+        public IEnumerable<BaseStationToList> GetBasetationToListsByPredicate(Predicate<BaseStationToList> p = null)
         {
             try
             {
@@ -101,7 +100,7 @@ namespace BL
                 List<DO.BaseStation> stations = dal.GetBaseStationByPredicate().ToList();
                 foreach (DO.BaseStation item in stations)
                 {
-                    stationToLists.Add(GetBasetationToLists(item.StationID));
+                    stationToLists.Add(GetBaseStationToList(item.StationID));
                 }
                 return stationToLists.Where(i => p == null ? true : p(i)).ToList();
             }

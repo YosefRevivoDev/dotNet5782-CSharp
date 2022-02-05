@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -23,6 +24,7 @@ namespace PLGui
     public partial class CustomerWindow : Window
     {
         IBL GetBL;
+        public ObservableCollection<CustomerToList> customerToLists;
         public CustomerToList customerToList;
         public Customer customer { set; get; }
         public int index;
@@ -38,10 +40,8 @@ namespace PLGui
             InitializeComponent();
             GetBL = getBl;
             customer = new Customer();
-            customer = getBl.GetCustomer(customer.CustomerId);
             DataContext = customer;
-            CustomrtGrid.VerticalAlignment = VerticalAlignment.Center;
-            CustomrtGrid.HorizontalAlignment = HorizontalAlignment.Center;
+            //customer = getBl.GetCustomer(customer.CustomerId);
             mainWindow = _mainWindow;
             UpdateVisibility();
         }
@@ -71,14 +71,14 @@ namespace PLGui
 
         private void UpdateGridVisibility()
         {
-            btnaddCustomer.Visibility = Visibility.Hidden;
+            //btnaddCustomer.Visibility = Visibility.Hidden;
         }
 
         private void UpdateVisibility() // hidden Button - upgrade and remove
         {
-            CustomerID.IsReadOnly = false;
-            btnRemoveCustomer.Visibility = Visibility.Hidden;
-            btnupdateCustomer.Visibility = Visibility.Hidden;
+            //CustomerID.IsReadOnly = false;
+            //btnRemoveCustomer.Visibility = Visibility.Hidden;
+            //btnupdateCustomer.Visibility = Visibility.Hidden;
         }
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
@@ -150,10 +150,52 @@ namespace PLGui
             }
         }
 
-        private void addCustomer_Click(object sender, RoutedEventArgs e)
+        private void CustomerListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void fromCustomer_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //int parcel = ((ParcelAtCustomer)fromCustomer.SelectedItem).Id;
+            //new ParcelWindow(GetBL, mainWindow, parcel, index).Show();
+            //Close();
+        }
+
+        private void toCustomer_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void onlyNumbersForID(object sender, TextCompositionEventArgs e)
+        {
+
+        }
+
+        private void onlyAlphaBeta(object sender, TextCompositionEventArgs e)
+        {
+
+        }
+
+        private void phonePattren(object sender, TextCompositionEventArgs e)
+        {
+
+        }
+
+        private void lungetudePattren(object sender, TextCompositionEventArgs e)
+        {
+
+        }
+
+        private void lattitudePattren(object sender, TextCompositionEventArgs e)
+        {
+
+        }
+
+        private void btnAddCustomer_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult messageBoxResult = MessageBox.Show("? האם אתה בטוח שאתה רוצה להוסיף לקוח זה"
-              , "הכנס תחנה", MessageBoxButton.YesNoCancel);
+             , "הכנס תחנה", MessageBoxButton.YesNoCancel);
 
             switch (messageBoxResult)
             {
@@ -179,6 +221,11 @@ namespace PLGui
                 default:
                     break;
             }
+        }
+
+        private void btnClose_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

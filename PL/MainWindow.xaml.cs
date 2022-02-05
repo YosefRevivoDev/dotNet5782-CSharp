@@ -43,7 +43,7 @@ namespace PLGui
             InitBaseStation();
         }
 
-        
+
         #region Init Object
         private void InitDrones()
         {
@@ -60,14 +60,13 @@ namespace PLGui
         private void InitParcels()
         {
             parcelToLists = new();
-            IEnumerable<ParcelToList> parcelTemp = getBL.GetParcelToLists();
+            IEnumerable<ParcelToList> parcelTemp = getBL.GetParcelToListsByPredicate();
             foreach (var item in parcelTemp)
             {
                 parcelToLists.Add(item);
             }
             lstParcelListView.ItemsSource = parcelToLists;
             cmbParcelStatus.ItemsSource = Enum.GetValues(typeof(ParcelStatus));
-            SenderTarget.ItemsSource = Enum.GetValues(typeof(SenderOrTarget));
         }
         private void InitCustomer()
         {
@@ -82,7 +81,7 @@ namespace PLGui
         private void InitBaseStation()
         {
             baseStationToLists = new();
-            IEnumerable<BaseStationToList> basetationTemp = getBL.GetBasetationToLists();
+            IEnumerable<BaseStationToList> basetationTemp = getBL.GetBasetationToListsByPredicate();
             foreach (var item in basetationTemp)
             {
                 baseStationToLists.Add(item);
@@ -97,6 +96,7 @@ namespace PLGui
             {
                 int Idrone = lstDroneListView.SelectedIndex;
                 new DroneWindow(getBL, this, drones, Idrone).Show();
+                //x = x.DroneVisibility();
             }
         }
 
@@ -106,7 +106,7 @@ namespace PLGui
             if (basetation != null)
             {
                 int IndexBaseStation = lstBaseStationListView.SelectedIndex;
-                new BaseStationWindow(getBL, this, basetation, IndexBaseStation).Show();                
+                new BaseStationWindow(getBL, this, basetation, IndexBaseStation).Show();
             }
         }
 
@@ -142,16 +142,7 @@ namespace PLGui
         {
 
         }
-        private void btnAddDrone_Click(object sender, RoutedEventArgs e)
-        {
-           var x = new DroneWindow(getBL, this);
-            x.GridAddDrone.Visibility = Visibility.Visible;
-            x.GridUpdateDrone.Visibility = Visibility.Hidden;
-            x.Height = 350;
-            x.Width = 500;
-            x.ShowDialog();
-        }
-
+      
         private void btnCloseWindow_Click(object sender, RoutedEventArgs e)
         {
             Close();
@@ -162,12 +153,6 @@ namespace PLGui
             WeightCategories droneWeight = (WeightCategories)cmbWeightSelector.SelectedItem;
             txtLable.Text = droneWeight.ToString();
             lstDroneListView.ItemsSource = dronesToLists.Where(x => x.DroneWeight == droneWeight).ToList();
-        }
-
-        private void SenderTarget_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            SenderOrTarget senderOrTarget = (SenderOrTarget)SenderTarget.SelectedItem;
-            lstParcelListView.ItemsSource = parcelToLists.Where(x => x.SenderOrTarget == senderOrTarget).ToList();
         }
 
         private void cmbParcelStatus_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -181,28 +166,47 @@ namespace PLGui
             new LoginApp(this, getBL).Show();
         }
 
+        #region ADD Object Click
+        private void btnAddDrone_Click(object sender, RoutedEventArgs e)
+        {
+            var x = new DroneWindow(getBL, this);
+            x.GridAddDrone.Visibility = Visibility.Visible;
+            x.GridUpdateDrone.Visibility = Visibility.Hidden;
+            x.Height = 450;
+            x.Width = 500;
+            x.ShowDialog();
+        }
         private void addBaseStation_Click(object sender, RoutedEventArgs e)
         {
-            BaseStationToList basetation = (BaseStationToList)lstBaseStationListView.SelectedItem;
-            if (basetation != null)
-            {
-                new BaseStationWindow(getBL, this).Show();
-                //RemoveStation.Visibility = Visibility.Hidden;
-                //UpdateBaseStation.Visibility = Visibility.Hidden;
-                //addStation.Visibility = Visibility.Visible;
-            }
+            var x = new BaseStationWindow(getBL, this);
+            x.GridAddStation.Visibility = Visibility.Visible;
+            x.GridUpdateStation.Visibility = Visibility.Hidden;
+            x.Height = 450;
+            x.Width = 500;
+            x.ShowDialog();
         }
 
         private void addingCustomer_Click(object sender, RoutedEventArgs e)
         {
-            CustomerToList customer = (CustomerToList)lstCustomerListView.SelectedItem;
-
-            if (customer != null)
-            {
-                new CustomerWindow(getBL, this).Show();
-            }
+            var x = new CustomerWindow (getBL, this);
+            x.GridAddCustomer.Visibility = Visibility.Visible;
+            x.GridUpdateCustomer.Visibility = Visibility.Hidden;
+            x.Height = 550;
+            x.Width = 400;
+            x.ShowDialog();
         }
 
-        
+        private void btnAddParcel_Click(object sender, RoutedEventArgs e)
+        {
+            var x = new ParcelWindow(getBL, this);
+            x.GridAddDrone.Visibility = Visibility.Visible;
+            x.GridUpdateDrone.Visibility = Visibility.Hidden;
+            x.Height = 500;
+            x.Width = 400;
+            x.ShowDialog();
+        }
+        #endregion
     }
 }
+
+

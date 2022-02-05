@@ -11,7 +11,6 @@ namespace BO
 
         public int SenderId { get; set; }
         public int TargetId { get; set; }
-        public SenderOrTarget SenderOrTarget { get; set; }
         public ParcelStatus parcelStatus { get; set; }
         public int ParcelAreNotAssighmentToDrone { get; set; }
         public override string ToString()

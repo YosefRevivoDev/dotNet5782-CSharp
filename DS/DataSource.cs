@@ -59,7 +59,7 @@ namespace DS
                 {
                     DroneID = ++Config.RunIdDrone,
                     DroneModel = DronesModels[i],
-                    DroneWeight = (WeightCategories)random.Next(0, 2)
+                    DroneWeight = (WeightCategories)random.Next(1, 3)
                 });
             }
             #endregion
@@ -177,8 +177,8 @@ namespace DS
                     ParcelId = Config.RunParcelId++,
                     SenderId = Customer[i].CustomerId,
                     TargetId = Customer[i + 1].CustomerId,
-                    ParcelPriority = (Priorities) random.Next(0, 2),
-                    ParcelWeight = (WeightCategories) random.Next(0, 2),
+                    ParcelPriority = (Priorities) random.Next(1, 3),
+                    ParcelWeight = (WeightCategories) random.Next(1, 3),
                     DroneId = Drones[i].DroneID,
                     Created = DateTime.Now,
                     Assignment = DateTime.MinValue,

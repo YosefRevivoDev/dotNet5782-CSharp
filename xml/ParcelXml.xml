@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <ArrayOfParcel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Parcel>
-    <ParcelId>0</ParcelId>
+    <ParcelId>35</ParcelId>
     <SenderId>200786113</SenderId>
     <TargetId>203548976</TargetId>
     <ParcelWeight>medium</ParcelWeight>
@@ -239,5 +239,17 @@
     <Assignment>0001-01-01T00:00:00</Assignment>
     <Delivered>0001-01-01T00:00:00</Delivered>
     <PickedUp>0001-01-01T00:00:00</PickedUp>
+  </Parcel>
+  <Parcel>
+    <ParcelId>20</ParcelId>
+    <SenderId>311890522</SenderId>
+    <TargetId>200786113</TargetId>
+    <ParcelWeight>light</ParcelWeight>
+    <ParcelPriority>fast</ParcelPriority>
+    <DroneId>0</DroneId>
+    <Created>2022-02-05T20:15:45.9803926+02:00</Created>
+    <Assignment xsi:nil="true" />
+    <Delivered xsi:nil="true" />
+    <PickedUp xsi:nil="true" />
   </Parcel>
 </ArrayOfParcel>

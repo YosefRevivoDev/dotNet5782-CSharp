@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PLGui"
       
         mc:Ignorable="d"
-        Title="AddDroneWindow" Height="450" Width="800" WindowStyle="SingleBorderWindow" ResizeMode="NoResize">
+        Title="DroneWindow" Height="450" Width="800" WindowStyle="SingleBorderWindow" ResizeMode="NoResize">
     <Window.Resources>
 
         <Style x:Key="styleForButtons" TargetType="Button">
@@ -203,7 +203,6 @@
                 </Grid>
             </Grid>
         </Grid>
-
         <Grid x:Name ="GridAddDrone" Visibility="Hidden" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20"/>
@@ -268,12 +267,9 @@
                     </ListView.View>
                 </ListView>
             </Grid>
-            <Button x:Name="btnAddDrone" Grid.Row="10" Grid.Column="1"
+            <Button x:Name="btnAddDrone" Grid.Row="10" Grid.Column="1" VerticalAlignment="Bottom"
                 Grid.ColumnSpan="3"
                 Content="הוסף רחפן" Click="btnAddDrone_Click"/>
         </Grid>
     </Grid>
-    
-   
-
 </Window>

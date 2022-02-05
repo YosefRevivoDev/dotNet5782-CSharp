@@ -17,6 +17,9 @@ using BlApi;
 
 namespace PLGui
 {
+
+    public enum SlotsSTatus { הכל, פנוי, מלא };
+
     /// <summary>
     /// Interaction logic for BaseStationWindow.xaml
     /// </summary>
@@ -33,17 +36,15 @@ namespace PLGui
         /// <summary>
         /// Constructor for add baseStation
         /// </summary>
-        /// <param name = "getBl" ></ param >
-        /// < param name="BaseStationWindow"></param>
+        /// <param name = "getBL" ></ param >
+        /// < param name="_mainWindow"></param>
         public BaseStationWindow(IBL getBL, MainWindow _mainWindow)
         {
             InitializeComponent();
             GetBL = getBL;
             baseStation = new BaseStation();
-            baseStation = getBL.GetBaseStation(baseStation.ID);
+            //baseStation = getBL.GetBaseStation(baseStation.ID);
             DataContext = baseStation;
-            BaseStationGrid.VerticalAlignment = VerticalAlignment.Center;
-            BaseStationGrid.HorizontalAlignment = HorizontalAlignment.Center;
             mainWindow = _mainWindow;
             UpdateVisibility();
 
@@ -51,9 +52,9 @@ namespace PLGui
         /// <summary>
         /// Constructor for update drone
         /// </summary>
-        /// <param name="bL"></param>
+        /// <param name="getBL"></param>
         /// <param name="_baseStation"></param>
-        /// <param name="baseStation"></param>
+        /// <param name="_mainWindow"></param>
         /// <param name="_index"></param>
         public BaseStationWindow(IBL getBL, MainWindow _mainWindow, BaseStation _baseStation, int _index)
         {
@@ -70,52 +71,20 @@ namespace PLGui
 
         private void UpdateGridVisibility()
         {
-            
-            addStation.Visibility = Visibility.Hidden;
+
+            //addStation.Visibility = Visibility.Hidden;
         }
 
         private void UpdateVisibility() // hidden Button - upgrade and remove
         {
-            StationID.IsReadOnly = false;
-            RemoveStation.Visibility = Visibility.Hidden;
-            UpdateBaseStation.Visibility = Visibility.Hidden;
+            //StationID.IsReadOnly = false;
+            //UpdateBaseStation.Visibility = Visibility.Hidden;
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]$");
             e.Handled = regex.IsMatch(e.Text);
-        }
-
-        private void addStation_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBoxResult messageBoxResult = MessageBox.Show("האם אתה בטוח שאתה רוצה להוסיף את תחנה?"
-                , "הכנס תחנה", MessageBoxButton.YesNoCancel);
-
-            switch (messageBoxResult)
-            {
-                case MessageBoxResult.Yes:
-                    try
-                    {
-                        GetBL.AddBaseStation(baseStation);
-                        mainWindow.baseStationToLists.Add(GetBL.GetBasetationToLists()
-                            .First(i => i.ID == baseStation.ID));
-                        MessageBox.Show(baseStation.ToString(), "הרחפן נוסף בהצלחה");
-                        Close();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
-                    break;
-                case MessageBoxResult.Cancel:
-                    Close();
-                    break;
-                case MessageBoxResult.No:
-                    break;
-                default:
-                    break;
-            }
         }
 
         private void UpdateBaseStation_Click(object sender, RoutedEventArgs e)
@@ -181,5 +150,78 @@ namespace PLGui
                     break;
             }
         }
+
+        private void btnAddStation_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult messageBoxResult = MessageBox.Show("האם אתה בטוח שאתה רוצה להוסיף את תחנה?"
+              , "הכנס תחנה", MessageBoxButton.YesNoCancel);
+
+            switch (messageBoxResult)
+            {
+                case MessageBoxResult.Yes:
+                    try
+                    {
+                        GetBL.AddBaseStation(baseStation);
+                        mainWindow.baseStationToLists.Add(GetBL.GetBasetationToListsByPredicate()
+                            .First(i => i.ID == baseStation.ID));
+                        MessageBox.Show(baseStation.ToString(), "הרחפן נוסף בהצלחה");
+                        Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                    break;
+                case MessageBoxResult.Cancel:
+                    Close();
+                    break;
+                case MessageBoxResult.No:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void btnClose_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void SlutsSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void StationListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void onlyNumbersForID(object sender, TextCompositionEventArgs e)
+        {
+
+        }
+
+        private void onlytwoNumbers(object sender, TextCompositionEventArgs e)
+        {
+
+        }
+
+        private void lungetudePattren(object sender, TextCompositionEventArgs e)
+        {
+
+        }
+
+        private void lattitudePattren(object sender, TextCompositionEventArgs e)
+        {
+
+        }
+
+        private void Drones_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
+
+

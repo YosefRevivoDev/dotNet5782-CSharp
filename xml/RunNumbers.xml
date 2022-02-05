@@ -1,8 +1,5 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ArrayOfRunNumber xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  
   <RunNumberDrone>10</RunNumberDrone>
-  
-  <RunNumberParcel>19</RunNumberParcel>
-  
+  <RunNumberParcel>20</RunNumberParcel>
 </ArrayOfRunNumber>

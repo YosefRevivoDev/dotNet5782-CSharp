@@ -11,6 +11,10 @@ namespace BL
 {
     public partial class BL : IBL
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="newCustomer"></param>
         public void AddNewCustomer(Customer newCustomer)
         {
             try
@@ -31,6 +35,11 @@ namespace BL
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
         public IEnumerable<CustomerToList> GetCustomerToList(Predicate<CustomerToList> p = null)
         {
             try
@@ -117,12 +126,11 @@ namespace BL
                 }
                 return BLCustomer;
             }
-            catch (Exception)
+            catch (DO.CheckIfIdNotException Ex)
             {
-
-                throw;
+                throw new CheckIfIdNotException("ERORR", Ex);
             }
-            
+
         }
         public void UpdateCustomr(int customerId, string newNameCustomer, string newPhoneCustomer)
         {
