@@ -22,39 +22,58 @@ namespace DAL
         [MethodImpl(MethodImplOptions.Synchronized)]
         
         #region Add object
+
         public void AddBaseStation(BaseStation newBaseStation)
         {
             DataSource.Stations.Add(DataSource.Stations.FindIndex(i => i.StationID == newBaseStation.StationID) == -1 ?
                 newBaseStation : throw new BaseStationException($"This id{newBaseStation.StationID}already exist"));
         }
 
+        /// <summary>
+        /// AddDrone
+        /// </summary>
+        /// <param name="newDrone"></param>
         public void AddDrone(Drone newDrone)
         {
             DataSource.Drones.Add((DataSource.Drones.FindIndex(i => i.DroneID == newDrone.DroneID) == -1 ?
                 newDrone : throw new DroneException($"This id {newDrone.DroneID} already exist")));
         }
 
+        /// <summary>
+        /// AddCustomer
+        /// </summary>
+        /// <param name="newCustomer"></param>
         public void AddCustomer(Customer newCustomer)
         {
             DataSource.Customer.Add(DataSource.Customer.FindIndex(i => i.CustomerId == newCustomer.CustomerId) == -1 ?
             newCustomer : throw new CustumerException($"This id {newCustomer.CustomerId} already exist"));
         }
 
+        /// <summary>
+        /// AddParcel
+        /// </summary>
+        /// <param name="newParcel"></param>
         public void AddParcel(Parcel newParcel)
         {
             DataSource.Parcels.Add(DataSource.Parcels.FindIndex(i => i.ParcelId == newParcel.ParcelId) == -1 ?
             newParcel : throw new ParcelException($"This id {newParcel.ParcelId} already exist"));
         }
 
+        /// <summary>
+        /// AddDroneCharge
+        /// </summary>
+        /// <param name="droneCharge"></param>
         public void AddDroneCharge(DroneCharge droneCharge)
         {
             DataSource.DroneCharges.Add(droneCharge);
-            //    DataSource.DroneCharges.Add(DataSource.DroneCharges.FindIndex(i => i.StationID == droneCharge.StationID) == -1 ?
-            //    droneCharge : throw new DroneChargeException($"This id {droneCharge.StationID} already exist"));
-            //
         }
 
-            public void AddUser(User newUser)
+
+        /// <summary>
+        /// AddUser
+        /// </summary>
+        /// <param name="newUser"></param>
+        public void AddUser(User newUser)
         {
             DataSource.users.Add((DataSource.users.FindIndex(i => i.UserId == newUser.UserId) == -1 ?
                 newUser : throw new UserException($"This id {newUser.UserId} already exist")));
@@ -105,7 +124,7 @@ namespace DAL
 
         }
         #endregion
-
+        //Set Drone For Parcel by ID
         #region Operations of drone
         [MethodImpl(MethodImplOptions.Synchronized)]
         public void SetDroneForParcel(int parcelId, int droneId)
@@ -124,7 +143,10 @@ namespace DAL
                 throw new CheckIdException("There is no match between the package and the drone");
             }
         }
-
+        /// <summary>
+        /// check the time of parcel's pick up to collection parcel
+        /// </summary>
+        /// <param name="parcelId"></param>
         [MethodImpl(MethodImplOptions.Synchronized)]
         public void PackageCollectionByDrone(int parcelId)
         {
@@ -141,6 +163,11 @@ namespace DAL
             }
         }
 
+
+        /// <summary>
+        /// check the time of parcel's deliver up to deliver parcel
+        /// </summary>
+        /// <param name="parcelId"></param>
         [MethodImpl(MethodImplOptions.Synchronized)]
         public void DeliveredPackageToCustumer(int parcelId)
         {
@@ -157,6 +184,12 @@ namespace DAL
             }
         }
 
+
+        /// <summary>
+        /// ReleasingChargeDrone by remove from chargeSlot's list 
+        /// </summary>
+        /// <param name="droneId"></param>
+        /// <param name="baseStationId"></param>
         [MethodImpl(MethodImplOptions.Synchronized)]
         public void ReleasingChargeDrone(int droneId, int baseStationId)
         {
@@ -171,6 +204,11 @@ namespace DAL
             }
         }
 
+
+        /// <summary>
+        /// remove one AvailableChargeSlots from all AvailableChargeSlots 
+        /// </summary>
+        /// <param name="stationId"></param>
         [MethodImpl(MethodImplOptions.Synchronized)]
         public void MinusDroneCharge(int stationId)
         {
@@ -187,6 +225,10 @@ namespace DAL
             }
         }
 
+        /// <summary>
+        /// add one AvailableChargeSlots from all AvailableChargeSlots 
+        /// </summary>
+        /// <param name="stationId"></param>
         [MethodImpl(MethodImplOptions.Synchronized)]
         public void PlusDroneCharge(int stationId)
         {
@@ -203,6 +245,10 @@ namespace DAL
             }
         }
 
+     /// <summary>
+     /// initial power consuption for drone 
+     /// </summary>
+     /// <returns></returns>
         public double[] RequetPowerConsumption()
         {
             double[] arr = new double[]
@@ -218,7 +264,10 @@ namespace DAL
         #endregion
 
         #region Remove Object
-
+        /// <summary>
+        /// RemoveDrone by droneID
+        /// </summary>
+        /// <param name="droneID"></param>
         public void RemoveDrone(int droneID)
         {
             int index = DataSource.DroneCharges.FindIndex(i => i.DroneID == droneID);
@@ -230,6 +279,11 @@ namespace DAL
             DataSource.Drones.RemoveAt(index);
         }
 
+
+        /// <summary>
+        /// RemoveCustomer by customerId
+        /// </summary>
+        /// <param name="customerId"></param>
         public void RemoveCustomer(int customerId)
         {
             int index = DataSource.Customer.FindIndex(i => i.CustomerId == customerId);
@@ -241,6 +295,11 @@ namespace DAL
             DataSource.Customer.RemoveAt(index);
         }
 
+
+        /// <summary>
+        /// RemoveParcel by parcelId
+        /// </summary>
+        /// <param name="parcelId"></param>
         public void RemoveParcel(int parcelId)
         {
             int index = DataSource.Parcels.FindIndex(i => i.ParcelId == parcelId);
@@ -252,6 +311,11 @@ namespace DAL
             DataSource.Parcels.RemoveAt(index);
         }
 
+
+        /// <summary>
+        /// Remove BaseStation by stationID
+        /// </summary>
+        /// <param name="stationID"></param>
         public void RemoveBaseStation(int stationID)
         {
             int index = DataSource.Stations.FindIndex(i => i.StationID == stationID);
@@ -262,6 +326,11 @@ namespace DAL
             DataSource.Stations.RemoveAt(index);
         }
 
+
+        /// <summary>
+        /// Remove User by UserID
+        /// </summary>
+        /// <param name="UserID"></param>
         public void RemoveUser (int UserID)
         {
             int index = DataSource.users.FindIndex(i => i.UserId == UserID);
@@ -275,7 +344,12 @@ namespace DAL
 
         #endregion
 
+
         #region Update object
+        /// <summary>
+        /// Update BaseStation by baseStation
+        /// </summary>
+        /// <param name="baseStation"></param>
         public void UpdateBaseStation(BaseStation baseStation)
         {
             int index = DataSource.Stations.FindIndex(i => i.StationID == baseStation.StationID);
@@ -286,6 +360,11 @@ namespace DAL
             DataSource.Stations[index] = baseStation;
         }
 
+
+        /// <summary>
+        /// Update Drone by drone obj
+        /// </summary>
+        /// <param name="drone"></param>
         public void UpdateDrone(Drone drone)
         {
             int index = DataSource.Drones.FindIndex(i => i.DroneID == drone.DroneID);
@@ -296,6 +375,11 @@ namespace DAL
             DataSource.Drones[index] = drone;
         }
 
+
+        /// <summary>
+        /// Update Customer by customer obj 
+        /// </summary>
+        /// <param name="customer"></param>
         public void UpdateCustomer(Customer customer)
         {
             int index = DataSource.Customer.FindIndex(i => i.CustomerId == customer.CustomerId);
@@ -306,6 +390,11 @@ namespace DAL
             DataSource.Customer[index] = customer;
         }
 
+
+        /// <summary>
+        /// Update Parcel by parcel obj 
+        /// </summary>
+        /// <param name="parcel"></param>
         public void UpdateParcel(Parcel parcel)
         {
             int index = DataSource.Parcels.FindIndex(i => i.ParcelId == parcel.ParcelId);
@@ -316,6 +405,11 @@ namespace DAL
             DataSource.Parcels[index] = parcel;
         }
 
+
+        /// <summary>
+        /// Update DroneCharge by droneCharge obj 
+        /// </summary>
+        /// <param name="droneCharge"></param>
         public void UpdateDroneCharge(DroneCharge droneCharge)
         {
             int index = DataSource.DroneCharges.FindIndex(i => i.DroneID == droneCharge.DroneID);
@@ -326,6 +420,10 @@ namespace DAL
             DataSource.DroneCharges[index] = droneCharge;
         }
 
+        /// <summary>
+        /// Update User by user obj 
+        /// </summary>
+        /// <param name="user"></param>
         public void UpdateUser(User user)
         {
             int index = DataSource.users.FindIndex(i => i.UserId == user.UserId);
@@ -337,6 +435,12 @@ namespace DAL
         }
         #endregion
 
+        /// <summary>
+        /// return list by prdicate to display
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        /// 
         #region Display lists
         public IEnumerable<Drone> GetDronesByPredicate(Predicate<Drone> predicate = null)
         {
@@ -359,9 +463,6 @@ namespace DAL
             return DataSource.DroneCharges.FindAll(i => predicate == null ? true : predicate(i));
         }
         #endregion
-
-        // Returns an array of power consumption per mile
-
     }
 }
 

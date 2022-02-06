@@ -67,6 +67,11 @@ namespace BL
 
         }
 
+        /// <summary>
+        /// GetUser by name 
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
         public User GetUser(string userName)
         {
             try

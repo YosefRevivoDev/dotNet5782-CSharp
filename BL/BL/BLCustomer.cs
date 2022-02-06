@@ -12,7 +12,7 @@ namespace BL
     public partial class BL : IBL
     {
         /// <summary>
-        /// 
+        /// Add new customer by CustomerId, Name, Phone, location
         /// </summary>
         /// <param name="newCustomer"></param>
         public void AddNewCustomer(Customer newCustomer)
@@ -36,7 +36,7 @@ namespace BL
         }
 
         /// <summary>
-        /// 
+        /// Add customer to customer's list 
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
@@ -57,8 +57,13 @@ namespace BL
             {
                 throw new CheckIfIdNotException("ERORR" , ex);
             }
-
         }
+
+        /// <summary>
+        /// Get customer and intial his params 
+        /// </summary>
+        /// <param name="customerID"></param>
+        /// <returns></returns>
         public CustomerToList GetCustomerToList(int customerID)
         {
             try
@@ -90,6 +95,12 @@ namespace BL
             }
 
         }
+
+        /// <summary>
+        /// get customer by ID 
+        /// </summary>
+        /// <param name="customrID"></param>
+        /// <returns></returns>
         public Customer GetCustomer(int customrID)
         {
             try
@@ -132,6 +143,13 @@ namespace BL
             }
 
         }
+
+        /// <summary>
+        /// UpdateCustomr name & phone
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <param name="newNameCustomer"></param>
+        /// <param name="newPhoneCustomer"></param>
         public void UpdateCustomr(int customerId, string newNameCustomer, string newPhoneCustomer)
         {
             try
@@ -139,7 +157,6 @@ namespace BL
                 DO.Customer customer = dal.GetCustomer(customerId);
                 customer.Name = newNameCustomer;
                 customer.Phone = newPhoneCustomer;
-
                 dal.UpdateCustomer(customer);
             }
             catch (DO.CustumerException)
@@ -148,11 +165,21 @@ namespace BL
                 throw new Exception(" ");
             }
         }
+
+        /// <summary>
+        /// RemoveCustomerBL
+        /// </summary>
+        /// <param name="id"></param>
         public void RemoveCustomerBL(int id)
         {
-            //IDAL.DO.BaseStation baseStationRemove = dal.GetBaseStation(id);
             dal.RemoveCustomer(id);
         }
+
+        /// <summary>
+        /// get customer from customerInParcel's list
+        /// </summary>
+        /// <param name="customerID"></param>
+        /// <returns></returns>
         public CustomerInParcel GetCustomerInParcel(int customerID)
         {
             try

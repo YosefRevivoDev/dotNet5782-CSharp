@@ -12,7 +12,7 @@ namespace BL
     public partial class BL : IBL
     {
         /// <summary>
-        /// 
+        /// AddBaseStation by StationID, Name, AvailableChargeSlots, location
         /// </summary>
         /// <param name="newBaseStation"></param>
         public void AddBaseStation(BaseStation newBaseStation)
@@ -31,13 +31,10 @@ namespace BL
             }
             catch { }
         }
+
+
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="stationID"></param>
-        /// <returns></returns>
-        /// <summary>
-        /// 
+        /// GetBaseStation by ID
         /// </summary>
         /// <param name="id"></param>
         public BaseStation GetBaseStation(int stationID)
@@ -65,11 +62,23 @@ namespace BL
             }
             return BLbaseStation;
         }
+
+        /// <summary>
+        /// RemoveBaseStation from BL & Dal layer
+        /// </summary>
+        /// <param name="id"></param>
         public void RemoveBaseStationBL(int id)
         {
             //IDAL.DO.BaseStation baseStationRemove = dal.GetBaseStation(id);
             dal.RemoveBaseStation(id);
         }
+
+        /// <summary>
+        /// Update BaseStation by stationId NameStation & sum of chargestation
+        /// </summary>
+        /// <param name="stationId"></param>
+        /// <param name="newNameStation"></param>
+        /// <param name="sumOfChargestation"></param>
         public void UpdateBaseStation(int stationId, string newNameStation, int sumOfChargestation)
         {
             try
@@ -91,6 +100,12 @@ namespace BL
                 throw new Exception(" ");
             }
         }
+
+        /// <summary>
+        /// Get BasetationToLists By Predicate
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
         public IEnumerable<BaseStationToList> GetBasetationToListsByPredicate(Predicate<BaseStationToList> p = null)
         {
             try
@@ -110,6 +125,13 @@ namespace BL
             }
         }
 
+
+        /// <summary>
+        /// get nearest between customer to stations
+        /// </summary>
+        /// <param name="customerLocation"></param>
+        /// <param name="stations"></param>
+        /// <returns></returns>
         public Location LocationOfTheNearestStation(Location customerLocation, List<DO.BaseStation> stations)
         {
             DO.BaseStation nearStation = stations[0];
@@ -128,6 +150,12 @@ namespace BL
             Location location = new() { Longtitude = nearStation.Longtitude, Latitude = nearStation.Latitude };
             return location;
         }
+
+        /// <summary>
+        /// help func that get BaseStationToList by stationID
+        /// </summary>
+        /// <param name="stationID"></param>
+        /// <returns></returns>
         public BaseStationToList GetBaseStationToList(int stationID)
         {
             try
@@ -139,6 +167,8 @@ namespace BL
                     Name = station.Name,
                     AvailableChargingStations = station.AvailableChargingStations
                 };
+
+                //inial NotAvailableChargingStations list by prdicate
                 if (station.droneCharges == null)
                 {
                     baseStationToList.NotAvailableChargingStations = station.droneCharges.Count;
@@ -155,6 +185,13 @@ namespace BL
             }
 
         }
+
+        /// <summary>
+        /// help func that get nearest between customer to stations
+        /// </summary>
+        /// <param name="customerLocation"></param>
+        /// <param name="stations"></param>
+        /// <returns></returns>
         private DO.BaseStation TheNearestOfStation(Location customerLocation, List<DO.BaseStation> stations)
         {
             DO.BaseStation nearStation = stations[0];

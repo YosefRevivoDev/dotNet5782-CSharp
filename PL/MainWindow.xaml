@@ -53,7 +53,7 @@
             </Button>
         </DockPanel>
 
-        <Grid x:Name="CompanyManagement" Visibility="Hidden" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
+        <Grid x:Name="CompanyManagement" Visibility="Visible" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
             <TabControl
                   Style="{StaticResource MaterialDesignNavigatilRailTabControl}" materialDesign:ColorZoneAssist.Mode="Standard"
                             materialDesign:ShadowAssist.ShadowDepth="Depth0">
