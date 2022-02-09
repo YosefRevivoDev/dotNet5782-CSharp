@@ -68,7 +68,7 @@ namespace DAL
             }
         }
 
-        public static List<T> LoadListToXMLSerializer<T>(string filePath)
+        public static List<T> LoadListFromXMLSerializer<T>(string filePath)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new XMLFileLoadCreateException(filePath, $"fail to load xml file: {filePath}", ex);
+                throw; //new XMLFileLoadCreateException(filePath, $"fail to load xml file: {filePath}", ex);
             }
         }
     }

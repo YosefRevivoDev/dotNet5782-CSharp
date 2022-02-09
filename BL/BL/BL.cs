@@ -73,12 +73,8 @@ namespace BL
             {
                 DO.User DalUser = dal.GetUser(userName);
                 User BlUser = new User();
-                BlUser.FirstName = DalUser.FirstName;
-                BlUser.LastName = DalUser.LastName;
                 BlUser.Password = DalUser.Password;
                 BlUser.UserId = DalUser.UserId;
-                BlUser.UserName = DalUser.UserName;
-
                 return BlUser;
             }
             catch (Exception)

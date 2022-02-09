@@ -49,178 +49,121 @@
             </Grid>
         </GroupBox>
     </Grid>-->
-    
-        <Grid>
-                <Grid.RowDefinitions>
-                <RowDefinition Height="5*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Button x:Name="btnAddStation" Content="אישור" FontSize="16" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" Click="btnAddStation_Click"/>
-            <Button x:Name="btnClose" Content="סגור" FontSize="16" Grid.Row="1" VerticalAlignment="Bottom" FontWeight="Bold" Click="btnClose_Click"/>
 
-            <Border Name="List" Visibility="Hidden" Grid.Row="0">
-            <Grid Name="BaseStationGrid">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50*"/>
-                        <RowDefinition Height="400*"/>
-                    </Grid.RowDefinitions>
-                    <Grid Name="UpGrid" HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Button x:Name="btnAddStation" Content="אישור" FontSize="16" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" Click="UpdateBaseStation_Click"/>
+        <Button x:Name="btnClose" Content="סגור" FontSize="16" Grid.Row="1" VerticalAlignment="Bottom" FontWeight="Bold" Click="btnClose_Click"/>
 
-                        <Label Content="מיון עמדות פנויות" Grid.Column="1" HorizontalAlignment="Center"  />
-                        <ComboBox Name="SlutsSelector"  FontWeight="Bold"  Grid.Column="0" SelectionChanged="SlutsSelector_SelectionChanged"   />
-                    </Grid>
-                    <ListView x:Name="StationListView" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{x:Null}" SelectionChanged="StationListView_SelectionChanged">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="מזהה"  Width="130" DisplayMemberBinding="{Binding ID}"   />
-                                <GridViewColumn Header="שם תחנה" Width="180" DisplayMemberBinding="{Binding Name}"/>
-                                <GridViewColumn Header="עמדות פנויות" Width="145" DisplayMemberBinding="{Binding AvailableChargingStations}"/>
-                            <GridViewColumn Header="עמדות תפוסות" Width="145" DisplayMemberBinding="{Binding NotAvailableChargingStations}"/>
-                            </GridView>
-                        </ListView.View>
-                        <ListView.GroupStyle>
-                            <GroupStyle>
-                                <GroupStyle.HeaderTemplate>
-                                    <DataTemplate>
-                                        <TextBlock  FontWeight="Bold" FontSize="15"  Text="{Binding Name}" Foreground="Black"/>
-                                    </DataTemplate>
-                                </GroupStyle.HeaderTemplate>
-                            </GroupStyle>
-                        </ListView.GroupStyle>
-                    </ListView>
-                </Grid>
-
-            </Border>
         <Border Name="GridAddStation" Grid.Row="0" Visibility="Hidden">
             <Grid x:Name="AddStation" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.2*"/>
+                    <RowDefinition Height="*"/>
+
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Label  Content="הכנס פרטי תחנה "  HorizontalAlignment="Center" FontSize="20" FontWeight="Bold" Background="{x:Null}" />
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="0.2*"/>
                         <RowDefinition Height="*"/>
-
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0">
-                        <Label  Content="הכנס פרטי תחנה "  HorizontalAlignment="Center" FontSize="20" FontWeight="Bold" Background="{x:Null}" />
-                    </Grid>
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Label Grid.Column="2" Grid.Row="0" Content=":מספר מזהה" FontWeight="Bold" Background="{x:Null}" />
-                        <Label Grid.Column="2" Grid.Row="1" Content=":שם תחנה" FontWeight="Bold" Background="{x:Null}" />
-                        <Label Grid.Column="2" Grid.Row="2" Content=":עמדות פנויות" FontWeight="Bold"  Background="{x:Null}"/>
-                        <Label Grid.Column="2" Grid.Row="3" Content="מיקום התחנה" FontWeight="Bold"  Background="{x:Null}"/>
-                        <Label Grid.Column="2" Grid.Row="4" Content=":קו אורך" FontWeight="Bold"  Background="{x:Null}"/>
-                        <Label Grid.Column="2" Grid.Row="5" Content=":קו רוחב" FontWeight="Bold"  Background="{x:Null}"/>
-                        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding ID}" Background="{x:Null}" PreviewTextInput="onlyNumbersForID" />
-                        <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Name}" Background="{x:Null}"/>
-                        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding AvailableChargingStations}" Background="{x:Null}" PreviewTextInput="onlytwoNumbers"/>
-                        <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding location.Longtitude}" Background="{x:Null}" PreviewTextInput="lungetudePattren"/>
-                        <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding location.Latitude}" Background="{x:Null}" PreviewTextInput="lattitudePattren"/>
 
-                    </Grid>
+                    <Label Grid.Column="2" Grid.Row="0" Content=":מספר מזהה" FontWeight="Bold" Background="{x:Null}" />
+                    <Label Grid.Column="2" Grid.Row="1" Content=":שם תחנה" FontWeight="Bold" Background="{x:Null}" />
+                    <Label Grid.Column="2" Grid.Row="2" Content=":עמדות פנויות" FontWeight="Bold"  Background="{x:Null}"/>
+                    <Label Grid.Column="2" Grid.Row="3" Content="מיקום התחנה" FontWeight="Bold"  Background="{x:Null}"/>
+                    <Label Grid.Column="2" Grid.Row="4" Content=":קו אורך" FontWeight="Bold"  Background="{x:Null}"/>
+                    <Label Grid.Column="2" Grid.Row="5" Content=":קו רוחב" FontWeight="Bold"  Background="{x:Null}"/>
+                    <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding ID}" Background="{x:Null}" PreviewTextInput="onlyNumbersForID" />
+                    <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Name}" Background="{x:Null}"/>
+                    <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding AvailableChargingStations}" Background="{x:Null}" PreviewTextInput="onlytwoNumbers"/>
+                    <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding location.Longtitude}" Background="{x:Null}" PreviewTextInput="lungetudePattren"/>
+                    <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding location.Latitude}" Background="{x:Null}" PreviewTextInput="lattitudePattren"/>
 
                 </Grid>
-            </Border>
 
-            <Border Name="Updating" Grid.Row="0" Visibility="Visible">
+            </Grid>
+        </Border>
 
-                <Grid  Margin="0,2,0,-2" Name="MainGrid1">
-                    <Border  Name="BorderEnterNumber" BorderThickness="2" BorderBrush="Yellow" Background="{x:Null}"  CornerRadius="5" Padding="20" Visibility="Hidden">
-                        <Grid>
+        <Border Name="Updating" Grid.Row="0" Visibility="Visible">
+
+            <Grid  Margin="0,2,0,-2" Name="MainGrid1">
+                
+                <Grid x:Name="GridUpdateStation" Visibility="Visible">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions >
+                    <Border BorderThickness="2"  Grid.Column="1" Grid.Row="0" BorderBrush="Yellow"  CornerRadius="5" Padding="20">
+
+                        <Grid Grid.Column="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions >
-                            <Grid Grid.Column="1">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <Label Grid.Row="0" Content="בחירת תחנה לעדכון" VerticalContentAlignment="Center"  HorizontalContentAlignment="Center" FontWeight="Bold" FontSize="16" />
-                                <Label Grid.Row="2" Content="הכנס מספר" VerticalContentAlignment="Center"  HorizontalContentAlignment="Center" />
-                            <ComboBox x:Name="comboID" Grid.Row="3" SelectedItem="{Binding ID}" />
-                            </Grid>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+
+                            </Grid.RowDefinitions>
+
+                            <Label Grid.Column="1" Grid.Row="0" Content="פרטי" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" />
+                            <Label Grid.Column="0" Grid.Row="0" Content=":התחנה" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontWeight="Bold" />
+                            <Label Grid.Column="1" Grid.Row="1" Content=":מספר מזהה"  />
+                            <Label Grid.Column="1" Grid.Row="2" Content=":שם התחנה" />
+                            <Label Grid.Column="1" Grid.Row="3" Content=":חריצי טעינה  פנויים" FontSize="13" />
+                            <Label Grid.Column="1" Grid.Row="4" Content=":מיקום"  />
+
+                            <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding ID}"  />
+                            <TextBox Grid.Column="0" Grid.Row="2" Text="{Binding Name}" />
+                            <TextBox Grid.Column="0" Grid.Row="3" Text="{Binding AvailableChargingStations}" Background="{x:Null}"/>
+                            <TextBlock Grid.Column="0" Grid.Row="6" Text="{Binding location}" />
                         </Grid>
                     </Border>
+                    <Grid Grid.Column="0">
 
-                <Grid x:Name="GridUpdateStation" Visibility="Visible">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions >
-                        <Border BorderThickness="2"  Grid.Column="1" Grid.Row="0" BorderBrush="Yellow"  CornerRadius="5" Padding="20">
+                        <Border BorderThickness="2" Grid.Row="0" BorderBrush="Yellow"  CornerRadius="5" Padding="20">
 
-                            <Grid Grid.Column="1">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
+                            <Grid  x:Name="DroneInStation" Grid.Row="0" Visibility="Visible">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-
+                                    <RowDefinition Height="6*"/>
                                 </Grid.RowDefinitions>
 
-                                <Label Grid.Column="1" Grid.Row="0" Content="פרטי" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" />
-                                <Label Grid.Column="0" Grid.Row="0" Content=":התחנה" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontWeight="Bold" />
-                                <Label Grid.Column="1" Grid.Row="1" Content=":מספר מזהה"  />
-                                <Label Grid.Column="1" Grid.Row="2" Content=":שם התחנה" />
-                                <Label Grid.Column="1" Grid.Row="3" Content=":חריצי טעינה  פנויים" FontSize="13" />
-                                <Label Grid.Column="1" Grid.Row="4" Content=":מיקום"  />
-
-                                <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding ID}"  />
-                                <TextBox Grid.Column="0" Grid.Row="2" Text="{Binding Name}" />
-                                <TextBox Grid.Column="0" Grid.Row="3" Text="{Binding AvailableChargingStations}"      Background="{x:Null}"/>
-                                <TextBlock Grid.Column="0" Grid.Row="6" Text="{Binding location}" />
+                                <Label  Grid.Row="0" Content="פרטי הרחפנים הנטענים בתחנה"  HorizontalContentAlignment="Center" FontSize="18"  FontWeight="Bold" />
+                                <ListView x:Name="Drones" HorizontalAlignment="Right" Background="{x:Null}" 
+                                          DisplayMemberPath="{Binding droneCharges}" Grid.ColumnSpan="2" Margin="0,43,0,0" Grid.RowSpan="2" >
+                                    <ListView.View>
+                                        <GridView >
+                                            <GridViewColumn Header="מספר מזהה" DisplayMemberBinding="{Binding DroneID}"/>
+                                            <GridViewColumn Header="מצב סוללה " DisplayMemberBinding="{Binding BattaryStatus, StringFormat=0.00}"/>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
                             </Grid>
                         </Border>
-                        <Grid Grid.Column="0">
-
-                            <Border BorderThickness="2" Grid.Row="0" BorderBrush="Yellow"  CornerRadius="5" Padding="20">
-
-                                <Grid  x:Name="DroneInStation" Grid.Row="0" Visibility="Visible">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="6*"/>
-                                    </Grid.RowDefinitions>
-
-                                    <Label  Grid.Row="0" Content="פרטי הרחפנים הנטענים בתחנה"  HorizontalContentAlignment="Center" FontSize="18"  FontWeight="Bold" />
-                                    <ListView x:Name="Drones" HorizontalAlignment="Right" Background="{x:Null}" SelectionChanged="Drones_SelectionChanged" Grid.ColumnSpan="2" Margin="0,43,0,0" Grid.RowSpan="2" >
-                                        <ListView.View>
-                                            <GridView >
-                                                <GridViewColumn Header="מספר מזהה" Width="150" DisplayMemberBinding="{Binding ID}"/>
-                                            <GridViewColumn Header="מצב סוללה " Width="150" DisplayMemberBinding="{Binding BattaryStatus, StringFormat=0.00}"/>
-                                            </GridView>
-                                        </ListView.View>
-                                    </ListView>
-                                </Grid>
-                            </Border>
-                        </Grid>
                     </Grid>
                 </Grid>
-            </Border>
-        </Grid>
+            </Grid>
+        </Border>
+    </Grid>
 </Window>

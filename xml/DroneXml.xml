@@ -8,7 +8,7 @@
   <Drone>
     <DroneID>2</DroneID>
     <DroneModel>Alpha2</DroneModel>
-    <DroneWeight>medium</DroneWeight>
+    <DroneWeight>heavy</DroneWeight>
   </Drone>
   <Drone>
     <DroneID>3</DroneID>
@@ -18,11 +18,11 @@
   <Drone>
     <DroneID>4</DroneID>
     <DroneModel>Alpha4</DroneModel>
-    <DroneWeight>medium</DroneWeight>
+    <DroneWeight>heavy</DroneWeight>
   </Drone>
   <Drone>
     <DroneID>5</DroneID>
-    <DroneModel>Alpha5</DroneModel>
+    <DroneModel>Revital</DroneModel>
     <DroneWeight>medium</DroneWeight>
   </Drone>
   <Drone>
@@ -49,5 +49,10 @@
     <DroneID>10</DroneID>
     <DroneModel>Beta5</DroneModel>
     <DroneWeight>light</DroneWeight>
+  </Drone>
+  <Drone>
+    <DroneID>14</DroneID>
+    <DroneModel>David</DroneModel>
+    <DroneWeight>heavy</DroneWeight>
   </Drone>
 </ArrayOfDrone>

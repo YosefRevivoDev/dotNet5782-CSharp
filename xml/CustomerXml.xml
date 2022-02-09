@@ -2,7 +2,7 @@
 <ArrayOfCustomer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Customer>
     <CustomerId>200532406</CustomerId>
-    <Name>יוסף רביבו</Name>
+    <Name>רביבו</Name>
     <Phone>057-1117665</Phone>
     <Longtitude>32.0932</Longtitude>
     <Latitude>34.8306</Latitude>
@@ -32,7 +32,7 @@
     <CustomerId>200786113</CustomerId>
     <Name>שוקי אלבירט</Name>
     <Phone>058-9432005</Phone>
-    <Longtitude>32.0940</Longtitude>
+    <Longtitude>32.094</Longtitude>
     <Latitude>34.8362</Latitude>
   </Customer>
   <Customer>

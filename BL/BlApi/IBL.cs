@@ -18,6 +18,7 @@ namespace BlApi
         bool ReleaseDroneFromCharge(int droneId);
         bool SendDroneToCharge(int droneId);
         bool CollectParcelByDrone(int droneID);
+        bool DeliveryParcelToCustomer(int droneID);
         bool AssignmentOfPackageToDrone(int droneID);
         public ParcelAtCustomer GetParcelAtCustomer(int parcelID, int customrID);
         public CustomerInParcel GetCustomerInParcel(int customerID);
@@ -38,7 +39,7 @@ namespace BlApi
         void AddBaseStation(BaseStation newBaseStation);
         void AddNewCustomer(Customer newCustomer);
         void AddNewDrone(Drone newDrone, int NumberOfStation);
-        void AddNewParcel(Parcel newParcel, int SenderId, int TargetId);
+        int AddNewParcel(Parcel newParcel, int SenderId, int TargetId);
         #endregion
         
         #region UpdateObject

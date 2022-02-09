@@ -12,7 +12,7 @@
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" WindowState="Normal">
 
     <Window.Background>
         <ImageBrush ImageSource="/PacketFly.jpg"/>
@@ -25,35 +25,32 @@
 
 
     <Grid Background="Transparent">
-
-        <Grid.RowDefinitions>
+        <Grid x:Name="LoginManagement">
+            <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1.5*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-        <DockPanel x:Name="LoginButtons" Grid.Column="1" Visibility="Visible">
-            <Button x:Name="LoginApp" Height="50" Width="100" 
-                Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                   materialDesign:ButtonAssist.CornerRadius="25 25 25 25" 
-                       IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" Click="LoginApp_Click">
-                <TextBlock
-                   Text="כניסה" />
+            <Button x:Name="LoginApp" Height="50" Width="120" Grid.Column="1" Grid.Row="0" Click="LoginApp_Click">
+                <TextBlock Text="כניסת מנהל" />
             </Button>
-            <Button x:Name="RegisterApp" Height="50" Width="100"
-                Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                   materialDesign:ButtonAssist.CornerRadius="25 25 25 25" 
-                       IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}">
-                <TextBlock
-                   Text="הרשמה" />
-            </Button>
-        </DockPanel>
 
-        <Grid x:Name="CompanyManagement" Visibility="Hidden" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
+            <Button x:Name="LoginCustomer" Height="50" Width="120" Grid.Column="1" Grid.Row="1" Click="LoginCustomer_Click">
+                <TextBlock Text="כניסת לקוח" />
+            </Button>
+
+            <Button x:Name="RegisterApp" Height="50" Width="120" Grid.Column="1" Grid.Row="2" Click="RegisterApp_Click">
+                <TextBlock  Text="הרשמה" />
+            </Button>
+        </Grid>
+        <Grid x:Name="CompanyManagement" Visibility="Visible" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
             <TabControl
                   Style="{StaticResource MaterialDesignNavigatilRailTabControl}" materialDesign:ColorZoneAssist.Mode="Standard"
                             materialDesign:ShadowAssist.ShadowDepth="Depth0">
@@ -65,8 +62,8 @@
                             <TextBlock  Text="Home" HorizontalAlignment="Center" />
                         </StackPanel>
                     </TabItem.Header>
-                    <StackPanel x:Name="GeneralInfo" HorizontalAlignment="Center" VerticalAlignment="Top" Width="750" Height="60"
-                                Background="Yellow" Margin="0,0,2.5,0" >
+                    <StackPanel x:Name="GeneralInfo" HorizontalAlignment="Center" VerticalAlignment="Top" Width="720" Height="60"
+                                Background="Yellow">
                     </StackPanel>
                 </TabItem>
 
@@ -91,32 +88,40 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBox x:Name="txtLable" Text="TBD" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Background="Transparent" />
-                            <ComboBox x:Name="cmbStatusSelector" Grid.Column="1" Text="Choose status: " IsEditable="True" IsReadOnly="True" 
-                                 HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="Choose status: " SelectionChanged="cmbStatusSelector_SelectionChanged"/>
-                            <ComboBox x:Name="cmbWeightSelector" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="2"
-                                 IsEditable="True" IsReadOnly="True" Height="auto" Width="auto" ToolTip="Choose Weight"
-                                 Text="Choose Weight: " SelectionChanged="cmbWeightSelector_SelectionChanged" Grid.ColumnSpan="4" Margin="48,0,0,0"/>
+                            
+                            <ComboBox x:Name="cmbStatusSelector" Grid.Column="1" Text="בחירת סטטוס: " IsEditable="True" IsReadOnly="True" HorizontalAlignment="Center" 
+                                      VerticalAlignment="Center" ToolTip="Choose status: " SelectionChanged="cmbStatusSelector_SelectionChanged"/>
+
+                            <ComboBox x:Name="cmbWeightSelector" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2" IsEditable="True"
+                                      IsReadOnly="True" ToolTip="Choose Weight" Text="בחירת משקל: " SelectionChanged="cmbWeightSelector_SelectionChanged"/>
+
                             <Button x:Name="btnAddDrone" Content="הוסף רחפן" Click="btnAddDrone_Click" Grid.Column="3"
-                                     HorizontalAlignment="Left" VerticalAlignment="Top" Margin="28,8,0,0"/>
+                                     HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            
                         </Grid>
                         <ListView x:Name="lstDroneListView" Grid.Row="1" 
                               MouseDoubleClick="lstDroneListView_MouseDoubleClick" ItemsSource="{Binding Path = dronesToLists}">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="מזהה" DisplayMemberBinding="{Binding DroneID}"/>
-                                    <GridViewColumn Header="דגם" Width="150" DisplayMemberBinding="{Binding DroneModel}"/>
-                                    <GridViewColumn Header="סוללה" Width="150" DisplayMemberBinding="{Binding BattaryStatus, StringFormat=0.00}"/>
+                                    <GridViewColumn Header="דגם" Width="100" DisplayMemberBinding="{Binding DroneModel}"/>
+                                    <GridViewColumn Header="סוללה" Width="100" DisplayMemberBinding="{Binding BattaryStatus, StringFormat=0.00}"/>
                                     <GridViewColumn Header="מיקום" Width="150" DisplayMemberBinding="{Binding CurrentLocation}"/>
-                                    <GridViewColumn Header="משקל" Width="150" DisplayMemberBinding="{Binding DroneWeight}"/>
+                                    <GridViewColumn Header="משקל" Width="120" DisplayMemberBinding="{Binding DroneWeight}"/>
                                     <GridViewColumn Header="סטטוס" Width="150" DisplayMemberBinding="{Binding Status}"/>
                                 </GridView>
                             </ListView.View>
+                            <ListView.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.HeaderTemplate>
+                                        <DataTemplate>
+                                            <TextBlock  FontWeight="Bold" FontSize="15"  Text="{Binding Name}" Foreground="Black"/>
+                                        </DataTemplate>
+                                    </GroupStyle.HeaderTemplate>
+                                </GroupStyle>
+                            </ListView.GroupStyle>
                         </ListView>
                     </Grid>
-                    <!-- <Button x:Name="btnListDrone" Content="הצג רחפנים" Click="btnListDrone_Click" HorizontalAlignment="Center"
-                              materialDesign:ButtonAssist.CornerRadius="15" </Button> -->
-
                 </TabItem>
                 <!--#endregion-->
 
@@ -141,13 +146,15 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <ComboBox x:Name="SenderTarget" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="16" Margin="0,0,0,5"
-                                  IsEditable="True" IsReadOnly="True"/>
-                            <ComboBox Name="cmbParcelStatus" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="16" Margin="0,0,0,5"
-                                      IsEditable="True" IsReadOnly="True" SelectionChanged="cmbParcelStatus_SelectionChanged" />
-                            <DatePicker Grid.Column="2" Width="100" materialDesign:HintAssist.Hint="Pick Date"
-                                                 materialDesign:TextFieldAssist.HasClearButton="True" Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+                            </Grid.ColumnDefinitions >
+
+
+                            <ComboBox Name="cmbStatusSelectorParcel" Text="בחר סטטוס" IsEditable="True" IsReadOnly="True"
+                                      FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.Column="0" SelectionChanged="cmbStatusSelectorParcel_SelectionChanged"/>
+                            <ComboBox Name="cmbPrioritiSelectorParcel" Text="בחר עדיפות"  IsEditable="True" IsReadOnly="True"
+                                       FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" SelectionChanged="cmbPrioritiSelectorParcel_SelectionChanged"/>
+                            <ComboBox Name="cmbWeightSelectorParcel" Text="בחר משקל" IsEditable="True" IsReadOnly="True"
+                                      FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2" SelectionChanged="cmbWeightSelectorParcel_SelectionChanged"/>
                             <Button x:Name="btnAddParcel" Content="הוסף חבילה" Grid.Column="3" Click="btnAddParcel_Click" />
                         </Grid>
                         <ListView x:Name="lstParcelListView" Grid.Row="1" MouseDoubleClick="lstParcelListView_MouseDoubleClick" 
@@ -162,13 +169,22 @@
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="מזהה" Width="100" DisplayMemberBinding="{Binding Id}"/>
-                                    <GridViewColumn Header="שולח" Width="100" DisplayMemberBinding="{Binding SenderId}"/>
-                                    <GridViewColumn Header="מקבל" Width="100" DisplayMemberBinding="{Binding TargetId}"/>
+                                    <GridViewColumn Header="שולח" Width="100" DisplayMemberBinding="{Binding SenderName}"/>
+                                    <GridViewColumn Header="מקבל" Width="100" DisplayMemberBinding="{Binding TargetName}"/>
                                     <GridViewColumn Header="משקל חבילה" Width="150" DisplayMemberBinding="{Binding Weight}"/>
                                     <GridViewColumn Header="עדיפות" Width="110" DisplayMemberBinding="{Binding Priority}"/>
                                     <GridViewColumn Header="סטטוס" Width="120" DisplayMemberBinding="{Binding parcelStatus}"/>
                                 </GridView>
                             </ListView.View>
+                            <ListView.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.HeaderTemplate>
+                                        <DataTemplate>
+                                            <TextBlock HorizontalAlignment="Center" FontWeight="Bold" FontSize="15" TextDecorations="Underline" Text="{Binding Name}" Foreground="Black"/>
+                                        </DataTemplate>
+                                    </GroupStyle.HeaderTemplate>
+                                </GroupStyle>
+                            </ListView.GroupStyle>
                         </ListView>
                     </Grid>
 
@@ -249,6 +265,8 @@
                     </Grid>
                 </TabItem>
                 <!--#endregion-->
+
+
             </TabControl>
         </Grid>
     </Grid>

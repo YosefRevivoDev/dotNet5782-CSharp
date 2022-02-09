@@ -53,7 +53,7 @@
             <RowDefinition Height="5*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Button x:Name="btnAddCustomer" Content="אישור" FontSize="20" Height="45" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" Click="btnAddCustomer_Click"/>
+        <Button x:Name="btnAddCustomer" Content="אישור" FontSize="20" Height="45" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" Click="updateCustomer_Click"/>
         <Button x:Name="btnClose" Content="סגור" FontSize="20" Height="45" Grid.Row="1" VerticalAlignment="Bottom" FontWeight="Bold" Click="btnClose_Click"/>
 
         <Border Name="List" Visibility="Hidden" Grid.Row="0">

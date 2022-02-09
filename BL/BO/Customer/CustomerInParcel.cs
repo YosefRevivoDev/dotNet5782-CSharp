@@ -14,7 +14,7 @@ namespace BO
 
         public override string ToString()
         {
-            return $"CustomerId: {CustomerId} , NameCustomer: {NameCustomer} ";
+            return string.Format("Id {0}\t mane {1}\t", CustomerId, NameCustomer);
         }
     }
 }

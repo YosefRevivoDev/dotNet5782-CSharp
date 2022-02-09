@@ -11,26 +11,29 @@ namespace BL
 {
     public partial class BL : IBL
     {
-        public void AddNewParcel(Parcel newParcel, int SenderId, int TargetId)
+        public int AddNewParcel(Parcel newParcel, int SenderId, int TargetId)
         {
-            try
+            newParcel.DroneInParcel = null;
+            DO.Parcel parcel = new()
             {
-                newParcel.Drone = null;
-                DO.Parcel parcel = new()
-                {
-                    SenderId = SenderId,
-                    TargetId = TargetId,
-                    ParcelWeight = (DO.WeightCategories)newParcel.Weight,
-                    ParcelPriority = (DO.Priorities)newParcel.Priority,
-                    Created = DateTime.Now,
-                    Assignment = null,
-                    PickedUp = null,
-                    Delivered = null
-                };
-                dal.AddParcel(parcel);
+                SenderId = SenderId,
+                TargetId = TargetId,
+                ParcelWeight = (DO.WeightCategories)newParcel.Weight,
+                ParcelPriority = (DO.Priorities)newParcel.Priority,
+                Created = DateTime.Now,
+                Assignment = DateTime.MinValue,
+                PickedUp = DateTime.MinValue,
+                Delivered = DateTime.MinValue
+            };
+
+            try
+            {  
+                return dal.AddParcel(parcel);
             }
             catch { }
+            return -1;
         }
+
         public Parcel GetParcel(int id)
         {
             try
@@ -90,8 +93,8 @@ namespace BL
                 ParcelToList BLparcels = new()
                 {
                     Id = parcel.Id,
-                    SenderId = parcel.Sender.CustomerId,
-                    TargetId = parcel.Target.CustomerId,
+                    SenderName = parcel.Sender.NameCustomer,
+                    TargetName = parcel.Target.NameCustomer,
                     Weight = parcel.Weight,
                     Priority = parcel.Priority,
                 };
@@ -121,42 +124,57 @@ namespace BL
         }
 
 
-        public ParcelInDeliver GetParcelInDeliverd(Location firstLocation, int NumOfPackageId)
+        public ParcelInDeliver GetParcelInDeliverd(Location firstLocation, int parcelID)
         {
-            Parcel parcel = GetParcel(NumOfPackageId);
-            DO.Customer SenderCustomer = dal.GetCustomer(parcel.Sender.CustomerId);
-            DO.Customer TargetCustomer = dal.GetCustomer(parcel.Target.CustomerId);
-
-            Location senderLocation = new() { Latitude = SenderCustomer.Latitude, Longtitude = SenderCustomer.Longtitude };
-            Location targetLocation = new() { Latitude = TargetCustomer.Latitude, Longtitude = TargetCustomer.Longtitude };
-
-            ParcelInDeliver ParcelInDeliverd = new()
+            try
             {
-                ID = parcel.Id,
-                Sender = parcel.Sender,
-                Target = parcel.Target,
-                Priorities = parcel.Priority,
-                WeightCategories = parcel.Weight,
+                DO.Parcel parcel = dal.GetParcel(parcelID);
 
-            };
-            if (parcel.PickedUp == DateTime.MinValue)
-            {
-                ParcelInDeliverd.StatusParcrlInDeliver = StatusParcrlInDeliver.AwaitingCollection;
-                ParcelInDeliverd.TransportDistance = helpFunction.DistanceBetweenLocations(firstLocation, senderLocation);
+
+                DO.Customer SenderCustomer = dal.GetCustomer(parcel.SenderId);
+                DO.Customer TargetCustomer = dal.GetCustomer(parcel.TargetId);
+
+                Location senderLocation = new() { Latitude = SenderCustomer.Latitude, Longtitude = SenderCustomer.Longtitude };
+                Location targetLocation = new() { Latitude = TargetCustomer.Latitude, Longtitude = TargetCustomer.Longtitude };
+
+                ParcelInDeliver ParcelInDeliverd = new()
+                {
+                    ID = parcel.ParcelId,
+                    
+                    Priorities = (Priorities)parcel.ParcelPriority,
+                    WeightCategories = (WeightCategories)parcel.ParcelWeight,
+
+                };
+
+                if (parcel.PickedUp == DateTime.MinValue)
+                {
+                    ParcelInDeliverd.StatusParcrlInDeliver = StatusParcrlInDeliver.AwaitingCollection;
+                    ParcelInDeliverd.TransportDistance = helpFunction.DistanceBetweenLocations(firstLocation, senderLocation);
+                }
+                else
+                {
+                    ParcelInDeliverd.StatusParcrlInDeliver = StatusParcrlInDeliver.OnTheWayDestination;
+                    ParcelInDeliverd.TransportDistance = helpFunction.DistanceBetweenLocations(senderLocation, targetLocation);
+                }
+
+                ParcelInDeliverd.Sender = GetCustomerInParcel(parcel.SenderId);
+                ParcelInDeliverd.Target = GetCustomerInParcel(parcel.TargetId);
+
+                ParcelInDeliverd.CollectionLocation = targetLocation;
+                ParcelInDeliverd.DeliveryDestination = senderLocation;
+
+                return ParcelInDeliverd;
             }
-            else
+            catch (DO.CheckIdException ex)
             {
-                ParcelInDeliverd.StatusParcrlInDeliver = StatusParcrlInDeliver.OnTheWayDestination;
-                ParcelInDeliverd.TransportDistance = helpFunction.DistanceBetweenLocations(senderLocation, targetLocation);
+                throw new CheckIdException("ERORR", ex);
             }
-
-            //ParcelInDeliverd.Sender = CustomerInParcel
-            //ParcelInDeliverd
-
-
-
-            return ParcelInDeliverd;
+            catch (DO.CheckIfIdNotException ex)
+            {
+                throw new CheckIfIdNotException("ERORR", ex);
+            }
         }
+
         public ParcelStatus GetparcelStatus(DO.Parcel parcel)
         {
             if (parcel.Delivered != null)

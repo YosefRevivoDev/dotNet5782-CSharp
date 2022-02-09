@@ -34,22 +34,44 @@ namespace PLGui
         public ObservableCollection<ParcelToList> parcelToLists;
         public ParcelToList parcelToList;
         public Parcel parcel { set; get; }
+        DroneToList droneToList { set; get; }
         public CustomerInParcel customerInParcel { set; get; }
+        public DroneInParcel droneInParcel { set; get; }
         public int index;
         private MainWindow mainWindow;
 
+        /// <summary>
+        /// Add constructor.
+        /// </summary>
+        /// <param name="getBL"></param>
+        /// <param name="_mainWindow"></param>
         public ParcelWindow(IBL getBL, MainWindow _mainWindow)
         {
             InitializeComponent();
             GetBL = getBL;
             parcel = new Parcel();
-            //parcel = getBL.GetParcel(parcel.Id);
             DataContext = parcel;
             mainWindow = _mainWindow;
             UpdateVisibility();
+            List<CustomerToList> temp = getBL.GetCustomerToList().ToList();
 
+            comboBoxOfsander.ItemsSource = temp;
+            comboBoxOfsander.DisplayMemberPath = "CustomerId";
+
+            comboBoxOftarget.ItemsSource = temp;
+            comboBoxOftarget.DisplayMemberPath = "CustomerId";
+
+            prioritiCombo.ItemsSource = Enum.GetValues(typeof(Priorities));
+            weightCombo.ItemsSource = Enum.GetValues(typeof(WeightCategories));
         }
         
+        /// <summary>
+        /// Update cunstructor.
+        /// </summary>
+        /// <param name="bL"></param>
+        /// <param name="_mainWindow"></param>
+        /// <param name="_parcel"></param>
+        /// <param name="_index"></param>
         public ParcelWindow(IBL bL, MainWindow _mainWindow, ParcelToList _parcel, int _index)
         {
             InitializeComponent();
@@ -60,7 +82,6 @@ namespace PLGui
             parcel = bL.GetParcel(_parcel.Id);
             DataContext = parcel;
             UpdateGridVisibility();
-
         }
 
         private void UpdateGridVisibility()
@@ -157,10 +178,11 @@ namespace PLGui
                 case MessageBoxResult.Yes:
                     try
                     {
-                        GetBL.AddNewParcel(parcel, parcel.Sender.CustomerId, parcel.Target.CustomerId);
-                        mainWindow.parcelToLists.Add(GetBL.GetParcelToListsByPredicate()
-                            .First(i => i.Id == parcel.Id));
-                        MessageBox.Show(parcel.ToString(), "החבילה נוספה בהצלחה");
+                        int idParcel = GetBL.AddNewParcel(parcel, ((CustomerToList)comboBoxOfsander.SelectedItem).CustomerId, ((CustomerToList)comboBoxOftarget.SelectedItem).CustomerId);
+
+                        mainWindow.parcelToLists.Add(GetBL.GetParcelToListsByPredicate(i => i.Id == idParcel).First());
+
+                        MessageBox.Show("החבילה נוספה בהצלחה");
                         Close();
                     }
                     catch (Exception ex)
@@ -178,32 +200,7 @@ namespace PLGui
             }
         }
 
-        private void StatusSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void prioritiSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void weightSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void droneInParcelButton_Click(object sender, RoutedEventArgs e)
-        {
-            //int drone = parcel.Id;
-            //new DroneWindow(GetBL, mainWindow, drone, index).Show();
-            //Close();
-        }
-
-        private void ParcelListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
+       
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {

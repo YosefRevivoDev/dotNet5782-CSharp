@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <ArrayOfUser xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <User>
-    <UserId>0</UserId>
+    <UserId>200532406</UserId>
     <Password>1</Password>
     <FirstName>Yosef</FirstName>
     <LastName>Revivo</LastName>
   </User>
   <User>
-    <UserId>0</UserId>
+    <UserId>2233</UserId>
     <Password>1</Password>
     <FirstName>Tomer</FirstName>
     <LastName>Zecharia</LastName>

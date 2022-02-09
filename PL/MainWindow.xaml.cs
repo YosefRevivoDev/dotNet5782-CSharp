@@ -13,17 +13,23 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+
+
 using BO;
 using BlApi;
 
 namespace PLGui
 {
-
+    public enum WeightCategories {הכל, קל, בינוני, כבד };
+    public enum DroneStatuses { הכל, זמין, בטעינה, במשלוח };
+    public enum Priorities { הכל, רגיל, מהיר, דחוף };
+    public enum parcelStatus { הכל, נוצר, שוייך, נאסף, סופק };
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        
         IBL getBL;
         public ObservableCollection<DroneToList> dronesToLists;
         public ObservableCollection<ParcelToList> parcelToLists;
@@ -42,8 +48,20 @@ namespace PLGui
             InitParcels();
             InitCustomer();
             InitBaseStation();
+
+            cmbWeightSelectorParcel.ItemsSource = Enum.GetValues(typeof(WeightCategories));
+            cmbPrioritiSelectorParcel.ItemsSource = Enum.GetValues(typeof(Priorities));
+            cmbStatusSelectorParcel.ItemsSource = Enum.GetValues(typeof(parcelStatus));
+
+            cmbWeightSelectorParcel.SelectedIndex = 0;
+            parcelToLists.CollectionChanged += ParcelToListView_CollectionChanged;
+
         }
 
+        private void ParcelToListView_CollectionChanged(object sender,NotifyCollectionChangedEventArgs e)
+        {
+            controlComboBoxesSortedParcel();
+        }
 
         #region Init Object
         private void InitDrones()
@@ -57,6 +75,7 @@ namespace PLGui
             cmbStatusSelector.ItemsSource = Enum.GetValues(typeof(DroneStatus));
             cmbWeightSelector.ItemsSource = Enum.GetValues(typeof(WeightCategories));
             lstDroneListView.ItemsSource = dronesToLists;
+
         }
         private void InitParcels()
         {
@@ -66,8 +85,10 @@ namespace PLGui
             {
                 parcelToLists.Add(item);
             }
+            cmbStatusSelectorParcel.ItemsSource = Enum.GetValues(typeof(ParcelStatus));
+            cmbPrioritiSelectorParcel.ItemsSource = Enum.GetValues(typeof(Priorities));
+            cmbWeightSelectorParcel.ItemsSource = Enum.GetValues(typeof(WeightCategories));
             lstParcelListView.ItemsSource = parcelToLists;
-            cmbParcelStatus.ItemsSource = Enum.GetValues(typeof(ParcelStatus));
         }
         private void InitCustomer()
         {
@@ -90,6 +111,8 @@ namespace PLGui
             lstBaseStationListView.ItemsSource = baseStationToLists;
         }
         #endregion
+
+        #region Double Click
         private void lstDroneListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             DroneToList drones = (DroneToList)lstDroneListView.SelectedItem;
@@ -97,7 +120,7 @@ namespace PLGui
             {
                 int Idrone = lstDroneListView.SelectedIndex;
                 new DroneWindow(getBL, this, drones, Idrone).Show();
-                //x = x.DroneVisibility();
+                
             }
         }
 
@@ -130,14 +153,8 @@ namespace PLGui
                 new ParcelWindow(getBL, this, parcelToList, indexParcel).Show();
             }
         }
+        #endregion
 
-
-        private void cmbStatusSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            DroneStatus status = (DroneStatus)cmbStatusSelector.SelectedItem;
-            txtLable.Text = status.ToString();
-            lstDroneListView.ItemsSource = dronesToLists.Where(x => x.Status == status).ToList();
-        }
 
         private void txtLable_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -149,23 +166,140 @@ namespace PLGui
             Close();
         }
 
+
+        #region ComboBox List Drone
+        private void cmbStatusSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            cmbStatusSelector_SelectionChanged();
+        }
+        private void cmbStatusSelector_SelectionChanged()
+        {
+            DroneStatus status = (DroneStatus)cmbStatusSelector.SelectedItem;
+            lstDroneListView.ItemsSource = dronesToLists.Where(x => x.Status == status).ToList();
+        }
         private void cmbWeightSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            WeightCategories droneWeight = (WeightCategories)cmbWeightSelector.SelectedItem;
-            txtLable.Text = droneWeight.ToString();
+            cmbWeightSelector_SelectionChanged();
+        }
+        private void cmbWeightSelector_SelectionChanged()
+        {
+            BO.WeightCategories droneWeight = (BO.WeightCategories)cmbWeightSelector.SelectedItem;
             lstDroneListView.ItemsSource = dronesToLists.Where(x => x.DroneWeight == droneWeight).ToList();
         }
-
-        private void cmbParcelStatus_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        public void cmbStatusSelectorAndcmbWeightSelector()
         {
-            ParcelStatus comboBoxParcelStatus = (ParcelStatus)cmbParcelStatus.SelectedItem;
-            lstParcelListView.ItemsSource = parcelToLists.Where(x => x.parcelStatus == comboBoxParcelStatus).ToList();
+            cmbStatusSelector_SelectionChanged();
+            cmbWeightSelector_SelectionChanged();
+        }
+        #endregion
+
+        #region ComboBox List Parcel
+        private void cmbStatusSelectorParcel_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            controlComboBoxesSortedParcel();
+        }
+        //private void cmbStatusSelectorParcel_SelectionChanged()
+        //{
+        //    ParcelStatus comboBoxParcelStatus = (ParcelStatus)cmbStatusSelectorParcel.SelectedItem;
+
+        //    lstParcelListView.ItemsSource = parcelToLists.Where(x => x.parcelStatus == comboBoxParcelStatus).ToList();
+        //}
+
+        private void cmbPrioritiSelectorParcel_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            controlComboBoxesSortedParcel();
+        }
+        //private void cmbPrioritiSelectorParcel_SelectionChanged()
+        //{
+        //    Priorities comboBoxPriorityStatus = (Priorities)cmbPrioritiSelectorParcel.SelectedItem;
+        //    lstParcelListView.ItemsSource = parcelToLists.Where(x => x.Priority == comboBoxPriorityStatus).ToList();
+        //}
+
+        private void cmbWeightSelectorParcel_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            controlComboBoxesSortedParcel();
+        }
+        //private void cmbWeightSelectorParcel_SelectionChanged()
+        //{
+        //    WeightCategories comboBoxWeightCategories = (WeightCategories)cmbWeightSelectorParcel.SelectedItem;
+        //    lstParcelListView.ItemsSource = parcelToLists.Where(x => x.Weight == comboBoxWeightCategories);
+        //}
+
+        //public void controlComboBoxesSortedParcel()
+        //{
+        //    cmbStatusSelectorParcel_SelectionChanged();
+        //    cmbPrioritiSelectorParcel_SelectionChanged();
+        //    cmbWeightSelectorParcel_SelectionChanged();
+        //}
+
+        private void controlComboBoxesSortedParcel()
+        {
+            if (cmbPrioritiSelectorParcel.SelectedIndex == -1)
+            {
+                cmbPrioritiSelectorParcel.SelectedIndex = 0;
+            }
+            if (cmbStatusSelectorParcel.SelectedIndex == -1)
+            {
+                cmbStatusSelectorParcel.SelectedIndex = 0;
+            }
+
+            WeightCategories weightCategories = (WeightCategories)cmbWeightSelectorParcel.SelectedItem;
+            parcelStatus parcelStatus = (parcelStatus)cmbStatusSelectorParcel.SelectedItem;
+            Priorities priorities = (Priorities)cmbPrioritiSelectorParcel.SelectedItem;
+
+            if ((weightCategories == WeightCategories.הכל) && (parcelStatus == parcelStatus.הכל) && (priorities == Priorities.הכל))
+                lstParcelListView.ItemsSource = parcelToLists;
+
+
+            else if ((weightCategories != WeightCategories.הכל) && (parcelStatus == parcelStatus.הכל) && (priorities == Priorities.הכל))
+                lstParcelListView.ItemsSource = parcelToLists.ToList().FindAll(i => i.Weight == (BO.WeightCategories)weightCategories);
+
+            else if ((weightCategories == WeightCategories.הכל) && (parcelStatus != parcelStatus.הכל) && (priorities == Priorities.הכל))
+                lstParcelListView.ItemsSource = parcelToLists.ToList().FindAll(i => i.parcelStatus == (BO.ParcelStatus)parcelStatus);
+
+            else if ((weightCategories == WeightCategories.הכל) && (parcelStatus == parcelStatus.הכל) && (priorities != Priorities.הכל))
+                lstParcelListView.ItemsSource = parcelToLists.ToList().FindAll(i => i.Priority == (BO.Priorities)priorities);
+
+
+            else if ((weightCategories != WeightCategories.הכל) && (parcelStatus != parcelStatus.הכל) && (priorities == Priorities.הכל))
+                lstParcelListView.ItemsSource = parcelToLists.ToList().FindAll(i => i.Weight == (BO.WeightCategories)weightCategories &&
+                i.parcelStatus == (BO.ParcelStatus)parcelStatus);
+
+            else if ((weightCategories != WeightCategories.הכל) && (parcelStatus == parcelStatus.הכל) && (priorities != Priorities.הכל))
+                lstParcelListView.ItemsSource = parcelToLists.ToList().FindAll(i => i.Weight == (BO.WeightCategories)weightCategories &&
+                i.Priority == (BO.Priorities)priorities);
+
+            else if ((weightCategories == WeightCategories.הכל) && (parcelStatus != parcelStatus.הכל) && (priorities != Priorities.הכל))
+                lstParcelListView.ItemsSource = parcelToLists.ToList().FindAll(i => i.Priority == (BO.Priorities)priorities &&
+                i.parcelStatus == (BO.ParcelStatus)parcelStatus);
+
+            else
+                lstParcelListView.ItemsSource = parcelToLists.ToList().FindAll(i => i.Priority == (BO.Priorities)priorities &&
+                i.parcelStatus == (BO.ParcelStatus)parcelStatus && i.Weight == (BO.WeightCategories)weightCategories);
+
+            GroupingParcelList();
         }
 
+        #endregion
+
+        #region LOGIN
         private void LoginApp_Click(object sender, RoutedEventArgs e)
         {
             new LoginApp(this, getBL).Show();
+            
         }
+
+        private void LoginCustomer_Click(object sender, RoutedEventArgs e)
+        {
+            new LoginApp(this, getBL).Show();
+        }
+
+        private void RegisterApp_Click(object sender, RoutedEventArgs e)
+        {
+            new LoginApp(this, getBL).Show();
+
+        }
+        #endregion
 
         #region ADD Object Click
         private void btnAddDrone_Click(object sender, RoutedEventArgs e)
@@ -175,8 +309,10 @@ namespace PLGui
             x.GridUpdateDrone.Visibility = Visibility.Hidden;
             x.Height = 450;
             x.Width = 500;
-            x.ShowDialog();
+            x.Show();
+            //x.ShowDialog();
         }
+
         private void addBaseStation_Click(object sender, RoutedEventArgs e)
         {
             var x = new BaseStationWindow(getBL, this);
@@ -205,6 +341,49 @@ namespace PLGui
             x.Height = 500;
             x.Width = 400;
             x.ShowDialog();
+        }
+
+
+
+        #endregion
+
+        #region GROUPING
+        CollectionView droneView;
+        /// <summary>
+        /// grouping functaion by DroneStatuses
+        /// </summary>
+        private void GroupingDroneList()
+        {
+            string choise = "DroneStatus";
+            droneView = (CollectionView)CollectionViewSource.GetDefaultView(lstDroneListView.ItemsSource);
+            if (droneView.CanGroup == true)
+            {
+                PropertyGroupDescription groupDescription = new(choise);
+                droneView.GroupDescriptions.Clear();
+                droneView.GroupDescriptions.Add(groupDescription);
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        CollectionView parcelView;
+        /// <summary>
+        /// grouping functaion by sanderName.
+        /// </summary>
+        private void GroupingParcelList()
+        {
+            string choise = "SenderName";
+            parcelView = (CollectionView)CollectionViewSource.GetDefaultView(lstParcelListView.ItemsSource);
+            if (parcelView.CanGroup == true)
+            {
+                PropertyGroupDescription groupDescription = new(choise);
+                parcelView.GroupDescriptions.Clear();
+                parcelView.GroupDescriptions.Add(groupDescription);
+            }
+            else
+                return;
         }
         #endregion
     }

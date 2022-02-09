@@ -3,15 +3,15 @@
   <BaseStation>
     <StationID>15</StationID>
     <Name>B.S.R 4</Name>
-    <Longtitude>34.8247758</Longtitude>
-    <Latitude>32.0931651</Latitude>
-    <AvailableChargeSlots>50</AvailableChargeSlots>
+    <Longtitude>34.8247</Longtitude>
+    <Latitude>32.0931</Latitude>
+    <AvailableChargeSlots>51</AvailableChargeSlots>
   </BaseStation>
   <BaseStation>
     <StationID>54</StationID>
-    <Name>מתנס קהילתי - ק.הרצוג</Name>
-    <Longtitude>34.8377433</Longtitude>
-    <Latitude>32.0964575</Latitude>
-    <AvailableChargeSlots>80</AvailableChargeSlots>
+    <Name>מתנס - ק.הרצוג</Name>
+    <Longtitude>34.8377</Longtitude>
+    <Latitude>32.0964</Latitude>
+    <AvailableChargeSlots>82</AvailableChargeSlots>
   </BaseStation>
 </ArrayOfBaseStation>

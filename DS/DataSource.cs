@@ -17,7 +17,7 @@ namespace DS
         public static List<User> users = new List<User>();
 
         // Empty Constractor for Default
-      
+
         public static class Config
         {
             // ------------- PowerConsumption by Drone -----------------//
@@ -40,10 +40,10 @@ namespace DS
             #region User
             users = new List<User>
             {
-                new User{FirstName = "Yosef", LastName = "Revivo", Password = "1"},
-                new User{FirstName = "Tomer", LastName = "Zecharia", Password = "1"},
-                new User{FirstName = "user", LastName = "user", Password = "1"},
-                new User{FirstName = "admin", LastName = "admin", Password = "1"},
+                new User{UserId = "200532406" , Password = "1"},
+                new User{UserId = "2233" , Password = "1"},
+                new User{UserId = "", Password = "1"},
+                new User{UserId = "", Password = "1"},
             };
             #endregion
 
@@ -59,7 +59,7 @@ namespace DS
                 {
                     DroneID = ++Config.RunIdDrone,
                     DroneModel = DronesModels[i],
-                    DroneWeight = (WeightCategories)random.Next(1, 3)
+                    DroneWeight = (WeightCategories)random.Next(0, 2)
                 });
             }
             #endregion
@@ -68,31 +68,30 @@ namespace DS
             Stations.Add(new BaseStation
             {
                 Name = "B.S.R 4",
-                StationID = random.Next(1,20),
-                Latitude = 32.0931651,
-                Longtitude = 34.8247758,
+                StationID = random.Next(1, 50),
+                Latitude = 32.0931,
+                Longtitude = 34.8247,
                 AvailableChargeSlots = 50,
             });
 
             Stations.Add(new BaseStation
             {
                 Name = "מתנס קהילתי - ק.הרצוג",
-                StationID = random.Next(21, 60),
-                AvailableChargeSlots = 80,
-                Latitude = 32.0964575,
-                Longtitude = 34.8377433
-
+                StationID = random.Next(1, 60),
+                Latitude = 32.0964,
+                Longtitude = 34.8377,
+                AvailableChargeSlots = 80
             });
             #endregion
-            
+
             #region Clients
             Customer.Add(new Customer
             {
                 CustomerId = 200532406,
                 Name = "יוסף רביבו",
                 Phone = "05" + random.Next(0, 9) + '-' + random.Next(1000000, 10000000),
-                Longtitude = 32.0932627,
-                Latitude = 34.8306360
+                Longtitude = 32.0932,
+                Latitude = 34.8306
 
             });
             Customer.Add(new Customer()
@@ -100,90 +99,90 @@ namespace DS
                 CustomerId = 309865341,
                 Name = "פיני איינהורן",
                 Phone = "05" + random.Next(0, 9) + '-' + random.Next(1000000, 10000000),
-                Longtitude = 32.0934950,
-                Latitude = 34.8415697
+                Longtitude = 32.0934,
+                Latitude = 34.8415
             });
             Customer.Add(new Customer()
             {
                 CustomerId = 203548976,
                 Name = "יוני רבינוביץ",
                 Phone = "05" + random.Next(0, 9) + '-' + random.Next(1000000, 10000000),
-                Longtitude = 32.0937440,
-                Latitude = 34.8364607
+                Longtitude = 32.0937,
+                Latitude = 34.8364
             });
             Customer.Add(new Customer()
             {
                 CustomerId = 349927608,
                 Name = "דניאל שרם",
                 Phone = "05" + random.Next(0, 9) + '-' + random.Next(1000000, 10000000),
-                Longtitude = 32.0878331,
-                Latitude = 34.8901060
+                Longtitude = 32.0878,
+                Latitude = 34.8901
             });
             Customer.Add(new Customer()
             {
                 CustomerId = 200786113,
                 Name = "שוקי אלבירט",
                 Phone = "05" + random.Next(0, 9) + '-' + random.Next(1000000, 10000000),
-                Longtitude = 32.0940572,
-                Latitude = 34.8362261
+                Longtitude = 32.0940,
+                Latitude = 34.8362
             });
             Customer.Add(new Customer()
             {
                 CustomerId = 201344879,
                 Name = "ליאור וענונו",
                 Phone = "05" + random.Next(0, 9) + '-' + random.Next(1000000, 10000000),
-                Longtitude = 32.0993644,
-                Latitude = 34.8361656
+                Longtitude = 32.0993,
+                Latitude = 34.8361
             });
             Customer.Add(new Customer()
             {
                 CustomerId = 301242853,
                 Name = "אפרים שוובר",
                 Phone = "05" + random.Next(0, 9) + '-' + random.Next(1000000, 10000000),
-                Longtitude = 32.0943398,
-                Latitude = 34.8289060
+                Longtitude = 32.0943,
+                Latitude = 34.8289
             });
             Customer.Add(new Customer()
             {
                 CustomerId = 209433871,
                 Name = "אבנר לבייב",
                 Phone = "05" + random.Next(0, 9) + '-' + random.Next(1000000, 10000000),
-                Longtitude = 32.0856264,
-                Latitude = 34.8227299
+                Longtitude = 32.0856,
+                Latitude = 34.8227
             });
             Customer.Add(new Customer()
             {
                 CustomerId = 311890522,
                 Name = "יענקי סלוד",
                 Phone = "05" + random.Next(0, 9) + '-' + random.Next(1000000, 10000000),
-                Longtitude = 32.0963894,
-                Latitude = 34.8322994
+                Longtitude = 32.0963,
+                Latitude = 34.8322
             });
             Customer.Add(new Customer()
             {
                 CustomerId = 200996586,
                 Name = "משה הורוביץ",
                 Phone = "05" + random.Next(0, 9) + '-' + random.Next(1000000, 10000000),
-                Longtitude = 32.0948123,
-                Latitude = 34.8293454
+                Longtitude = 32.0948,
+                Latitude = 34.8293
             });
             #endregion
 
             #region Paecels
-            for (int i = 0; i< 20; i++)
+            for (int i = 0; i < 20; i++)
             {
                 Parcels.Add(new Parcel
                 {
                     ParcelId = Config.RunParcelId++,
                     SenderId = Customer[i].CustomerId,
                     TargetId = Customer[i + 1].CustomerId,
-                    ParcelPriority = (Priorities) random.Next(1, 3),
-                    ParcelWeight = (WeightCategories) random.Next(1, 3),
+                    ParcelPriority = (Priorities)random.Next(0, 2),
+                    ParcelWeight = (WeightCategories)random.Next(0, 2),
                     DroneId = Drones[i].DroneID,
                     Created = DateTime.Now,
                     Assignment = DateTime.MinValue,
                     PickedUp = DateTime.MinValue,
-                    Delivered = i % 2 == 0 ? null : DateTime.MinValue,
+                    Delivered = DateTime.MinValue,
                 });
             }
             #endregion

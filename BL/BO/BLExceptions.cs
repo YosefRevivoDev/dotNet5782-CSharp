@@ -13,7 +13,7 @@ namespace BO
     } 
     public class CheckIdException : Exception
     {
-        public CheckIdException(string messge, Exception innerExeption) : base(messge) { }
+        public CheckIdException(string messge, Exception innerExeption) : base(messge, innerExeption) { }
     }
     public class CheckIfIdNotException : Exception
     {

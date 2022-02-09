@@ -40,10 +40,11 @@ namespace DAL
             newCustomer : throw new CustumerException($"This id {newCustomer.CustomerId} already exist"));
         }
 
-        public void AddParcel(Parcel newParcel)
+        public int AddParcel(Parcel newParcel)
         {
             DataSource.Parcels.Add(DataSource.Parcels.FindIndex(i => i.ParcelId == newParcel.ParcelId) == -1 ?
             newParcel : throw new ParcelException($"This id {newParcel.ParcelId} already exist"));
+            return 0;
         }
 
         public void AddDroneCharge(DroneCharge droneCharge)
@@ -82,10 +83,10 @@ namespace DAL
             Parcel parcel = DataSource.Parcels.Find(i => i.ParcelId == Id);
             return parcel.ParcelId != default ? parcel : throw new ParcelException("Parcel not found");
         }
-        public User GetUser(string userName)
+        public User GetUser(string userId)
         {
-            User user = DataSource.users.Find(i => i.UserName == userName);
-            return user.UserName != default ? user : throw new UserException("User not found");
+            User user = DataSource.users.Find(i => i.UserId == userId);
+            return user.UserId != default ? user : throw new UserException("User not found");
         }
         public void GetDroneChargeByStation(int baseStationId)
         {
@@ -142,7 +143,7 @@ namespace DAL
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public void DeliveredPackageToCustumer(int parcelId)
+        public bool DeliveredPackageToCustumer(int parcelId)
         {
             int index = DataSource.Parcels.ToList().FindIndex(i => i.ParcelId == parcelId);
             Parcel parcel = DataSource.Parcels[index];
@@ -150,6 +151,7 @@ namespace DAL
             {
                 parcel.Delivered = DateTime.Now;
                 DataSource.Parcels[index] = parcel;
+                return true;
             }
             else
             {
@@ -262,7 +264,7 @@ namespace DAL
             DataSource.Stations.RemoveAt(index);
         }
 
-        public void RemoveUser (int UserID)
+        public void RemoveUser (string UserID)
         {
             int index = DataSource.users.FindIndex(i => i.UserId == UserID);
             DataSource.users.RemoveAt(DataSource.users.FindIndex(i => i.UserId == UserID));

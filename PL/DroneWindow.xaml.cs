@@ -18,6 +18,7 @@ using System.Collections.Specialized;
 using BO;
 using BlApi;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace PLGui
 {
@@ -27,31 +28,29 @@ namespace PLGui
     public partial class DroneWindow : Window
     {
         public IBL bL;
-        BackgroundWorker backgroundWorker;
-        private Drone drone { set; get; }
+        private Drone drone;
         private DroneToList droneToList;
-        private ParcelInDeliver parcelInDeliverd;
-        private BaseStationToList baseStationToList { set; get; }
+        BaseStation BaseStation;
+        private int StationID;
         public int Idrone;
         private MainWindow mainWindow;
-        private int StationID;
-
-
 
         /// <summary>
         /// Constructor for add drone
         /// </summary>
-        /// <param name="getBl"></param>
-        /// <param name="_showDronesWindow"></param>
+        /// <param name="getBL"></param>
+        /// <param name="_mainWindow"></param>
         public DroneWindow(IBL getBL, MainWindow _mainWindow)
         {
             InitializeComponent();
             bL = getBL;
             drone = new Drone();
             DataContext = drone;
-            DroneSituateGrid.Visibility = Visibility.Collapsed;
+            DroneSituateGrid.Visibility = Visibility.Hidden;
             ItemsSourceStations();
             mainWindow = _mainWindow;
+            BaseStation = new();
+            lvStations.ItemsSource = bL.GetBasetationToListsByPredicate(b => b.AvailableChargingStations > 0);
             cbxDroneWeight.ItemsSource = Enum.GetValues(typeof(WeightCategories));
             //StatusDrone.SelectedItem = Enum.GetValues(typeof(DroneStatus));
         }
@@ -63,18 +62,18 @@ namespace PLGui
         /// <param name="_ShowDronesWindow"></param>
         /// <param name="drone"></param>
         /// <param name="_Idrone"></param>
-        public DroneWindow(IBL _bL, MainWindow _mainWindow, DroneToList drone, int _Idrone)
+        public DroneWindow(IBL _bL, MainWindow _mainWindow, DroneToList _drone, int _Idrone)
         {
             InitializeComponent();
-            DroneSituateGrid.Visibility = Visibility.Visible;
             Idrone = _Idrone;
-            this.bL = _bL;
-            this.drone = _bL.GetDrone(drone.DroneID);
+            bL = _bL;
+            droneToList = _drone;
+            drone = _bL.GetDrone(_drone.DroneID);
+            DataContext = drone;
             mainWindow = _mainWindow;
-            DataContext = this.drone;
+            DroneSituateGrid.Visibility = Visibility.Visible;
             ItemsSourceStations();
             DroneVisibility();
-            droneToList = drone;
         }
 
         private void ItemsSourceStations()
@@ -85,50 +84,62 @@ namespace PLGui
         {
             if (drone.Status == DroneStatus.available)
             {
-                btnDroneCharge.Visibility = Visibility.Visible;
-                btnSendDroneToDeliver.Visibility = Visibility.Visible;
-                btnCollectParcel.Visibility = Visibility.Hidden;
-                btnSupplyParcel.Visibility = Visibility.Hidden;
-                btnRealeseDrone.Visibility = Visibility.Hidden;
+                NoFindParcel.Visibility = Visibility.Visible;
+                droneMaintenance.Visibility = Visibility.Hidden;
+                FindParcel.Visibility = Visibility.Hidden;
+                ChargeAndCollect.Visibility = Visibility.Visible;
+                CollectParcel.Visibility = Visibility.Visible;
+
+                // for inside of the grid collect parcel//
+                btnCollectParcel.Visibility = Visibility.Visible;
+
+                packageAssociated.Text = "הרחפן זמין";
             }
-            else if(drone.Status == DroneStatus.maintenance)
+            else if (drone.Status == DroneStatus.maintenance)
             {
-                btnRealeseDrone.Visibility = Visibility.Visible;
-                btnDroneCharge.Visibility = Visibility.Hidden;
-                btnSendDroneToDeliver.Visibility = Visibility.Hidden;
-                btnCollectParcel.Visibility = Visibility.Hidden;
-                btnSupplyParcel.Visibility = Visibility.Hidden;
+                DetailsStation.Visibility = Visibility.Visible;
+                ChargeAndCollect.Visibility = Visibility.Hidden;
+                CollectParcel.Visibility = Visibility.Hidden;
+                droneMaintenance.Visibility = Visibility.Visible;
+            }
+
+            else if (drone.Status == DroneStatus.busy)
+            {
+                FindParcel.Visibility = Visibility.Visible;
+                NoFindParcel.Visibility = Visibility.Hidden;
+                DetailsStation.Visibility = Visibility.Hidden;
+                ChargeAndCollect.Visibility = Visibility.Hidden;
+                CollectParcel.Visibility = Visibility.Visible;
+
+                if (drone.ParcelInDeliverd.StatusParcrlInDeliver == StatusParcrlInDeliver.AwaitingCollection)
+                {
+
+                    //btnCollectParcel.Visibility = Visibility.Visible;
+                    btnCollectParcel.Content = "איסוף חבילה מלקוח";
+                }
+                else if (drone.ParcelInDeliverd.StatusParcrlInDeliver == StatusParcrlInDeliver.OnTheWayDestination)
+                {
+                    //btnCollectParcel.Visibility = Visibility.Visible;
+                    btnCollectParcel.Content = "אספקת חבילה ללקוח";
+                    NoFindParcel.Visibility = Visibility.Hidden;
+                    FindParcel.Visibility = Visibility.Visible;
+                }
             }
             else
             {
-                if (drone.ParcelInDeliverd.StatusParcrlInDeliver == StatusParcrlInDeliver.AwaitingCollection)
-                {
-                    btnRealeseDrone.Visibility = Visibility.Hidden;
-                    btnDroneCharge.Visibility = Visibility.Hidden;
-                    btnSendDroneToDeliver.Visibility = Visibility.Hidden;
-                    btnCollectParcel.Visibility = Visibility.Visible;
-                    btnSupplyParcel.Visibility = Visibility.Hidden;
-                }
-                else
-                {
-                    btnRealeseDrone.Visibility = Visibility.Hidden;
-                    btnDroneCharge.Visibility = Visibility.Hidden;
-                    btnSendDroneToDeliver.Visibility = Visibility.Hidden;
-                    btnCollectParcel.Visibility = Visibility.Hidden;
-                    btnSupplyParcel.Visibility = Visibility.Visible;
-                }
+                NoFindParcel.Visibility = Visibility.Hidden;
+                FindParcel.Visibility = Visibility.Hidden;
+                CollectParcel.Visibility = Visibility.Hidden;
+
             }
         }
         private void refreshThisWindow()
         {
 
-            //if (mainWindow != null)
-            //{
-                mainWindow.lstDroneListView.Items.Refresh();
-            this.Close();
+            mainWindow.lstDroneListView.Items.Refresh();
             new DroneWindow(bL, mainWindow, droneToList, Idrone).Show();
-                // mainWindow.AddGrouping();
-            //}
+            this.Close();
+
         }
         private void DroneId_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -160,7 +171,7 @@ namespace PLGui
                     mainWindow.dronesToLists[Idrone] = droneToList;
                     mainWindow.lstDroneListView.Items.Refresh();
 
-                    MessageBox.Show(drone.ToString(), "הרחפן עודכן בהצלחה");
+                    MessageBox.Show("הרחפן עודכן בהצלחה");
                     Close();
                     break;
                 case MessageBoxResult.Cancel:
@@ -184,7 +195,6 @@ namespace PLGui
                 {
                     refreshThisWindow();
                     DataContext = drone;
-                    //UpdatingWindow(drone.Id);
                 }
             }
 
@@ -228,29 +238,32 @@ namespace PLGui
         //    StationID = stations.ID;
         //}
 
+        private void lvStations_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            BaseStationToList stations = (BaseStationToList)lvStations.SelectedItem;
+            StationID = stations.ID;
+        }
+
         private void btnSendDroneToDeliver_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 MessageBoxResult messageBoxResult = MessageBox.Show("האם ברצונך לשייך חבילה ", "אישור", MessageBoxButton.OKCancel);
-                switch (messageBoxResult)
+                if (messageBoxResult == MessageBoxResult.OK)
                 {
-                    case MessageBoxResult.OK:
-                        bool test = bL.AssignmentOfPackageToDrone(drone.DroneID);
-                        if (test)
-                        {
-                            drone = bL.GetDrone(drone.DroneID);
-                            refreshThisWindow();
-                        }
-                        else
-                        {
-                            MessageBox.Show("לא נמצאה חבילה מתאימה", "אישור");
-                        }
-                        break;
-                    case MessageBoxResult.Cancel:
-                        break;
-                    default:
-                        break;
+                    bool test = bL.AssignmentOfPackageToDrone(drone.DroneID);
+                    if (test)
+                    {
+                        FindParcel.Visibility = Visibility.Hidden;
+                        NoFindParcel.Visibility = Visibility.Visible;
+                        drone = bL.GetDrone(drone.DroneID);
+                        drone.ParcelInDeliverd.StatusParcrlInDeliver = StatusParcrlInDeliver.AwaitingCollection;
+                        refreshThisWindow();
+                    }
+                    else
+                    {
+                        MessageBox.Show("לא נמצאה חבילה מתאימה", "אישור");
+                    }
                 }
             }
             catch (BO.CheckIfIdNotException ex)
@@ -275,83 +288,131 @@ namespace PLGui
 
         private void btnCollectParcel_Click(object sender, RoutedEventArgs e)
         {
-
-            bL.CollectParcelByDrone(drone.DroneID);
-
             try
             {
-                MessageBoxResult result = MessageBox.Show("נכנסת בהצלחה", "מידע", MessageBoxButton.OK, MessageBoxImage.Information);
-                switch (result)
+                if (btnCollectParcel.Content == "איסוף חבילה מלקוח")
                 {
-
-                    case MessageBoxResult.OK:
-
-                        bL.CollectParcelByDrone(drone.DroneID);
+                    if (!bL.CollectParcelByDrone(drone.DroneID))
+                    {
+                        MessageBox.Show("הפעולה נכשלה", "אישור");
+                        
+                    }
+                    else
+                    {
                         drone = bL.GetDrone(drone.DroneID);
+                        drone.ParcelInDeliverd.StatusParcrlInDeliver = StatusParcrlInDeliver.OnTheWayDestination;
                         DataContext = drone;
+                        refreshThisWindow();
                         mainWindow.lstDroneListView.Items.Refresh();
-                        btnCollectParcel.Visibility = Visibility.Hidden;
-
-                        break;
-                    default:
-                        break;
+                    }
+                }
+                
+                else if (btnCollectParcel.Content == "אספקת חבילה ללקוח")
+                {
+                    if (!bL.DeliveryParcelToCustomer(drone.DroneID))
+                    {
+                        MessageBox.Show("הפעולה נכשלה", "אישור");
+                    }
+                    else
+                    {
+                        NoFindParcel.Visibility = Visibility.Visible;
+                        drone = bL.GetDrone(drone.DroneID);
+                        MessageBox.Show("החבילה סופקה ללקוח","אישור");
+                        mainWindow.lstDroneListView.Items.Refresh();
+                    }
                 }
             }
-            catch (Exception ex)
+            catch (BO.CheckIfIdNotException ex)
             {
-                MessageBox.Show(ex.ToString(), "לא נמצא רחפן", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error,
+                    MessageBoxResult.None, MessageBoxOptions.RightAlign);
+                Close();
+            }
+            catch (BO.CheckIdException ex)
+            {
+                MessageBox.Show(ex.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error,
+                    MessageBoxResult.None, MessageBoxOptions.RightAlign);
+                Close();
+            }
+            catch (BO.ParcelAssociationExeptions ex)
+            {
+                MessageBox.Show(ex.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error,
+                    MessageBoxResult.None, MessageBoxOptions.RightAlign);
+                Close();
             }
         }
 
         private void btnAddDrone_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult messageBoxResult = MessageBox.Show("האם אתה בטוח שאתה רוצה להוסיף את הרחפן?"
-               , "הכנס רחפן", MessageBoxButton.YesNoCancel);
+               , "הכנס רחפן", MessageBoxButton.OKCancel);
 
-            if (baseStationToList != null)
+            if (StationID != default)
             {
                 switch (messageBoxResult)
                 {
-                    case MessageBoxResult.Yes:
+                    case MessageBoxResult.OK:
                         try
                         {
-                            bL.AddNewDrone(drone, bL.GetDroneToListsBLByPredicate().ToList().Count);
+                            bL.AddNewDrone(drone, StationID);
+
                             mainWindow.dronesToLists.Add(bL.GetDroneToListsBLByPredicate()
                                 .First(i => i.DroneID == drone.DroneID));
-                            //mainWindow.dronesToList.CollectionChanged += mainWindow.OnCollectionChanged;
-                            lvStations.ItemsSource = bL.GetBasetationToListsByPredicate(i => i.AvailableChargingStations > 0);
+                            mainWindow.cmbStatusSelectorAndcmbWeightSelector();
 
-                            MessageBox.Show(drone.ToString(), "הרחפן נוסף בהצלחה");
+                            MessageBox.Show("הרחפן נוסף בהצלחה");
+                            Close();
+
+                        }
+                        catch (BO.CheckIdException ex)
+                        {
+                            MessageBox.Show(ex.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error,
+                                MessageBoxResult.None, MessageBoxOptions.RightAlign);
                             Close();
                         }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(ex.Message);
-                        }
                         break;
+
                     case MessageBoxResult.Cancel:
                         Close();
-                        break;
-                    case MessageBoxResult.No:
                         break;
                     default:
                         break;
                 }
             }
-
             else
             {
                 MessageBox.Show("משתמש יקר אנא בחר תחנה", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private void lvStations_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+        //private void DroneToListsView_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        //{
+        //    StatusSelectorAndWeightSelector();
+        //}
 
-            baseStationToList = (BO.BaseStationToList)lvStations.SelectedItem;
-            StationID = baseStationToList.ID;
+        //private void StatusSelectorAndWeightSelector()
+        //{
+        //    if (WeightCategories.SelectedIndex == -1)
+        //    {
+        //        WeightSelector.SelectedIndex = 0;
+        //    }
+        //    WeightCategories weightCategories = (WeightCategories)WeightSelector.SelectedItem;
+        //    DroneStatuses droneStatuses = (DroneStatuses)StatusSelector.SelectedItem;
 
-        }
+        //    if (weightCategories == WeightCategories.All && droneStatuses == DroneStatuses.All)
+        //        DroneListView.ItemsSource = droneToListsView;
+
+        //    else if (weightCategories != WeightCategories.All && droneStatuses == DroneStatuses.All)
+        //        DroneListView.ItemsSource = droneToListsView.ToList().FindAll(i => i.MaxWeight == (BO.WeightCategories)weightCategories);
+
+        //    else if (weightCategories == WeightCategories.All && droneStatuses != DroneStatuses.All)
+        //        DroneListView.ItemsSource = droneToListsView.ToList().FindAll(i => i.DroneStatuses == (BO.DroneStatuses)droneStatuses);
+
+        //    else
+        //        DroneListView.ItemsSource = droneToListsView.ToList().FindAll(i => i.MaxWeight == (BO.WeightCategories)weightCategories && i.DroneStatuses == (BO.DroneStatuses)droneStatuses);
+        //    AddGrouping();
+        //}
+
     }
 }
 

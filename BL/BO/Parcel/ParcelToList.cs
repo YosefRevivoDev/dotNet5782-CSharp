@@ -9,13 +9,14 @@ namespace BO
     public class ParcelToList : ParcelPoly
     {
 
-        public int SenderId { get; set; }
-        public int TargetId { get; set; }
+        public string SenderName { get; set; }
+        public string TargetName { get; set; }
         public ParcelStatus parcelStatus { get; set; }
         public int ParcelAreNotAssighmentToDrone { get; set; }
+
         public override string ToString()
         {
-            return base.ToString() + $"Sender ID: {SenderId}, Target ID: {TargetId}," +
+            return base.ToString() + $"Sender Name: {SenderName}, Target Name: {TargetName}," +
                 $" ParcelAreNotAssighmentToDrone: {ParcelAreNotAssighmentToDrone} ";
         }
     }

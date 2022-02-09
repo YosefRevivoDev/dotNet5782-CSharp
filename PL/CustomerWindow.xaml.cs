@@ -39,7 +39,7 @@ namespace PLGui
         {
             InitializeComponent();
             GetBL = getBl;
-            customer = new Customer();
+            customer = new Customer() { LocationCustomer = new Location() };
             DataContext = customer;
             //customer = getBl.GetCustomer(customer.CustomerId);
             mainWindow = _mainWindow;
@@ -97,10 +97,10 @@ namespace PLGui
                     try
                     {
                         GetBL.UpdateCustomr(customer.CustomerId, customer.NameCustomer, customer.PhoneCustomer);
-                        customerToList.NameCustomer = customer.NameCustomer;
-                        mainWindow.customerToLists[index] = customerToList;
+
+                        mainWindow.customerToLists[index] = GetBL.GetCustomerToList(i => i.CustomerId == customer.CustomerId).First();
                         mainWindow.lstBaseStationListView.Items.Refresh();
-                        MessageBox.Show(customerToList.ToString(), "התחנה עודכנה בהצלחה");
+                        MessageBox.Show("הלקוח עודכנה בהצלחה");
                         Close();
                     }
                     catch (Exception ex)
@@ -205,7 +205,7 @@ namespace PLGui
                         GetBL.AddNewCustomer(customer);
                         mainWindow.customerToLists.Add(GetBL.GetCustomerToList()
                             .First(i => i.CustomerId == customer.CustomerId));
-                        MessageBox.Show(customer.ToString(), "הלקוח נוסף בהצלחה");
+                        MessageBox.Show("הלקוח נוסף בהצלחה");
                         Close();
                     }
                     catch (Exception ex)

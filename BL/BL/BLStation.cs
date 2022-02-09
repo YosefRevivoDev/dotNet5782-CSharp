@@ -36,40 +36,45 @@ namespace BL
         /// </summary>
         /// <param name="stationID"></param>
         /// <returns></returns>
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="id"></param>
         public BaseStation GetBaseStation(int stationID)
         {
-            DO.BaseStation DalBaseStation = dal.GetBaseStation(stationID);
-
-            BaseStation BLbaseStation = new();
-            Location location = new();
-            BLbaseStation.location = new();
-            BLbaseStation.ID = DalBaseStation.StationID;
-            BLbaseStation.location.Latitude = DalBaseStation.Latitude;
-            BLbaseStation.location.Longtitude = DalBaseStation.Longtitude;
-            BLbaseStation.Name = DalBaseStation.Name;
-            BLbaseStation.AvailableChargingStations = DalBaseStation.AvailableChargeSlots;
-            BLbaseStation.droneCharges = new List<DroneInCharging>();
-
-            List<DO.DroneCharge> DroneCharges = dal.GetDroneChargesByPredicate(x => x.StationID == stationID).ToList();
-            foreach (var item in DroneCharges)
+            try
             {
-                BLbaseStation.droneCharges.Add(new DroneInCharging
+                DO.BaseStation DalBaseStation = dal.GetBaseStation(stationID);
+
+                BaseStation BLbaseStation = new()
                 {
-                    DroneID = item.DroneID,
-                    BattaryStatus = DroneToList.Find(x => x.DroneID == item.DroneID).BattaryStatus
-                });
+                    ID = DalBaseStation.StationID,
+                    Name = DalBaseStation.Name,
+                    AvailableChargingStations = DalBaseStation.AvailableChargeSlots,
+                    location = new()
+                    {
+                        Latitude = DalBaseStation.Latitude,
+                        Longtitude = DalBaseStation.Longtitude
+                    },
+                    droneCharges = new List<DroneInCharging>()
+                };
+                foreach (DroneToList item in DroneToList)
+                {
+                    if (item.CurrentLocation.Latitude == BLbaseStation.location.Latitude && item.CurrentLocation.Longtitude == BLbaseStation.location.Longtitude &&
+                       item.Status == DroneStatus.maintenance)
+                        BLbaseStation.droneCharges.Add(new() { DroneID = item.DroneID, BattaryStatus = item.BattaryStatus });
+                }
+                return BLbaseStation;
             }
-            return BLbaseStation;
+            catch (DO.CheckIfIdNotException ex)
+            {
+
+                throw new CheckIfIdNotException("ERORR", ex);
+            }
+
         }
         public void RemoveBaseStationBL(int id)
         {
             //IDAL.DO.BaseStation baseStationRemove = dal.GetBaseStation(id);
             dal.RemoveBaseStation(id);
         }
+
         public void UpdateBaseStation(int stationId, string newNameStation, int sumOfChargestation)
         {
             try
@@ -80,8 +85,9 @@ namespace BL
                 baseStation.Name = newNameStation;
 
                 //check sum of available ChargeSlots + sum of unavailable ChargeSlots
-                if (baseStation.AvailableChargeSlots + stationId < DroneToList.Count)
-                    baseStation.AvailableChargeSlots = sumOfChargestation - baseStation.AvailableChargeSlots + DroneToList.Count;//לבדוק איך סוכמים
+                int numberOfNotAvailableChargeSlots = dal.GetBaseStationByPredicate(x => x.StationID == stationId).Count();
+                if (sumOfChargestation > (numberOfNotAvailableChargeSlots + baseStation.AvailableChargeSlots))
+                    baseStation.AvailableChargeSlots = sumOfChargestation - numberOfNotAvailableChargeSlots;
 
                 dal.UpdateBaseStation(baseStation);
             }

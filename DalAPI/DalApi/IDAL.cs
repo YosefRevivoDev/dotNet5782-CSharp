@@ -11,7 +11,7 @@ namespace DalApi
         void AddCustomer(Customer new_customer);
         void AddDrone(Drone new_drone);
         void AddDroneCharge(DroneCharge droneCharge);
-        void AddParcel(Parcel new_parcel);
+        int AddParcel(Parcel new_parcel);
         #endregion
 
         #region Get object
@@ -28,7 +28,7 @@ namespace DalApi
         void UpdateBaseStation(BaseStation baseStation);
         void UpdateCustomer(Customer customer);
         void UpdateDrone(Drone drone);
-        void UpdateDroneCharge(DroneCharge droneCharge);
+        //void UpdateDroneCharge(DroneCharge droneCharge);
         void UpdateParcel(Parcel parcrl);
         void UpdateUser(User user);
         #endregion
@@ -38,7 +38,7 @@ namespace DalApi
         void RemoveCustomer(int customerId);
         void RemoveDrone(int droneID);
         void RemoveParcel(int parcelId);
-        void RemoveUser(int UserID);
+        void RemoveUser(string UserID);
         #endregion
 
         #region Display lists
@@ -52,7 +52,7 @@ namespace DalApi
         #region Operations 
         void PackageCollectionByDrone(int parcelId);
         void ReleasingChargeDrone(int droneId, int baseStationId);
-        void DeliveredPackageToCustumer(int parcelId);
+        bool DeliveredPackageToCustumer(int parcelId);
         void SetDroneForParcel(int parcelId, int droneId);
         void MinusDroneCharge(int stationId);
         void PlusDroneCharge(int stationId);
