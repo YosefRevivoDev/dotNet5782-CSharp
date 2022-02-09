@@ -41,7 +41,7 @@ namespace BL
             return angle * Radius;
         }
 
-        
+    
         public Location IndexOfMinDistancesBetweenLocations(Location customerLocation, List<DO.BaseStation> baseStations)
         {
             DO.BaseStation closeStation = baseStations[0];
