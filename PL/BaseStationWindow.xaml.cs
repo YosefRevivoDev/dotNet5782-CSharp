@@ -30,6 +30,7 @@ namespace PLGui
         public ObservableCollection<BaseStationToList> baseStationToLists;
         public BaseStationToList baseStationToList;
         public BaseStation baseStation { set; get; }
+        DroneToList droneToList { set; get; }
         public int index;
         private MainWindow mainWindow;
         private BaseStationToList basetation;
@@ -66,7 +67,7 @@ namespace PLGui
             mainWindow = _mainWindow;
             baseStation = getBL.GetBaseStation(_baseStation.ID);
             DataContext = baseStation;
-            Drones.ItemsSource = baseStation.droneCharges;
+            lstDronesCharge.ItemsSource = baseStation.droneCharges;
             UpdateGridVisibility();
 
         }
@@ -79,25 +80,29 @@ namespace PLGui
             {
                 baseStation = GetBL.GetBaseStation(id);
             }
-            catch (BO.CheckIfIdNotException ex)
+            catch (BO.CheckIfIdNotExceptions ex)
             {
                 MessageBox.Show(ex.Message, "שגיאה פנימית", MessageBoxButton.OK, MessageBoxImage.Error,
                     MessageBoxResult.None, MessageBoxOptions.RightAlign);
                 return;
             }
-            Drones.ItemsSource = baseStation.droneCharges.ToList();
+            lstDronesCharge.ItemsSource = baseStation.droneCharges.ToList();
             DataContext = baseStation;
         }
 
         private void UpdateGridVisibility()
         {
-
             AddStation.Visibility = Visibility.Hidden;
+            btnUpdateStation.Visibility = Visibility.Visible;
+            btnAddStation.Visibility = Visibility.Hidden;
+
         }
 
         private void UpdateVisibility() // hidden Button - upgrade and remove
         {
             GridUpdateStation.Visibility = Visibility.Hidden;
+            btnUpdateStation.Visibility = Visibility.Hidden;
+            btnAddStation.Visibility = Visibility.Visible;
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
@@ -108,7 +113,7 @@ namespace PLGui
 
         private void UpdateBaseStation_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult messageBoxResult = MessageBox.Show("האם אתה בטוח שאתה רוצה לעדכן את הלקוח?", "עדכן",  MessageBoxButton.YesNoCancel);
+            MessageBoxResult messageBoxResult = MessageBox.Show("האם אתה בטוח שאתה רוצה לעדכן את התחנה?", "עדכן", MessageBoxButton.YesNoCancel);
 
             switch (messageBoxResult)
             {
@@ -120,7 +125,7 @@ namespace PLGui
                         mainWindow.baseStationToLists[index] = GetBL.GetBasetationToListsByPredicate(x => x.ID == baseStation.ID).First();
                         mainWindow.lstBaseStationListView.Items.Refresh();
 
-                        MessageBox.Show(baseStation.ToString(), "התחנה עודכן בהצלחה");
+                        MessageBox.Show("התחנה עודכנה בהצלחה");
                         Close();
                     }
                     catch (Exception ex)
@@ -183,7 +188,7 @@ namespace PLGui
                         GetBL.AddBaseStation(baseStation);
                         mainWindow.baseStationToLists.Add(GetBL.GetBasetationToListsByPredicate()
                             .First(i => i.ID == baseStation.ID));
-                        MessageBox.Show(baseStation.ToString(), "הרחפן נוסף בהצלחה");
+                        MessageBox.Show( "התחנה נוספה בהצלחה");
                         Close();
                     }
                     catch (Exception ex)
@@ -237,6 +242,15 @@ namespace PLGui
 
         private void lattitudePattren(object sender, TextCompositionEventArgs e)
         {
+
+        }
+
+        private void Drones_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+            int Idrone = ((DroneInCharging)lstDronesCharge.SelectedItem).DroneID;
+            new DroneWindow(GetBL, mainWindow, Idrone).Show();
+            Close();
 
         }
     }

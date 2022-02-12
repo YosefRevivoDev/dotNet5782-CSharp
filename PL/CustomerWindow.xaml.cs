@@ -26,6 +26,7 @@ namespace PLGui
         IBL GetBL;
         public ObservableCollection<CustomerToList> customerToLists;
         public CustomerToList customerToList;
+        ParcelToList parcelToList { set; get; }
         public Customer customer { set; get; }
         public int index;
         private MainWindow mainWindow;
@@ -41,7 +42,6 @@ namespace PLGui
             GetBL = getBl;
             customer = new Customer() { LocationCustomer = new Location() };
             DataContext = customer;
-            //customer = getBl.GetCustomer(customer.CustomerId);
             mainWindow = _mainWindow;
             UpdateVisibility();
         }
@@ -56,29 +56,51 @@ namespace PLGui
         /// <param name="_mainWindow"></param>
         /// <param name="_customer"></param>
         /// <param name="_index"></param>
-        public CustomerWindow(IBL bL, MainWindow _mainWindow, CustomerToList _customer, int _index)
+        public CustomerWindow(IBL bL, MainWindow _mainWindow, int _index)
         {
             InitializeComponent();
-            CustomrtGrid.Visibility = Visibility.Visible;
+            Updating.Visibility = Visibility.Visible;
             indexCustomer = _index;
             GetBL = bL;
             mainWindow = _mainWindow;
-            customer = bL.GetCustomer(_customer.CustomerId);
+            customerToList = bL.GetCustomerToList(x => x.CustomerId == _index).FirstOrDefault();
+            customer = bL.GetCustomer(_index);
+            ItemsSourceParcels();
             DataContext = customer;
             UpdateGridVisibility();
         }
 
+        private void ItemsSourceParcels()
+        {
+            fromCustomer.ItemsSource = customer.PackagesFromCustomer.ToList();
+            toCustomer.ItemsSource = customer.PackagesToCustomer.ToList();
+        }
+        private void UpdatingWindow(int id)
+        {
+            GridUpdateCustomer.Visibility = Visibility.Visible;
+            GridAddCustomer.Visibility = Visibility.Hidden;
+            try
+            {
+                customer = GetBL.GetCustomer(id);
+            }
+            catch (BO.CheckIfIdNotExceptions ex)
+            {
+                MessageBox.Show(ex.Message, "שגיאה פנימית", MessageBoxButton.OK, MessageBoxImage.Error,
+                    MessageBoxResult.None, MessageBoxOptions.RightAlign);
+                return;
+            }
+           // Drones.ItemsSource = baseStation.droneCharges.ToList();
+            DataContext = customer;
+        }
 
         private void UpdateGridVisibility()
         {
-            //btnaddCustomer.Visibility = Visibility.Hidden;
+            btnAddCustomer.Visibility = Visibility.Hidden;
         }
 
         private void UpdateVisibility() // hidden Button - upgrade and remove
         {
-            //CustomerID.IsReadOnly = false;
-            //btnRemoveCustomer.Visibility = Visibility.Hidden;
-            //btnupdateCustomer.Visibility = Visibility.Hidden;
+            btnUpdateCustomer.Visibility = Visibility.Hidden;
         }
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
@@ -88,8 +110,8 @@ namespace PLGui
 
         private void updateCustomer_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult messageBoxResult = MessageBox.Show("האם אתה בטוח שאתה רוצה לעדכן את תחנה?"
-             , "הכנס תחנה", MessageBoxButton.YesNoCancel);
+            MessageBoxResult messageBoxResult = MessageBox.Show("האם אתה בטוח שאתה רוצה לעדכן את הלקוח?"
+             , "הכנס לקוח", MessageBoxButton.YesNoCancel);
 
             switch (messageBoxResult)
             {
@@ -100,7 +122,7 @@ namespace PLGui
 
                         mainWindow.customerToLists[index] = GetBL.GetCustomerToList(i => i.CustomerId == customer.CustomerId).First();
                         mainWindow.lstBaseStationListView.Items.Refresh();
-                        MessageBox.Show("הלקוח עודכנה בהצלחה");
+                        MessageBox.Show("הלקוח עודכן בהצלחה");
                         Close();
                     }
                     catch (Exception ex)
@@ -152,19 +174,25 @@ namespace PLGui
 
         private void CustomerListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            customerToList = (CustomerToList)mainWindow.lstCustomerListView.SelectedItem;
+            if (customerToList != null)
+            {
+                UpdatingWindow(customerToList.CustomerId);
+            }
         }
 
         private void fromCustomer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //int parcel = ((ParcelAtCustomer)fromCustomer.SelectedItem).Id;
-            //new ParcelWindow(GetBL, mainWindow, parcel, index).Show();
-            //Close();
+            int parcel = ((ParcelAtCustomer)fromCustomer.SelectedItem).Id;
+            new ParcelWindow(GetBL, mainWindow, parcel).Show();
+            Close();
         }
 
         private void toCustomer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            int parcelID = ((ParcelAtCustomer)toCustomer.SelectedItem).Id;
+            new ParcelWindow(GetBL, mainWindow, parcelID).Show();
+            Close();
         }
 
         private void onlyNumbersForID(object sender, TextCompositionEventArgs e)

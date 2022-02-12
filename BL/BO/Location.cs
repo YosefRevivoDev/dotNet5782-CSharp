@@ -13,7 +13,7 @@ namespace BO
 
         public override string ToString()
         {
-            return string.Format(Longtitude + "\r\n" + Latitude);
+            return string.Format("{0}/{1}", Longtitude, Latitude);
         }
     }
 }

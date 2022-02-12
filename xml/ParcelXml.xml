@@ -9,8 +9,8 @@
     <DroneId>4</DroneId>
     <Created>2022-01-25T10:32:15.2526439+02:00</Created>
     <Assignment>2022-01-27T10:32:15.2522151+02:00</Assignment>
-    <Delivered>2022-02-09T13:42:26.485767+02:00</Delivered>
     <PickedUp>2022-02-09T13:37:17.8131864+02:00</PickedUp>
+    <Delivered>2022-02-09T13:42:26.485767+02:00</Delivered>
   </Parcel>
   <Parcel>
     <ParcelId>35</ParcelId>
@@ -21,8 +21,8 @@
     <DroneId>3</DroneId>
     <Created>2022-01-25T10:32:15.2522151+02:00</Created>
     <Assignment>0001-01-01T00:00:00</Assignment>
-    <Delivered>2022-02-09T12:53:15.6735575+02:00</Delivered>
     <PickedUp>2022-02-09T13:40:33.34183+02:00</PickedUp>
+    <Delivered>2022-02-09T12:53:15.6735575+02:00</Delivered>
   </Parcel>
   <Parcel>
     <ParcelId>1</ParcelId>
@@ -33,8 +33,8 @@
     <DroneId>0</DroneId>
     <Created>2022-01-25T10:32:15.2526393+02:00</Created>
     <Assignment>0001-01-01T00:00:00</Assignment>
-    <Delivered>0001-01-01T00:00:00</Delivered>
     <PickedUp>2022-02-08T18:22:17.7771526+02:00</PickedUp>
+    <Delivered>0001-01-01T00:00:00</Delivered>
   </Parcel>
   <Parcel>
     <ParcelId>2</ParcelId>
@@ -45,8 +45,8 @@
     <DroneId>10</DroneId>
     <Created>2022-01-25T10:32:15.2526414+02:00</Created>
     <Assignment>0001-01-01T00:00:00</Assignment>
+    <PickedUp>2022-02-12T20:25:56.4167653+02:00</PickedUp>
     <Delivered>2022-02-09T13:50:46.4117676+02:00</Delivered>
-    <PickedUp>2022-02-12T20:27:21.0818371+02:00</PickedUp>
   </Parcel>
   <Parcel>
     <ParcelId>3</ParcelId>
@@ -57,8 +57,8 @@
     <DroneId>0</DroneId>
     <Created>2022-01-25T10:32:15.252642+02:00</Created>
     <Assignment>0001-01-01T00:00:00</Assignment>
-    <Delivered>0001-01-01T00:00:00</Delivered>
     <PickedUp>0001-01-01T00:00:00</PickedUp>
+    <Delivered>0001-01-01T00:00:00</Delivered>
   </Parcel>
   <Parcel>
     <ParcelId>4</ParcelId>
@@ -69,8 +69,8 @@
     <DroneId>2</DroneId>
     <Created>2022-01-25T10:32:15.2526426+02:00</Created>
     <Assignment>0001-01-01T00:00:00</Assignment>
-    <Delivered>0001-01-01T00:00:00</Delivered>
     <PickedUp>0001-01-01T00:00:00</PickedUp>
+    <Delivered>0001-01-01T00:00:00</Delivered>
   </Parcel>
   <Parcel>
     <ParcelId>5</ParcelId>
@@ -81,8 +81,8 @@
     <DroneId>0</DroneId>
     <Created>2022-01-25T10:32:15.2526434+02:00</Created>
     <Assignment>0001-01-01T00:00:00</Assignment>
-    <Delivered>0001-01-01T00:00:00</Delivered>
     <PickedUp>2022-02-09T13:50:29.9849865+02:00</PickedUp>
+    <Delivered>0001-01-01T00:00:00</Delivered>
   </Parcel>
   <Parcel>
     <ParcelId>7</ParcelId>
@@ -93,8 +93,8 @@
     <DroneId>0</DroneId>
     <Created>2022-01-25T10:32:15.2526445+02:00</Created>
     <Assignment>0001-01-01T00:00:00</Assignment>
-    <Delivered>0001-01-01T00:00:00</Delivered>
     <PickedUp>2022-02-09T11:37:04.1705179+02:00</PickedUp>
+    <Delivered>0001-01-01T00:00:00</Delivered>
   </Parcel>
   <Parcel>
     <ParcelId>8</ParcelId>
@@ -105,8 +105,8 @@
     <DroneId>9</DroneId>
     <Created>2022-01-25T10:32:15.252645+02:00</Created>
     <Assignment>0001-01-01T00:00:00</Assignment>
-    <Delivered>0001-01-01T00:00:00</Delivered>
     <PickedUp>0001-01-01T00:00:00</PickedUp>
+    <Delivered>0001-01-01T00:00:00</Delivered>
   </Parcel>
   <Parcel>
     <ParcelId>9</ParcelId>
@@ -117,8 +117,8 @@
     <DroneId>0</DroneId>
     <Created>2022-01-25T10:32:15.2526456+02:00</Created>
     <Assignment>0001-01-01T00:00:00</Assignment>
-    <Delivered>0001-01-01T00:00:00</Delivered>
     <PickedUp>2022-02-09T11:37:17.6236967+02:00</PickedUp>
+    <Delivered>0001-01-01T00:00:00</Delivered>
   </Parcel>
   <Parcel>
     <ParcelId>10</ParcelId>
@@ -129,8 +129,8 @@
     <DroneId>1</DroneId>
     <Created>2022-01-25T10:32:15.2526462+02:00</Created>
     <Assignment>0001-01-01T00:00:00</Assignment>
-    <Delivered>0001-01-01T00:00:00</Delivered>
     <PickedUp>0001-01-01T00:00:00</PickedUp>
+    <Delivered>0001-01-01T00:00:00</Delivered>
   </Parcel>
   <Parcel>
     <ParcelId>11</ParcelId>
@@ -141,8 +141,8 @@
     <DroneId>0</DroneId>
     <Created>2022-01-25T10:32:15.2526467+02:00</Created>
     <Assignment>0001-01-01T00:00:00</Assignment>
-    <Delivered>0001-01-01T00:00:00</Delivered>
     <PickedUp>0001-01-01T00:00:00</PickedUp>
+    <Delivered>0001-01-01T00:00:00</Delivered>
   </Parcel>
   <Parcel>
     <ParcelId>12</ParcelId>
@@ -153,8 +153,8 @@
     <DroneId>5</DroneId>
     <Created>2022-01-25T10:32:15.2526473+02:00</Created>
     <Assignment>0001-01-01T00:00:00</Assignment>
-    <Delivered>0001-01-01T00:00:00</Delivered>
     <PickedUp>0001-01-01T00:00:00</PickedUp>
+    <Delivered>0001-01-01T00:00:00</Delivered>
   </Parcel>
   <Parcel>
     <ParcelId>13</ParcelId>
@@ -165,8 +165,8 @@
     <DroneId>0</DroneId>
     <Created>2022-01-25T10:32:15.2526478+02:00</Created>
     <Assignment>0001-01-01T00:00:00</Assignment>
-    <Delivered>0001-01-01T00:00:00</Delivered>
     <PickedUp>0001-01-01T00:00:00</PickedUp>
+    <Delivered>0001-01-01T00:00:00</Delivered>
   </Parcel>
   <Parcel>
     <ParcelId>14</ParcelId>
@@ -177,8 +177,8 @@
     <DroneId>1</DroneId>
     <Created>2022-01-25T10:32:15.2526483+02:00</Created>
     <Assignment>0001-01-01T00:00:00</Assignment>
-    <Delivered>0001-01-01T00:00:00</Delivered>
     <PickedUp>0001-01-01T00:00:00</PickedUp>
+    <Delivered>0001-01-01T00:00:00</Delivered>
   </Parcel>
   <Parcel>
     <ParcelId>15</ParcelId>
@@ -189,8 +189,8 @@
     <DroneId>0</DroneId>
     <Created>2022-01-25T10:32:15.2526488+02:00</Created>
     <Assignment>0001-01-01T00:00:00</Assignment>
-    <Delivered>0001-01-01T00:00:00</Delivered>
     <PickedUp>0001-01-01T00:00:00</PickedUp>
+    <Delivered>0001-01-01T00:00:00</Delivered>
   </Parcel>
   <Parcel>
     <ParcelId>16</ParcelId>
@@ -201,8 +201,8 @@
     <DroneId>7</DroneId>
     <Created>2022-01-25T10:32:15.2526493+02:00</Created>
     <Assignment>0001-01-01T00:00:00</Assignment>
-    <Delivered>0001-01-01T00:00:00</Delivered>
     <PickedUp>0001-01-01T00:00:00</PickedUp>
+<Delivered>0001-01-01T00:00:00</Delivered>
   </Parcel>
   <Parcel>
     <ParcelId>17</ParcelId>
@@ -213,8 +213,8 @@
     <DroneId>0</DroneId>
     <Created>2022-01-25T10:32:15.2526499+02:00</Created>
     <Assignment>0001-01-01T00:00:00</Assignment>
-    <Delivered>0001-01-01T00:00:00</Delivered>
     <PickedUp>0001-01-01T00:00:00</PickedUp>
+    <Delivered>0001-01-01T00:00:00</Delivered>
   </Parcel>
   <Parcel>
     <ParcelId>18</ParcelId>
@@ -225,8 +225,8 @@
     <DroneId>5</DroneId>
     <Created>2022-01-25T10:32:15.2526504+02:00</Created>
     <Assignment>0001-01-01T00:00:00</Assignment>
-    <Delivered>0001-01-01T00:00:00</Delivered>
     <PickedUp>0001-01-01T00:00:00</PickedUp>
+    <Delivered>0001-01-01T00:00:00</Delivered>
   </Parcel>
   <Parcel>
     <ParcelId>19</ParcelId>
@@ -237,8 +237,8 @@
     <DroneId>0</DroneId>
     <Created>2022-01-25T10:32:15.2526509+02:00</Created>
     <Assignment>0001-01-01T00:00:00</Assignment>
-    <Delivered>0001-01-01T00:00:00</Delivered>
     <PickedUp>0001-01-01T00:00:00</PickedUp>
+    <Delivered>0001-01-01T00:00:00</Delivered>
   </Parcel>
   <Parcel>
     <ParcelId>20</ParcelId>
@@ -249,7 +249,7 @@
     <DroneId>0</DroneId>
     <Created>2022-02-05T20:15:45.9803926+02:00</Created>
     <Assignment>0001-01-01T00:00:00</Assignment>
-    <Delivered>0001-01-01T00:00:00</Delivered>
     <PickedUp>0001-01-01T00:00:00</PickedUp>
+    <Delivered>0001-01-01T00:00:00</Delivered>
   </Parcel>
 </ArrayOfParcel>

@@ -124,7 +124,7 @@ namespace DAL
         //Set Drone For Parcel by ID
         #region Operations of drone
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public void SetDroneForParcel(int parcelId, int droneId)
+        public bool SetDroneForParcel(int parcelId, int droneId)
         {
             int index = DataSource.Parcels.ToList().FindIndex(i => i.ParcelId == parcelId);
             Parcel parcel = DataSource.Parcels[index];
@@ -132,8 +132,9 @@ namespace DAL
             if (index != -1 && droneIndex != -1)
             {
                 parcel.DroneId = droneId;
-                parcel.PickedUp = DateTime.Now;
+                parcel.Assignment = DateTime.Now;
                 DataSource.Parcels[index] = parcel;
+                return true;
             }
             else
             {

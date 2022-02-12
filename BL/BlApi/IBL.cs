@@ -33,6 +33,7 @@ namespace BlApi
         public Parcel GetParcel(int id);
         public User GetUser(string userName);
         public ParcelToList GetParcelToList(int parcelID);
+        public DroneInParcel GetDroneAtParcel(int droneId);
         #endregion
 
         #region AddObject

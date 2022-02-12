@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PLGui" xmlns:bo="clr-namespace:BO;assembly=BL" d:DataContext="{d:DesignInstance Type=bo:Drone}"
         mc:Ignorable="d"
-        Title="DroneWindow" Height="480" Width="640" WindowStyle="SingleBorderWindow" ResizeMode="NoResize">
+        Title="DroneWindow" Height="530" Width="680" WindowStyle="SingleBorderWindow" ResizeMode="NoResize">
     <Window.Resources>
 
         <Style x:Key="styleForButtons" TargetType="Button">
@@ -29,7 +29,7 @@
             <Grid x:Name="GridUpdateDrone" Visibility="Visible">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition Width="1.4*"/>
                 </Grid.ColumnDefinitions>
                 <Border BorderThickness="2" Grid.Row="0" BorderBrush="Yellow" Visibility="Visible"  CornerRadius="5" Padding="20">
 
@@ -41,6 +41,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
@@ -72,7 +73,9 @@
                         <Label Content="מיקום רחפן" Grid.Column="1" Grid.Row="6" FontSize="16" FontWeight="UltraBlack" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <TextBlock x:Name="Location" Style="{StaticResource MaterialDesignCharacterCounterTextBlock}" Grid.Row="6" Width="64" PreviewTextInput="NumberValidationTextBox" Text="{Binding CurrentLocation}"/>
 
-                        <Button x:Name="btnUpdateDrone" Content="עדכון רחפן" Grid.Row="7" VerticalAlignment="Center" Width="128" Click="btnUpdateModel_Click" Grid.ColumnSpan="2"/>
+                        <Button x:Name="btnUpdateDrone" Content="עדכון רחפן" Grid.Row="7" Width="128" HorizontalAlignment="Center" Click="btnUpdateModel_Click" Grid.ColumnSpan="2"/>
+                        <Button x:Name="CloseWindow" Content="סגור" Grid.Row="8" Grid.ColumnSpan="2" Width="128"  Click="CloseWindow_Click" />
+
 
                     </Grid>
                 </Border>
@@ -80,12 +83,12 @@
                 <Grid x:Name="DroneSituateGrid" Visibility="Visible"  Grid.Column="1">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
-                        <RowDefinition Height="1.5*"/>
+                        <RowDefinition Height="1.7*"/>
                     </Grid.RowDefinitions>
 
                     <Border BorderThickness="2" Grid.Row="1" BorderBrush="Yellow"  CornerRadius="5" Padding="20">
 
-                        <Grid  x:Name="NoFindParcel" Visibility="Visible">
+                        <Grid  x:Name="NoFindParcel" Visibility="Hidden">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="3*"/>
@@ -104,11 +107,11 @@
 
                     <Border BorderThickness="2" Grid.Row="1" BorderBrush="Yellow"  CornerRadius="5" Padding="20">
 
-                        <Grid x:Name="FindParcel" Grid.Row="1" Visibility="Hidden">
+                        <Grid x:Name="FindParcel" Grid.Row="1" Visibility="Visible">
 
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
-                                <RowDefinition Height="7*"/>
+                                <RowDefinition Height="8*"/>
                             </Grid.RowDefinitions>
 
                             <Label x:Name="AssociateDrone" Grid.ColumnSpan="2" Content=":פרטי החבילה המשוייכת " FontSize="14"  VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" />
@@ -201,7 +204,8 @@
                     <Border Name="CollectParcel" BorderThickness="2" Grid.Row="0" BorderBrush="Yellow"  CornerRadius="5" Padding="20"  Visibility="Visible" >
 
                         <Grid >
-                            <Button x:Name="btnCollectParcel" Content="איסוף חבילה מלקוח" Click="btnCollectParcel_Click"  />
+                            <Button x:Name="btnCollectParcel" Content="איסוף חבילה מלקוח" Click="btnCollectParcel_Click" Visibility="Visible"/>
+                            <Button x:Name="btnSuplyParcel" Content="אספקת חבילה ללקוח" Click="btnSuplyParcel_Click" />
                         </Grid>
                     </Border>
 
@@ -267,6 +271,13 @@
                     <Label Grid.Row="0" Content=":בחר תחנה"  FontWeight="Bold" Background="{x:Null}" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
                     <ListView x:Name="lvStations" HorizontalAlignment="Right" Background="{x:Null}" Grid.ColumnSpan="2" Grid.RowSpan="2" DisplayMemberPath="ID"
                           SelectionChanged="lvStations_SelectionChanged">
+
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+
                         <ListView.View>
                             <GridView >
                                 <GridViewColumn Header="מספר מזהה" Width="150" DisplayMemberBinding="{Binding ID}"/>
@@ -278,8 +289,7 @@
                         </ListView.View>
                     </ListView>
                 </Grid>
-                <Button x:Name="btnAddDrone" Grid.Row="10" Grid.Column="1" VerticalAlignment="Bottom"
-                Grid.ColumnSpan="3"
+                <Button x:Name="btnAddDrone" Grid.Row="10" Grid.Column="1" VerticalAlignment="Bottom" Grid.ColumnSpan="3" 
                 Content="הוסף רחפן" Click="btnAddDrone_Click"/>
             </Grid>
         </Grid>

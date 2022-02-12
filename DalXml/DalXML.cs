@@ -8,19 +8,13 @@ using System.Xml.Serialization;
 using DalApi;
 using DO;
 using System.Globalization;
-
+using System.Runtime.CompilerServices;
 
 namespace DAL
 {
 
     sealed class DalXml : IDal
     {
-        static readonly DalXml instance = new DalXml();
-
-        public static IDal Instance { get => instance; }
-
-        private DalXml() { }
-
         string baseStationPath = @"BaseStationXml.xml";
         string dronePath = @"DroneXml.xml";
         string parcelPath = @"ParcelXml.xml";
@@ -28,6 +22,15 @@ namespace DAL
         string droneChargesPath = @"DroneChargesXml.xml";
         string userPath = @"UserXml.xml";
         string runNumbers = @"RunNumbers.xml";
+
+        static readonly DalXml instance = new DalXml();
+
+        public static IDal Instance { get => instance; }
+
+        private DalXml() { }
+
+        
+        [MethodImpl(MethodImplOptions.Synchronized)]
 
         #region Drone
         public void UpdateDrone(Drone drone)
@@ -75,7 +78,7 @@ namespace DAL
             List<Drone> drones = XMLTools.LoadListFromXMLSerializer<Drone>(dronePath);
 
             Drone drone = drones.Find(i => i.DroneID == Id);
-            return drone.DroneID != default ? drone : throw new DroneException("Drone not found");
+            return drone.DroneID != default ? drone : throw new CheckIfIdNotException("Drone not found");
         }
         public IEnumerable<Drone> GetDronesByPredicate(Predicate<Drone> predicate = null)
         {
@@ -486,21 +489,22 @@ namespace DAL
         /// <param name="parcelId"></param>
         /// <param name="droneId"></param>
         #region Operations
-        public void SetDroneForParcel(int parcelId, int droneId)
+        public bool SetDroneForParcel(int parcelId, int droneId)
         {
             List<Parcel> ListParcel = XMLTools.LoadListFromXMLSerializer<Parcel>(parcelPath);
             List<Drone> ListDrone = XMLTools.LoadListFromXMLSerializer<Drone>(dronePath);
 
             Parcel parcel = ListParcel.Find(Parcel => Parcel.ParcelId == parcelId);
-            int index = ListParcel.ToList().FindIndex(i => i.ParcelId == parcelId);
+            int index = ListParcel.FindIndex(i => i.ParcelId == parcelId);
             int droneIndex = ListDrone.FindIndex(i => i.DroneID == droneId);
 
             if (index != -1 && droneIndex != -1)
             {
                 parcel.DroneId = droneId;
-                parcel.PickedUp = DateTime.Now;
+                parcel.Assignment = DateTime.Now;
                 ListParcel[index] = parcel;
                 XMLTools.SaveListToXMLSerializer(ListParcel, parcelPath);
+                return true;
             }
             else
             {
@@ -539,6 +543,7 @@ namespace DAL
         public bool DeliveredPackageToCustumer(int parcelId)
         {
             List<Parcel> ListParcel = XMLTools.LoadListFromXMLSerializer<Parcel>(parcelPath);
+
             int index = ListParcel.ToList().FindIndex(i => i.ParcelId == parcelId);
             Parcel parcel = ListParcel[index];
             if (index != -1)
@@ -637,10 +642,10 @@ namespace DAL
 
     public static class Config
     {
-        public static double PowerConsumptionAvailable = 0.01;
-        public static double PowerConsumptionLightWeight = 0.04;
-        public static double PowerConsumptionMediumWeight = 0.07;
-        public static double PowerConsumptionHeavyWeight = 0.1;
+        public static double PowerConsumptionAvailable = 0.07;
+        public static double PowerConsumptionLightWeight = 0.09;
+        public static double PowerConsumptionMediumWeight = 0.15;
+        public static double PowerConsumptionHeavyWeight = 0.3;
         public static double LoadingDrone = 2;
     }
 }

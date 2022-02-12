@@ -72,14 +72,15 @@ namespace PLGui
         /// <param name="_mainWindow"></param>
         /// <param name="_parcel"></param>
         /// <param name="_index"></param>
-        public ParcelWindow(IBL bL, MainWindow _mainWindow, ParcelToList _parcel, int _index)
+        public ParcelWindow(IBL bL, MainWindow _mainWindow, int _index)
         {
             InitializeComponent();
             ParcelGrid.Visibility = Visibility.Visible;
             GetBL = bL;
             index = _index;
             mainWindow = _mainWindow;
-            parcel = bL.GetParcel(_parcel.Id);
+            parcelToList = bL.GetParcelToListsByPredicate(x => x.Id == _index).FirstOrDefault();
+            parcel = bL.GetParcel(_index);
             DataContext = parcel;
             UpdateGridVisibility();
         }
@@ -204,6 +205,13 @@ namespace PLGui
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
+            Close();
+        }
+
+        private void droneInParcelButton_Click_1(object sender, RoutedEventArgs e)
+        {
+            int idDrone = parcel.droneInParcel.DroneID;
+            new DroneWindow(GetBL, mainWindow, idDrone).Show();
             Close();
         }
     }

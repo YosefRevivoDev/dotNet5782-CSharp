@@ -53,7 +53,7 @@ namespace DalApi
         void PackageCollectionByDrone(int parcelId);
         void ReleasingChargeDrone(int droneId, int baseStationId);
         bool DeliveredPackageToCustumer(int parcelId);
-        void SetDroneForParcel(int parcelId, int droneId);
+        bool SetDroneForParcel(int parcelId, int droneId);
         void MinusDroneCharge(int stationId);
         void PlusDroneCharge(int stationId);
         #endregion
