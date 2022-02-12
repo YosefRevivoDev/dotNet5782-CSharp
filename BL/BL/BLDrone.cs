@@ -55,7 +55,7 @@ namespace BL
                     DroneWeight = newDrone.DroneWeight,
                     CurrentLocation = newDrone.CurrentLocation,
                     BattaryStatus = random.NextDouble() * 20.0 + 20.0,
-                    Status = DroneStatus.maintenance,
+                    Status = DroneStatus.available,
                 });          
 
                 DO.DroneCharge droneCharge = new()
@@ -73,7 +73,7 @@ namespace BL
             }
             catch (DO.CheckIfIdNotException ex)
             {
-                throw new CheckIfIdNotException("ERORR", ex);
+                throw new CheckIfIdNotExceptions("ERORR", ex);
             }
 
         }
@@ -103,14 +103,14 @@ namespace BL
         {
             try
             {
+                
                 DroneToList droneToList = DroneToList.Find(x => x.DroneID == id);
 
-                if (droneToList == null)
+                if (droneToList == default)
                 {
-                    throw new Exception("This Drone have not exist, please try again.");
+                    throw new CheckIfIdNotExceptions("This Drone have not exist, please try again.");
                 }
                 
-
                 Drone BLdrone = new()
                 {
                     DroneID = droneToList.DroneID,
@@ -124,17 +124,16 @@ namespace BL
                 if (droneToList.NumOfPackageDelivered != 0)
                 {
                     BLdrone.ParcelInDeliverd = GetParcelInDeliverd(droneToList.CurrentLocation, droneToList.NumOfPackageDelivered);
-                    return BLdrone;
                 }
                 return BLdrone;
             }
             catch (DO.CheckIdException ex)
             {
-                throw new CheckIdException("ERORR", ex);
+                throw new CheckIdException("ERORR" ,ex);
             }
             catch (DO.CheckIfIdNotException ex)
             {
-                throw new CheckIfIdNotException("ERORR", ex);
+                throw new CheckIfIdNotExceptions("ERORR", ex);
             }
 
         }
@@ -158,17 +157,17 @@ namespace BL
             {
                 double battarySenderToTarget;
 
-                int index = parcels.FindIndex(x => x.DroneId == drone.DroneID && x.Delivered == DateTime.MinValue);//Index of parcel that assigned but not sent1
+                int findIndex = parcels.FindIndex(x => x.DroneId == drone.DroneID && x.Delivered == DateTime.MinValue);//Index of parcel that assigned but not sent1
                 drone.CurrentLocation = new();
-                if (index != -1)//if have a parcel that assigned but not sent, do 
+                if (findIndex != -1)//if have a parcel that assigned but not sent, do 
                 {
 
                     drone.Status = DroneStatus.busy;//get the parcel ID that assigned to the drone & set to DroneToList parcel ID that not delivered and change status to busy
-                    drone.NumOfPackageDelivered = parcels[index].ParcelId;
+                    drone.NumOfPackageDelivered = parcels[findIndex].ParcelId;
 
                     
-                    DO.Customer SenderCustomer = customers.Find(x => x.CustomerId == parcels[index].SenderId); //Set parmaters to SenderCustomer & TargetCustomer
-                    DO.Customer TargetCustomer = customers.Find(x => x.CustomerId == parcels[index].TargetId);
+                    DO.Customer SenderCustomer = customers.Find(x => x.CustomerId == parcels[findIndex].SenderId); //Set parmaters to SenderCustomer & TargetCustomer
+                    DO.Customer TargetCustomer = customers.Find(x => x.CustomerId == parcels[findIndex].TargetId);
 
                     Location Senderlocation = new()
                     {
@@ -181,13 +180,11 @@ namespace BL
                         Longtitude = TargetCustomer.Longtitude
                     };
 
-                    if (parcels[index].PickedUp == DateTime.MinValue)
+                    if (parcels[findIndex].PickedUp == DateTime.MinValue)
                     {
                         drone.CurrentLocation = LocationOfTheNearestStation(Senderlocation, baseStations);// Battery status is required between the sender and the destination depending on the size of the package
-
-                        drone.CurrentLocation = LocationOfTheNearestStation(Senderlocation, baseStations);
                         battarySenderToTarget = (helpFunction.DistanceBetweenLocations(drone.CurrentLocation, Senderlocation) * PowerConsumptionAvailable)
-                        + (helpFunction.DistanceBetweenLocations(Senderlocation, Targetlocation) * tempPower[(int)ParcelOfDelivery[index].ParcelWeight])
+                        + (helpFunction.DistanceBetweenLocations(Senderlocation, Targetlocation) * tempPower[(int)ParcelOfDelivery[findIndex].ParcelWeight])
                         + (helpFunction.DistanceBetweenLocations(Targetlocation, LocationOfTheNearestStation(Targetlocation, baseStations)) * PowerConsumptionAvailable);
                         drone.BattaryStatus = (random.NextDouble() * (100.0 - battarySenderToTarget)) + battarySenderToTarget;
                     }
@@ -195,7 +192,7 @@ namespace BL
                     {
                         drone.CurrentLocation = Senderlocation;
                         battarySenderToTarget = (helpFunction.DistanceBetweenLocations(Senderlocation, Targetlocation) *
-                            tempPower[(int)ParcelOfDelivery[index].ParcelWeight])
+                            tempPower[(int)ParcelOfDelivery[findIndex].ParcelWeight])
                         + (helpFunction.DistanceBetweenLocations(Targetlocation, LocationOfTheNearestStation(Targetlocation, baseStations)) * PowerConsumptionAvailable);
                         drone.BattaryStatus = (random.NextDouble() * (100.0 - battarySenderToTarget)) + battarySenderToTarget;
                         
@@ -203,6 +200,8 @@ namespace BL
                 }
                 else
                 {
+                    int index;
+
                     DO.DroneCharge droneCarge = new();
                     try
                     {
@@ -224,15 +223,14 @@ namespace BL
                         drone.CurrentLocation = new() { Longtitude = station.Longtitude, Latitude = station.Latitude };
                         drone.BattaryStatus = random.NextDouble() * 20.0;
                     }
-
                     if (drone.Status == DroneStatus.available)
                     {
-                        List<DO.Parcel> droneParcels = ParcelOfDelivery.FindAll(i => i.Delivered != DateTime.MinValue);
+                        List<DO.Parcel> droneParcel = ParcelOfDelivery.FindAll(i => i.Delivered != DateTime.MinValue);
 
-                        index = random.Next(0, droneParcels.Count);
-                        if (droneParcels.Count > 0)
+                        index = random.Next(0, droneParcel.Count);
+                        if (droneParcel.Count > 0)
                         {
-                            DO.Customer target = customers.Find(customer => customer.CustomerId == droneParcels[index].TargetId);
+                            DO.Customer target = customers.Find(c => c.CustomerId == droneParcel[index].TargetId);
                             Location location = new() { Latitude = target.Latitude, Longtitude = target.Longtitude };
                             drone.CurrentLocation = location;
                         }
@@ -301,7 +299,7 @@ namespace BL
             }
             catch (DO.CheckIfIdNotException Ex)
             {
-                throw new CheckIfIdNotException("ERORR", Ex);
+                throw new CheckIfIdNotExceptions("ERORR", Ex);
             }
 
         }
@@ -338,7 +336,7 @@ namespace BL
             }
             catch (DO.CheckIfIdNotException Ex)
             {
-                throw new CheckIfIdNotException("ERORR", Ex);
+                throw new CheckIfIdNotExceptions("ERORR", Ex);
             }
 
         }
@@ -355,7 +353,7 @@ namespace BL
 
                 if (droneToList.Status != DroneStatus.available) // Checks if drone is available.
                     throw new ParcelAssociationExeptions("רחפן לא פנוי למשלוח");
-
+                
                 parcel = (from Parcel in dal.GetPackagesByPredicate().ToList()
                           where Parcel.Assignment == DateTime.MinValue
                           orderby Parcel.ParcelPriority descending
@@ -368,7 +366,6 @@ namespace BL
                 {
                     DroneToList[FindDrone].Status = DroneStatus.busy;
                     DroneToList[FindDrone].NumOfPackageDelivered = parcel.ParcelId;
-
                     dal.SetDroneForParcel(parcel.ParcelId, droneId);
                     return true;
                 }
@@ -383,7 +380,7 @@ namespace BL
             }
             catch (DO.CheckIfIdNotException ex)
             {
-                throw new CheckIfIdNotException("ERORR", ex);
+                throw new CheckIfIdNotExceptions("ERORR", ex);
             }
         }
 
@@ -434,7 +431,7 @@ namespace BL
         {
             try
             {
-                DO.Parcel parcelsInDrone = dal.GetPackagesByPredicate(i => i.DroneId == droneID && i.PickedUp == DateTime.MinValue).FirstOrDefault();
+                DO.Parcel parcelsInDrone = dal.GetPackagesByPredicate(i => i.DroneId == droneID && i.PickedUp == DateTime.MinValue).First();
 
                 DO.Customer sander = dal.GetCustomer(parcelsInDrone.SenderId);
                 Location sanderLocation = new() { Latitude = sander.Latitude, Longtitude = sander.Longtitude };
@@ -452,7 +449,7 @@ namespace BL
             }
             catch (DO.CheckIfIdNotException Ex)
             {
-                throw new CheckIfIdNotException("ERORR", Ex);
+                throw new CheckIfIdNotExceptions("ERORR", Ex);
             }
         }
 
@@ -492,6 +489,7 @@ namespace BL
                 DroneToList[index].NumOfPackageDelivered = 0;
                 dal.DeliveredPackageToCustumer(parcelInDrone.ParcelId);
 
+                return true;
             }
             catch (DO.CheckIdException ex)
             {
@@ -501,9 +499,8 @@ namespace BL
             catch (DO.CheckIfIdNotException ex)
             {
 
-                throw new CheckIfIdNotException("ERORR", ex);
+                throw new CheckIfIdNotExceptions("ERORR", ex);
             }
-            return true;
         }
 
         public void RemoveDroneBL(int id)
@@ -516,7 +513,7 @@ namespace BL
             DroneToList droneToList = DroneToList.Find(i => i.DroneID == droneId);
             if (droneToList.DroneID == 0)
             {
-                throw new CheckIfIdNotExceptions("אין רחפן עם מזהה זה");
+                throw new CheckIfIdNotExceptions("לא נמצא רחפן תואם");
 
             }
 

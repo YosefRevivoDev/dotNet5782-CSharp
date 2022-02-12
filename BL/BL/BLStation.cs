@@ -67,7 +67,7 @@ namespace BL
             catch (DO.CheckIfIdNotException ex)
             {
 
-                throw new CheckIfIdNotException("ERORR", ex);
+                throw new CheckIfIdNotExceptions("ERORR", ex);
             }
 
         }
@@ -120,7 +120,7 @@ namespace BL
             }
             catch (DO.CheckIfIdNotException Ex)
             {
-                throw new CheckIfIdNotException("ERORR", Ex);
+                throw new CheckIfIdNotExceptions("ERORR", Ex);
             }
         }
 
@@ -180,7 +180,7 @@ namespace BL
             }
             catch (DO.CheckIfIdNotException Ex)
             {
-                throw new CheckIfIdNotException("ERORR", Ex);
+                throw new CheckIfIdNotExceptions("ERORR", Ex);
             }
 
         }

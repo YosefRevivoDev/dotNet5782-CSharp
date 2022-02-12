@@ -62,7 +62,7 @@ namespace BL
             }
             catch (DO.CheckIfIdNotException Ex)
             {
-                throw new CheckIfIdNotException("ERORR", Ex);
+                throw new CheckIfIdNotExceptions("ERORR", Ex);
             }
 
         }

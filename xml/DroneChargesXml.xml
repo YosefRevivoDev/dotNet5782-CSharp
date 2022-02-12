@@ -35,4 +35,9 @@
     <StationID>15</StationID>
     <CurrentTime>2022-02-09T11:41:46.7433656+02:00</CurrentTime>
   </DroneCharge>
+  <DroneCharge>
+    <DroneID>15</DroneID>
+    <StationID>54</StationID>
+    <CurrentTime>0001-01-01T00:00:00</CurrentTime>
+  </DroneCharge>
 </ArrayOfDroneCharge>

@@ -49,7 +49,7 @@ namespace DAL
             newCustomer : throw new CustumerException($"This id {newCustomer.CustomerId} already exist"));
         }
 
-        public void AddParcel(Parcel newParcel)
+        public int AddParcel(Parcel newParcel)
         {
             DataSource.Parcels.Add(DataSource.Parcels.FindIndex(i => i.ParcelId == newParcel.ParcelId) == -1 ?
             newParcel : throw new ParcelException($"This id {newParcel.ParcelId} already exist"));
@@ -124,7 +124,7 @@ namespace DAL
         //Set Drone For Parcel by ID
         #region Operations of drone
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public void SetDroneForParcel(int parcelId, int droneId)
+        public bool SetDroneForParcel(int parcelId, int droneId)
         {
             int index = DataSource.Parcels.ToList().FindIndex(i => i.ParcelId == parcelId);
             Parcel parcel = DataSource.Parcels[index];
@@ -132,8 +132,9 @@ namespace DAL
             if (index != -1 && droneIndex != -1)
             {
                 parcel.DroneId = droneId;
-                parcel.PickedUp = DateTime.Now;
+                parcel.Assignment = DateTime.Now;
                 DataSource.Parcels[index] = parcel;
+                return true;
             }
             else
             {
@@ -329,7 +330,7 @@ namespace DAL
         /// Remove User by UserID
         /// </summary>
         /// <param name="UserID"></param>
-        public void RemoveUser (int UserID)
+        public void RemoveUser (string UserID)
         {
             int index = DataSource.users.FindIndex(i => i.UserId == UserID);
             DataSource.users.RemoveAt(DataSource.users.FindIndex(i => i.UserId == UserID));

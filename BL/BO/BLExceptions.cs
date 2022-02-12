@@ -14,12 +14,12 @@ namespace BO
     public class CheckIdException : Exception
     {
         public CheckIdException(string messge, Exception innerExeption) : base(messge, innerExeption) { }
+        public CheckIdException(string messge) : base(messge) { }
     }
-    public class CheckIfIdNotException : Exception
+
+    public class CheckIfIdNotExceptions : Exception
     {
-        public CheckIfIdNotException(string messge, Exception innerExeption) : base(messge) { }
-    } public class CheckIfIdNotExceptions : Exception
-    {
+        public CheckIfIdNotExceptions(string messge, Exception innerExeption) : base(messge) { }
         public CheckIfIdNotExceptions(string messge) : base(messge) { }
     }
     public class ChargExeptions : Exception

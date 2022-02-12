@@ -101,6 +101,13 @@
                         </Grid>
                         <ListView x:Name="lstDroneListView" Grid.Row="1" 
                               MouseDoubleClick="lstDroneListView_MouseDoubleClick" ItemsSource="{Binding Path = dronesToLists}">
+
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="מזהה" DisplayMemberBinding="{Binding DroneID}"/>
@@ -115,7 +122,7 @@
                                 <GroupStyle>
                                     <GroupStyle.HeaderTemplate>
                                         <DataTemplate>
-                                            <TextBlock  FontWeight="Bold" FontSize="15"  Text="{Binding Name}" Foreground="Black"/>
+                                            <TextBlock HorizontalAlignment="Center" FontWeight="Bold" FontSize="15"  Text="{Binding Name}" Foreground="Black"/>
                                         </DataTemplate>
                                     </GroupStyle.HeaderTemplate>
                                 </GroupStyle>
@@ -216,13 +223,34 @@
                         </Grid>
                         <ListView x:Name="lstCustomerListView" Grid.Row="1" 
                             MouseDoubleClick="lstCustomerListView_MouseDoubleClick" ItemsSource="{Binding Path=customer}">
+
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+
                             <ListView.View>
                                 <GridView>
-                                    <GridViewColumn Header="מזהה" Width="150" DisplayMemberBinding="{Binding CustomerId}"/>
-                                    <GridViewColumn Header="שם לקוח" Width="150" DisplayMemberBinding="{Binding NameCustomer}"/>
-                                    <GridViewColumn Header="טלפון" Width="150" DisplayMemberBinding="{Binding Phone}"/>
+                                    <GridViewColumn Header="לא התקבל" Width="125" DisplayMemberBinding="{Binding ParcelOweyToCustomer}"/>
+                                    <GridViewColumn Header="התקבל" Width="100" DisplayMemberBinding="{Binding ParcelsReciever}"/>
+                                    <GridViewColumn Header="לא סופק" Width="120" DisplayMemberBinding="{Binding SendParcelAndNotSupplied}"/>
+                                    <GridViewColumn Header="סופק" Width="95" DisplayMemberBinding="{Binding SendParcelAndSupplied}"/>
+                                    <GridViewColumn Header="טלפון" Width="100" DisplayMemberBinding="{Binding Phone}"/>
+                                    <GridViewColumn Header="שם לקוח" Width="120" DisplayMemberBinding="{Binding NameCustomer}"/>
+                                    <GridViewColumn Header="מזהה" DisplayMemberBinding="{Binding CustomerId}"/>
                                 </GridView>
                             </ListView.View>
+                            <ListView.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.HeaderTemplate>
+                                        <DataTemplate>
+                                            <TextBlock HorizontalAlignment="Center" FontWeight="Bold" FontSize="15"
+                                                       TextDecorations="Underline" Text="{Binding Name}" Foreground="Black"/>
+                                        </DataTemplate>
+                                    </GroupStyle.HeaderTemplate>
+                                </GroupStyle>
+                            </ListView.GroupStyle>
                         </ListView>
                     </Grid>
                 </TabItem>
@@ -249,24 +277,42 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
+                            <Label Content="מיין עמדות טעינה" Grid.Column="1" HorizontalAlignment="Center"  />
+                            <ComboBox Name="cmbFreeChrgeSelector"  FontWeight="Bold"  Grid.Column="0" 
+                                      SelectionChanged="cmbFreeChrgeSelector_SelectionChanged"/>
                             <Button x:Name="addBaseStation" Content="הוסף תחנה" Grid.Column="3" Click="addBaseStation_Click"/>
                         </Grid>
                         <ListView x:Name="lstBaseStationListView" Grid.Row="1"      
                                   MouseDoubleClick="lstBaseStationListView_MouseDoubleClick" ItemsSource="{Binding Path=BaseStation}">
+
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            
                             <ListView.View>
                                 <GridView>
-                                    <GridViewColumn Header="מזהה" Width="150" DisplayMemberBinding="{Binding ID}"/>
-                                    <GridViewColumn Header="שם תחנה" Width="150" DisplayMemberBinding="{Binding Name}"/>
-                                    <GridViewColumn Header="עמדות פנויות" Width="180" DisplayMemberBinding="{Binding AvailableChargingStations}"/>
-                                    <GridViewColumn Header="מיקום" Width="180" DisplayMemberBinding="{Binding location}"/>
+                                    <GridViewColumn Header="מזהה" Width="160" DisplayMemberBinding="{Binding ID}"/>
+                                    <GridViewColumn Header="שם תחנה" Width="170" DisplayMemberBinding="{Binding Name}"/>
+                                    <GridViewColumn Header="עמדות פנויות" Width="190" DisplayMemberBinding="{Binding AvailableChargingStations}"/>
+                                    <GridViewColumn Header="עמדות תפוסות" Width="160" DisplayMemberBinding="{Binding NotAvailableChargingStations}"/>
                                 </GridView>
                             </ListView.View>
+                            <ListView.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.HeaderTemplate>
+                                        <DataTemplate>
+                                            <TextBlock HorizontalAlignment="Center" FontWeight="Bold" FontSize="15" TextDecorations="Underline" Text ="{Binding Name}" Foreground="Black"/>
+                                        </DataTemplate>
+                                    </GroupStyle.HeaderTemplate>
+                                </GroupStyle>
+                            </ListView.GroupStyle>
                         </ListView>
                     </Grid>
                 </TabItem>
                 <!--#endregion-->
-
-
+                
             </TabControl>
         </Grid>
     </Grid>

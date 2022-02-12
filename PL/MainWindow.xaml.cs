@@ -20,10 +20,15 @@ using BlApi;
 
 namespace PLGui
 {
-    public enum WeightCategories {הכל, קל, בינוני, כבד };
-    public enum DroneStatuses { הכל, זמין, בטעינה, במשלוח };
+
+    public enum FreeChargeStatus { הכל, פנוי, מלא };
+    public enum WeightCategories { All, light, medium, heavy };
+    public enum DroneStatus { All, available, maintenance, busy };
     public enum Priorities { הכל, רגיל, מהיר, דחוף };
-    public enum parcelStatus { הכל, נוצר, שוייך, נאסף, סופק };
+    public enum ParcelStatus { הכל, נוצר, שוייך, נאסף, סופק };
+
+    
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -38,6 +43,7 @@ namespace PLGui
         private BaseStation baseStation;
         private Customer customer;
         private Parcel parcel;
+        MainWindow parent;
 
         public MainWindow()
         {
@@ -49,22 +55,11 @@ namespace PLGui
             InitCustomer();
             InitBaseStation();
 
-            cmbWeightSelectorParcel.ItemsSource = Enum.GetValues(typeof(WeightCategories));
-            cmbPrioritiSelectorParcel.ItemsSource = Enum.GetValues(typeof(Priorities));
-            cmbStatusSelectorParcel.ItemsSource = Enum.GetValues(typeof(parcelStatus));
-
-            cmbWeightSelectorParcel.SelectedIndex = 0;
-            parcelToLists.CollectionChanged += ParcelToListView_CollectionChanged;
-
         }
 
-        private void ParcelToListView_CollectionChanged(object sender,NotifyCollectionChangedEventArgs e)
-        {
-            controlComboBoxesSortedParcel();
-        }
 
         #region Init Object
-        private void InitDrones()
+        public void InitDrones()
         {
             dronesToLists = new();
             IEnumerable<DroneToList> temp = getBL.GetDroneToListsBLByPredicate();
@@ -74,6 +69,8 @@ namespace PLGui
             }
             cmbStatusSelector.ItemsSource = Enum.GetValues(typeof(DroneStatus));
             cmbWeightSelector.ItemsSource = Enum.GetValues(typeof(WeightCategories));
+            cmbStatusSelector.SelectedIndex = 0;
+            dronesToLists.CollectionChanged += SortedDrones_CollectionChanged;
             lstDroneListView.ItemsSource = dronesToLists;
 
         }
@@ -88,6 +85,8 @@ namespace PLGui
             cmbStatusSelectorParcel.ItemsSource = Enum.GetValues(typeof(ParcelStatus));
             cmbPrioritiSelectorParcel.ItemsSource = Enum.GetValues(typeof(Priorities));
             cmbWeightSelectorParcel.ItemsSource = Enum.GetValues(typeof(WeightCategories));
+            cmbWeightSelectorParcel.SelectedIndex = 0;
+            parcelToLists.CollectionChanged += SortedParcels_CollectionChanged;
             lstParcelListView.ItemsSource = parcelToLists;
         }
         private void InitCustomer()
@@ -108,6 +107,9 @@ namespace PLGui
             {
                 baseStationToLists.Add(item);
             }
+            cmbFreeChrgeSelector.ItemsSource = Enum.GetValues(typeof(FreeChargeStatus));
+
+            cmbFreeChrgeSelector.SelectedIndex = 0;
             lstBaseStationListView.ItemsSource = baseStationToLists;
         }
         #endregion
@@ -118,9 +120,8 @@ namespace PLGui
             DroneToList drones = (DroneToList)lstDroneListView.SelectedItem;
             if (drones != null)
             {
-                int Idrone = lstDroneListView.SelectedIndex;
-                new DroneWindow(getBL, this, drones, Idrone).Show();
-                
+                new DroneWindow(getBL, this, drones.DroneID).Show();
+
             }
         }
 
@@ -140,7 +141,7 @@ namespace PLGui
             if (customer != null)
             {
                 int insexCustomer = lstCustomerListView.SelectedIndex;
-                new CustomerWindow(getBL, this, customer, insexCustomer).Show();
+                new CustomerWindow(getBL, this, insexCustomer).Show();
             }
         }
 
@@ -150,7 +151,7 @@ namespace PLGui
             if (parcelToList != null)
             {
                 int indexParcel = lstParcelListView.SelectedIndex;
-                new ParcelWindow(getBL, this, parcelToList, indexParcel).Show();
+                new ParcelWindow(getBL, this,  indexParcel).Show();
             }
         }
         #endregion
@@ -170,27 +171,44 @@ namespace PLGui
         #region ComboBox List Drone
         private void cmbStatusSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            cmbStatusSelector_SelectionChanged();
-        }
-        private void cmbStatusSelector_SelectionChanged()
-        {
-            DroneStatus status = (DroneStatus)cmbStatusSelector.SelectedItem;
-            lstDroneListView.ItemsSource = dronesToLists.Where(x => x.Status == status).ToList();
+            controlComboBoxesSortedDrone();
         }
         private void cmbWeightSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            cmbWeightSelector_SelectionChanged();
+            controlComboBoxesSortedDrone();
         }
-        private void cmbWeightSelector_SelectionChanged()
+        private void controlComboBoxesSortedDrone()
         {
-            BO.WeightCategories droneWeight = (BO.WeightCategories)cmbWeightSelector.SelectedItem;
-            lstDroneListView.ItemsSource = dronesToLists.Where(x => x.DroneWeight == droneWeight).ToList();
+            if (cmbWeightSelector.SelectedIndex == -1)
+            {
+                cmbWeightSelector.SelectedIndex = 0;
+            }
+            if (cmbStatusSelector.SelectedIndex == -1)
+            {
+                cmbStatusSelector.SelectedIndex = 0;
+            }
+            WeightCategories weightCategories = (WeightCategories)cmbWeightSelector.SelectedItem;
+            DroneStatus droneStatus = (DroneStatus)cmbStatusSelector.SelectedItem;
+
+            if (weightCategories == WeightCategories.All && droneStatus == DroneStatus.All)
+                lstDroneListView.ItemsSource = dronesToLists;
+
+            else if (weightCategories != WeightCategories.All && droneStatus == DroneStatus.All)
+                lstDroneListView.ItemsSource = dronesToLists.ToList().FindAll(i => i.DroneWeight == (BO.WeightCategories)weightCategories);
+
+            else if (weightCategories == WeightCategories.All && droneStatus != DroneStatus.All)
+                lstDroneListView.ItemsSource = dronesToLists.ToList().FindAll(i => i.Status == (BO.DroneStatus)droneStatus);
+
+            else
+                lstDroneListView.ItemsSource = dronesToLists.ToList().FindAll(i => i.DroneWeight == (BO.WeightCategories)weightCategories
+                && i.Status == (BO.DroneStatus)droneStatus);
+            GroupingDroneList();
         }
-        public void cmbStatusSelectorAndcmbWeightSelector()
+        private void SortedDrones_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            cmbStatusSelector_SelectionChanged();
-            cmbWeightSelector_SelectionChanged();
+            controlComboBoxesSortedDrone();
         }
+
         #endregion
 
         #region ComboBox List Parcel
@@ -198,40 +216,14 @@ namespace PLGui
         {
             controlComboBoxesSortedParcel();
         }
-        //private void cmbStatusSelectorParcel_SelectionChanged()
-        //{
-        //    ParcelStatus comboBoxParcelStatus = (ParcelStatus)cmbStatusSelectorParcel.SelectedItem;
-
-        //    lstParcelListView.ItemsSource = parcelToLists.Where(x => x.parcelStatus == comboBoxParcelStatus).ToList();
-        //}
-
         private void cmbPrioritiSelectorParcel_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             controlComboBoxesSortedParcel();
         }
-        //private void cmbPrioritiSelectorParcel_SelectionChanged()
-        //{
-        //    Priorities comboBoxPriorityStatus = (Priorities)cmbPrioritiSelectorParcel.SelectedItem;
-        //    lstParcelListView.ItemsSource = parcelToLists.Where(x => x.Priority == comboBoxPriorityStatus).ToList();
-        //}
-
         private void cmbWeightSelectorParcel_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             controlComboBoxesSortedParcel();
         }
-        //private void cmbWeightSelectorParcel_SelectionChanged()
-        //{
-        //    WeightCategories comboBoxWeightCategories = (WeightCategories)cmbWeightSelectorParcel.SelectedItem;
-        //    lstParcelListView.ItemsSource = parcelToLists.Where(x => x.Weight == comboBoxWeightCategories);
-        //}
-
-        //public void controlComboBoxesSortedParcel()
-        //{
-        //    cmbStatusSelectorParcel_SelectionChanged();
-        //    cmbPrioritiSelectorParcel_SelectionChanged();
-        //    cmbWeightSelectorParcel_SelectionChanged();
-        //}
-
         private void controlComboBoxesSortedParcel()
         {
             if (cmbPrioritiSelectorParcel.SelectedIndex == -1)
@@ -242,34 +234,37 @@ namespace PLGui
             {
                 cmbStatusSelectorParcel.SelectedIndex = 0;
             }
+            if (cmbWeightSelectorParcel.SelectedIndex == -1)
+            {
+                cmbWeightSelectorParcel.SelectedIndex = 0;
+            }
 
             WeightCategories weightCategories = (WeightCategories)cmbWeightSelectorParcel.SelectedItem;
-            parcelStatus parcelStatus = (parcelStatus)cmbStatusSelectorParcel.SelectedItem;
+            ParcelStatus parcelStatus = (ParcelStatus)cmbStatusSelectorParcel.SelectedItem;
             Priorities priorities = (Priorities)cmbPrioritiSelectorParcel.SelectedItem;
 
-            if ((weightCategories == WeightCategories.הכל) && (parcelStatus == parcelStatus.הכל) && (priorities == Priorities.הכל))
+            if ((weightCategories == WeightCategories.All) && (parcelStatus == ParcelStatus.הכל) && (priorities == Priorities.הכל))
                 lstParcelListView.ItemsSource = parcelToLists;
 
-
-            else if ((weightCategories != WeightCategories.הכל) && (parcelStatus == parcelStatus.הכל) && (priorities == Priorities.הכל))
+            else if ((weightCategories != WeightCategories.All) && (parcelStatus == ParcelStatus.הכל) && (priorities == Priorities.הכל))
                 lstParcelListView.ItemsSource = parcelToLists.ToList().FindAll(i => i.Weight == (BO.WeightCategories)weightCategories);
 
-            else if ((weightCategories == WeightCategories.הכל) && (parcelStatus != parcelStatus.הכל) && (priorities == Priorities.הכל))
+            else if ((weightCategories == WeightCategories.All) && (parcelStatus != ParcelStatus.הכל) && (priorities == Priorities.הכל))
                 lstParcelListView.ItemsSource = parcelToLists.ToList().FindAll(i => i.parcelStatus == (BO.ParcelStatus)parcelStatus);
 
-            else if ((weightCategories == WeightCategories.הכל) && (parcelStatus == parcelStatus.הכל) && (priorities != Priorities.הכל))
+            else if ((weightCategories == WeightCategories.All) && (parcelStatus == ParcelStatus.הכל) && (priorities != Priorities.הכל))
                 lstParcelListView.ItemsSource = parcelToLists.ToList().FindAll(i => i.Priority == (BO.Priorities)priorities);
 
 
-            else if ((weightCategories != WeightCategories.הכל) && (parcelStatus != parcelStatus.הכל) && (priorities == Priorities.הכל))
+            else if ((weightCategories != WeightCategories.All) && (parcelStatus != ParcelStatus.הכל) && (priorities == Priorities.הכל))
                 lstParcelListView.ItemsSource = parcelToLists.ToList().FindAll(i => i.Weight == (BO.WeightCategories)weightCategories &&
                 i.parcelStatus == (BO.ParcelStatus)parcelStatus);
 
-            else if ((weightCategories != WeightCategories.הכל) && (parcelStatus == parcelStatus.הכל) && (priorities != Priorities.הכל))
+            else if ((weightCategories != WeightCategories.All) && (parcelStatus == ParcelStatus.הכל) && (priorities != Priorities.הכל))
                 lstParcelListView.ItemsSource = parcelToLists.ToList().FindAll(i => i.Weight == (BO.WeightCategories)weightCategories &&
                 i.Priority == (BO.Priorities)priorities);
 
-            else if ((weightCategories == WeightCategories.הכל) && (parcelStatus != parcelStatus.הכל) && (priorities != Priorities.הכל))
+            else if ((weightCategories == WeightCategories.All) && (parcelStatus != ParcelStatus.הכל) && (priorities != Priorities.הכל))
                 lstParcelListView.ItemsSource = parcelToLists.ToList().FindAll(i => i.Priority == (BO.Priorities)priorities &&
                 i.parcelStatus == (BO.ParcelStatus)parcelStatus);
 
@@ -279,8 +274,27 @@ namespace PLGui
 
             GroupingParcelList();
         }
+        private void SortedParcels_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            controlComboBoxesSortedParcel();
+        }
 
         #endregion
+
+        private void cmbFreeChrgeSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            FreeChargeStatus freeChargeSort = (FreeChargeStatus)cmbFreeChrgeSelector.SelectedItem;
+
+            if (freeChargeSort == FreeChargeStatus.הכל)
+                lstBaseStationListView.ItemsSource = baseStationToLists;
+
+            else if (freeChargeSort == FreeChargeStatus.פנוי)
+                lstBaseStationListView.ItemsSource = baseStationToLists.ToList().FindAll(i => i.AvailableChargingStations > 0);
+
+            else if (freeChargeSort == FreeChargeStatus.מלא)
+                lstBaseStationListView.ItemsSource = baseStationToLists.ToList().FindAll(i => i.AvailableChargingStations <= 0);
+            GroupingBaseStationList();
+        }
 
         #region LOGIN
         private void LoginApp_Click(object sender, RoutedEventArgs e)
@@ -348,13 +362,14 @@ namespace PLGui
         #endregion
 
         #region GROUPING
+
         CollectionView droneView;
         /// <summary>
-        /// grouping functaion by DroneStatuses
+        /// grouping functaion by DroneStatus
         /// </summary>
-        private void GroupingDroneList()
+        public void GroupingDroneList()
         {
-            string choise = "DroneStatus";
+            string choise = "Status";
             droneView = (CollectionView)CollectionViewSource.GetDefaultView(lstDroneListView.ItemsSource);
             if (droneView.CanGroup == true)
             {
@@ -370,7 +385,7 @@ namespace PLGui
 
         CollectionView parcelView;
         /// <summary>
-        /// grouping functaion by sanderName.
+        /// grouping functaion by SenderName.
         /// </summary>
         private void GroupingParcelList()
         {
@@ -385,7 +400,28 @@ namespace PLGui
             else
                 return;
         }
+        
+        CollectionView baseStationView;
+        /// <summary>
+        /// grouping functaion by AvailableChargingStations.
+        /// </summary>
+        private void GroupingBaseStationList()
+        {
+            string choise = "AvailableChargingStations";
+            baseStationView = (CollectionView)CollectionViewSource.GetDefaultView(lstBaseStationListView.ItemsSource);
+            if (baseStationView.CanGroup == true)
+            {
+                PropertyGroupDescription groupDescription = new(choise);
+                baseStationView.GroupDescriptions.Clear();
+                baseStationView.GroupDescriptions.Add(groupDescription);
+            }
+            else
+                return;
+        }
+
         #endregion
+
+       
     }
 }
 

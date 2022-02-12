@@ -55,7 +55,8 @@
             <RowDefinition Height="5*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Button x:Name="btnAddStation" Content="אישור" FontSize="16" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" Click="UpdateBaseStation_Click"/>
+        <Button x:Name="btnUpdateStation" Content="עדכן" FontSize="16" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" Click="UpdateBaseStation_Click"/>
+        <Button x:Name="btnAddStation" Content="הוסף" FontSize="16" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" Click="btnAddStation_Click"/>
         <Button x:Name="btnClose" Content="סגור" FontSize="16" Grid.Row="1" VerticalAlignment="Bottom" FontWeight="Bold" Click="btnClose_Click"/>
 
         <Border Name="GridAddStation" Grid.Row="0" Visibility="Hidden">
@@ -95,6 +96,7 @@
                     <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding AvailableChargingStations}" Background="{x:Null}" PreviewTextInput="onlytwoNumbers"/>
                     <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding location.Longtitude}" Background="{x:Null}" PreviewTextInput="lungetudePattren"/>
                     <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding location.Latitude}" Background="{x:Null}" PreviewTextInput="lattitudePattren"/>
+                    
 
                 </Grid>
 
@@ -150,8 +152,15 @@
                                 </Grid.RowDefinitions>
 
                                 <Label  Grid.Row="0" Content="פרטי הרחפנים הנטענים בתחנה"  HorizontalContentAlignment="Center" FontSize="18"  FontWeight="Bold" />
-                                <ListView x:Name="Drones" HorizontalAlignment="Right" Background="{x:Null}" 
-                                          DisplayMemberPath="{Binding droneCharges}" Grid.ColumnSpan="2" Margin="0,43,0,0" Grid.RowSpan="2" >
+                                <ListView x:Name="lstDronesCharge" HorizontalAlignment="Right" Background="{x:Null}" SelectionChanged="Drones_SelectionChanged"
+                                          DisplayMemberPath="{Binding droneCharges}" Grid.ColumnSpan="2" Grid.RowSpan="2" >
+
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+
                                     <ListView.View>
                                         <GridView >
                                             <GridViewColumn Header="מספר מזהה" DisplayMemberBinding="{Binding DroneID}"/>

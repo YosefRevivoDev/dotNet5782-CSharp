@@ -55,4 +55,9 @@
     <DroneModel>David</DroneModel>
     <DroneWeight>heavy</DroneWeight>
   </Drone>
+  <Drone>
+    <DroneID>15</DroneID>
+    <DroneModel>HHH</DroneModel>
+    <DroneWeight>medium</DroneWeight>
+  </Drone>
 </ArrayOfDrone>

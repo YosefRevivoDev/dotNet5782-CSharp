@@ -6,7 +6,7 @@ namespace BO
     {
         public CustomerInParcel Sender { get; set; }
         public CustomerInParcel Target { get; set; }
-        public DroneInParcel DroneInParcel { get; set; }
+        public DroneInParcel droneInParcel { get; set; }
         public DateTime Requested { get; set; }
         public DateTime assigned { get; set; }
         public DateTime PickedUp { get; set; }
@@ -15,7 +15,7 @@ namespace BO
         public override string ToString()
         {
             return base.ToString() + $"CustomerInParcel: {Sender}, CustomerInParcel: {Target}, " +
-                $"DroneInParcel: {DroneInParcel}, DateTime: {assigned}, DateTime: {PickedUp}, DateTime: {Delivered}, DateTime: {Requested} ";
+                $"DroneInParcel: {droneInParcel}, DateTime: {assigned}, DateTime: {PickedUp}, DateTime: {Delivered}, DateTime: {Requested} ";
         }
 
     }

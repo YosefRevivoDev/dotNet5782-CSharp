@@ -34,6 +34,8 @@ namespace DS
 
         }
 
+
+
         public void Initialize()
         {
             Random random = new Random(DateTime.Now.Millisecond);
@@ -190,6 +192,7 @@ namespace DS
         }
     }
 }
+
 
 /*static DalXml()
 {
