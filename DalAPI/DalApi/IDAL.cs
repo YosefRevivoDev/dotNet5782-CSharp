@@ -30,7 +30,7 @@ namespace DalApi
         void UpdateDrone(Drone drone);
         //void UpdateDroneCharge(DroneCharge droneCharge);
         void UpdateParcel(Parcel parcrl);
-        void UpdateUser(User user);
+       // void UpdateUser(User user);
         #endregion
 
         #region Remove object

@@ -4,7 +4,9 @@
              xmlns:local="clr-namespace:PLGui"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <!--<Style x:Key="styleForTextBoxes" TargetType="ListViewItem">
+        <!--<Style x:Key="styleForTextBoxes" TargetType="ListViewItem">c:\תומר\תואר\מיני פורייקט c sharp\dotnet_5782_3501_0124-main\pl\app.xaml.cs
+c:\תומר\תואר\מיני פורייקט c sharp\dotnet_5782_3501_0124-main\pl\app.xaml
+
             <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
         </Style>
 

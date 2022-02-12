@@ -49,7 +49,7 @@ namespace DAL
             newCustomer : throw new CustumerException($"This id {newCustomer.CustomerId} already exist"));
         }
 
-        public void AddParcel(Parcel newParcel)
+        public int AddParcel(Parcel newParcel)
         {
             DataSource.Parcels.Add(DataSource.Parcels.FindIndex(i => i.ParcelId == newParcel.ParcelId) == -1 ?
             newParcel : throw new ParcelException($"This id {newParcel.ParcelId} already exist"));
@@ -329,7 +329,7 @@ namespace DAL
         /// Remove User by UserID
         /// </summary>
         /// <param name="UserID"></param>
-        public void RemoveUser (int UserID)
+        public void RemoveUser (string UserID)
         {
             int index = DataSource.users.FindIndex(i => i.UserId == UserID);
             DataSource.users.RemoveAt(DataSource.users.FindIndex(i => i.UserId == UserID));

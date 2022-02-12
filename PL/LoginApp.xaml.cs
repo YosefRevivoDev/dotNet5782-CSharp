@@ -30,7 +30,7 @@ namespace PLGui
             InitializeComponent();
             mainWindow = _mainWindow;
         }
-
+        
         private void btnEnterApp_Click(object sender, RoutedEventArgs e)
         {
             if (UserId.Text == "" || PasswordBox1.Text == "")
