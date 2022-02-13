@@ -69,6 +69,7 @@ namespace DAL
             if (index != -1)
             {
                 drones.RemoveAt(index);
+                XMLTools.SaveListToXMLSerializer(drones, dronePath);
             }
             throw new DroneException($"This drone have not exist, Please try again.");
 
@@ -84,7 +85,7 @@ namespace DAL
         {
             List<Drone> ListDrone = XMLTools.LoadListFromXMLSerializer<Drone>(dronePath);
 
-            return ListDrone.FindAll(i => predicate == null ? true : predicate(i));
+            return ListDrone.Where(i => predicate == null ? true : predicate(i)).ToList();
         }
         #endregion
 
@@ -162,11 +163,13 @@ namespace DAL
         {
             List<BaseStation> ListBaseStation = XMLTools.LoadListFromXMLSerializer<BaseStation>(baseStationPath);
             int index = ListBaseStation.FindIndex(i => i.StationID == stationID);
-            if (index == -1)
+            if (index != -1)
             {
-                throw new BaseStationException($"This station have not exist, Please try again.");
+                ListBaseStation.RemoveAt(index);
+                XMLTools.SaveListToXMLSerializer(ListBaseStation, baseStationPath);
             }
-            ListBaseStation.RemoveAt(index);
+            throw new CheckIfIdNotException($"This station have not exist, Please try again.");
+
         }
 
 
@@ -240,13 +243,13 @@ namespace DAL
             List<Parcel> ListParcel = XMLTools.LoadListFromXMLSerializer<Parcel>(parcelPath);
 
             int index = ListParcel.FindIndex(i => i.ParcelId == parcelId);
-            ListParcel.RemoveAt(ListParcel.FindIndex(i => i.ParcelId == parcelId));
-            if (index == -1)
+
+            if (index != -1)
             {
-                throw new ParcelException($"This parcel have not exist, Please try again.");
+                ListParcel.RemoveAt(index);
+                XMLTools.SaveListToXMLSerializer(ListParcel, parcelPath);
             }
-            ListParcel.RemoveAt(index);
-            XMLTools.SaveListToXMLSerializer(ListParcel, parcelPath);
+            throw new ParcelException($"This parcel have not exist, Please try again.");
         }
 
         /// <summary>
@@ -297,22 +300,24 @@ namespace DAL
         }
         #endregion
 
+        #region Customer
         /// <summary>
         /// RemoveCustomer by id.
         /// </summary>
         /// <param name="customerId"></param>
-        #region Customer
         public void RemoveCustomer(int customerId)
         {
             List<Customer> ListCustomer = XMLTools.LoadListFromXMLSerializer<Customer>(customerPath);
+
             int index = ListCustomer.FindIndex(i => i.CustomerId == customerId);
-            ListCustomer.RemoveAt(ListCustomer.FindIndex(i => i.CustomerId == customerId));
-            if (index == -1)
+
+            if (index != -1)
             {
-                throw new CustumerException($"This customer have not exist, Please try again.");
+                ListCustomer.RemoveAt(index);
+                XMLTools.SaveListToXMLSerializer(ListCustomer, customerPath);
             }
-            ListCustomer.RemoveAt(index);
-            XMLTools.SaveListToXMLSerializer(ListCustomer, customerPath);
+            throw new CustumerException($"This customer have not exist, Please try again.");
+
         }
 
         /// <summary>
@@ -468,12 +473,13 @@ namespace DAL
         }
         #endregion
 
+
+        #region Operations
         /// <summary>
         /// Set drone for parcel by parcel Id & drone Id
         /// </summary>
         /// <param name="parcelId"></param>
         /// <param name="droneId"></param>
-        #region Operations
         public bool SetDroneForParcel(int parcelId, int droneId)
         {
             List<Parcel> ListParcel = XMLTools.LoadListFromXMLSerializer<Parcel>(parcelPath);
@@ -529,8 +535,9 @@ namespace DAL
         {
             List<Parcel> ListParcel = XMLTools.LoadListFromXMLSerializer<Parcel>(parcelPath);
 
-            int index = ListParcel.ToList().FindIndex(i => i.ParcelId == parcelId);
-            Parcel parcel = ListParcel[index];
+            Parcel parcel = ListParcel.Find(p => p.ParcelId == parcelId);
+            int index = ListParcel.FindIndex(i => i.ParcelId == parcelId);
+                
             if (index != -1)
             {
                 parcel.Delivered = DateTime.Now;
@@ -550,11 +557,11 @@ namespace DAL
         /// </summary>
         /// <param name="droneId"></param>
         /// <param name="baseStationId"></param>
-        public void ReleasingChargeDrone(int droneId, int baseStationId)
+        public void ReleasingChargeDrone(int droneId)
         {
             List<DroneCharge> ListDroneCharge = XMLTools.LoadListFromXMLSerializer<DroneCharge>(droneChargesPath);
 
-            int index = ListDroneCharge.FindIndex(i => i.DroneID == droneId && i.StationID == baseStationId);
+            int index = ListDroneCharge.FindIndex(i => i.DroneID == droneId);
             if (index != -1)
             {
                 ListDroneCharge.RemoveAt(index);
@@ -565,7 +572,6 @@ namespace DAL
                 throw new CheckIdException("Drone not found");
             }
         }
-
 
         /// <summary>
         /// Reduce one drone charge.

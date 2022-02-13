@@ -5,14 +5,14 @@
     <Name>B.S.R 4</Name>
     <Longtitude>34.8247</Longtitude>
     <Latitude>32.0931</Latitude>
-    <AvailableChargeSlots>396</AvailableChargeSlots>
+    <AvailableChargeSlots>400</AvailableChargeSlots>
   </BaseStation>
   <BaseStation>
     <StationID>54</StationID>
     <Name>מתנס - ק.הרצוג</Name>
     <Longtitude>34.8377</Longtitude>
     <Latitude>32.0964</Latitude>
-    <AvailableChargeSlots>81</AvailableChargeSlots>
+    <AvailableChargeSlots>85</AvailableChargeSlots>
   </BaseStation>
   <BaseStation>
     <StationID>0</StationID>
@@ -25,7 +25,7 @@
     <Name>hvf</Name>
     <Longtitude>33.5</Longtitude>
     <Latitude>34.7</Latitude>
-    <AvailableChargeSlots>500</AvailableChargeSlots>
+    <AvailableChargeSlots>499</AvailableChargeSlots>
   </BaseStation>
   <BaseStation>
     <StationID>99</StationID>

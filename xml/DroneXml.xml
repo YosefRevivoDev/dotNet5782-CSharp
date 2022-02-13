@@ -60,4 +60,14 @@
     <DroneModel>HHH</DroneModel>
     <DroneWeight>medium</DroneWeight>
   </Drone>
+  <Drone>
+    <DroneID>33</DroneID>
+    <DroneModel>didi</DroneModel>
+    <DroneWeight>heavy</DroneWeight>
+  </Drone>
+  <Drone>
+    <DroneID>34</DroneID>
+    <DroneModel>QAZ</DroneModel>
+    <DroneWeight>light</DroneWeight>
+  </Drone>
 </ArrayOfDrone>

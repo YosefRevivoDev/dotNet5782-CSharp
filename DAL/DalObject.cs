@@ -192,9 +192,9 @@ namespace DAL
         /// <param name="droneId"></param>
         /// <param name="baseStationId"></param>
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public void ReleasingChargeDrone(int droneId, int baseStationId)
+        public void ReleasingChargeDrone(int droneId)
         {
-            int index = DataSource.DroneCharges.FindIndex(i => i.DroneID == droneId && i.StationID == baseStationId);
+            int index = DataSource.DroneCharges.FindIndex(i => i.DroneID == droneId);
             if (index != -1)
             {
                 DataSource.DroneCharges.RemoveAt(index);

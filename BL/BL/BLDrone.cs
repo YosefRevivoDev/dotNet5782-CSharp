@@ -46,7 +46,7 @@ namespace BL
                     DroneWeight = newDrone.DroneWeight,
                     CurrentLocation = newDrone.CurrentLocation,
                     BattaryStatus = random.NextDouble() * 20.0 + 20.0,
-                    Status = DroneStatus.available,
+                    Status = DroneStatus.maintenance,
                 });          
 
                 DO.DroneCharge droneCharge = new()
@@ -351,7 +351,7 @@ namespace BL
                     DroneToList[droneIndex] = drone;
 
                     dal.PlusDroneCharge(droneCarge.StationID);
-                    dal.ReleasingChargeDrone(droneId, droneCarge.StationID);
+                    dal.ReleasingChargeDrone(droneId);
                     return true;
                 }
             }

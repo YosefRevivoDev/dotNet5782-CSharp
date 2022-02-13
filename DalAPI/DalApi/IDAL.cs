@@ -28,7 +28,6 @@ namespace DalApi
         void UpdateBaseStation(BaseStation baseStation);
         void UpdateCustomer(Customer customer);
         void UpdateDrone(Drone drone);
-        //void UpdateDroneCharge(DroneCharge droneCharge);
         void UpdateParcel(Parcel parcrl);
        // void UpdateUser(User user);
         #endregion
@@ -51,7 +50,7 @@ namespace DalApi
 
         #region Operations 
         void PackageCollectionByDrone(int parcelId);
-        void ReleasingChargeDrone(int droneId, int baseStationId);
+        void ReleasingChargeDrone(int droneId);
         bool DeliveredPackageToCustumer(int parcelId);
         bool SetDroneForParcel(int parcelId, int droneId);
         void MinusDroneCharge(int stationId);
