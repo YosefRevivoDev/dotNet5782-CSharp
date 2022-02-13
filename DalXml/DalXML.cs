@@ -12,7 +12,7 @@ using System.Runtime.CompilerServices;
 
 namespace DAL
 {
-    
+
     sealed class DalXml : IDal
     {
         string baseStationPath = @"BaseStationXml.xml";
@@ -89,6 +89,10 @@ namespace DAL
         #endregion
 
         #region DroneCharge
+        /// <summary>
+        ///  This function add element to the list of drinecarge.
+        /// </summary>
+        /// <param name="droneCharge"></param>
         public void AddDroneCharge(DroneCharge droneCharge)
         {
             List<DroneCharge> ListdroneCharge = XMLTools.LoadListFromXMLSerializer<DroneCharge>(droneChargesPath);
@@ -118,6 +122,12 @@ namespace DAL
             return droneCharge.StationID != default ? droneCharge : throw new CheckIfIdNotException("sorry, this Drone is not found.");
 
         }
+
+        /// <summary>
+        /// This function returns a ListDroneCharge by prdicate.
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
         public IEnumerable<DroneCharge> GetDroneChargesByPredicate(Predicate<DroneCharge> predicate = null)
         {
 
@@ -129,6 +139,10 @@ namespace DAL
 
         #region BaseStation
 
+        /// <summary>
+        /// This function allows the user to add a base station to the list.
+        /// </summary>
+        /// <param name="new_baseStation"></param>
         public void AddBaseStation(BaseStation new_baseStation)
         {
             List<BaseStation> ListBaseStation = XMLTools.LoadListFromXMLSerializer<BaseStation>(baseStationPath);
@@ -139,6 +153,11 @@ namespace DAL
             XMLTools.SaveListToXMLSerializer(ListBaseStation, baseStationPath);
         }
 
+
+        /// <summary>
+        /// This function deletes an object by ID
+        /// </summary>
+        /// <param name="stationID"></param>
         public void RemoveBaseStation(int stationID)
         {
             List<BaseStation> ListBaseStation = XMLTools.LoadListFromXMLSerializer<BaseStation>(baseStationPath);
@@ -150,6 +169,11 @@ namespace DAL
             ListBaseStation.RemoveAt(index);
         }
 
+
+        /// <summary>
+        /// This function update a baseStation
+        /// </summary>
+        /// <param name="baseStation"></param>
         public void UpdateBaseStation(BaseStation baseStation)
         {
             List<BaseStation> ListBaseStation = XMLTools.LoadListFromXMLSerializer<BaseStation>(baseStationPath);
@@ -162,6 +186,12 @@ namespace DAL
             XMLTools.SaveListToXMLSerializer(ListBaseStation, baseStationPath);
         }
 
+
+        /// <summary>
+        /// GetBaseStation by id
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         public BaseStation GetBaseStation(int Id)
         {
             List<BaseStation> ListBaseStation = XMLTools.LoadListFromXMLSerializer<BaseStation>(baseStationPath);
@@ -180,6 +210,11 @@ namespace DAL
         #endregion
 
         #region Parcel
+        /// <summary>
+        /// This func add parcel by id.
+        /// </summary>
+        /// <param name="newParcel"></param>
+        /// <returns></returns>
         public int AddParcel(Parcel newParcel)
         {
             XElement xElement = XMLTools.LoadListFromXMLElement(runNumbers);
@@ -195,6 +230,11 @@ namespace DAL
 
             return newParcel.ParcelId;
         }
+
+        /// <summary>
+        /// This func remove parcel by id.
+        /// </summary>
+        /// <param name="parcelId"></param>
         public void RemoveParcel(int parcelId)
         {
             List<Parcel> ListParcel = XMLTools.LoadListFromXMLSerializer<Parcel>(parcelPath);
@@ -208,17 +248,29 @@ namespace DAL
             ListParcel.RemoveAt(index);
             XMLTools.SaveListToXMLSerializer(ListParcel, parcelPath);
         }
+
+        /// <summary>
+        /// GetParcel by id. 
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         public Parcel GetParcel(int Id)
         {
             List<Parcel> ListParcel = XMLTools.LoadListFromXMLSerializer<Parcel>(parcelPath);
             object obj = ListParcel.Find(i => i.ParcelId == Id);
 
-            if(obj != null)
+            if (obj != null)
             {
-               return (Parcel)obj;
+                return (Parcel)obj;
             }
             throw new ParcelException("Parcel not found");
         }
+
+
+        /// <summary>
+        /// UpdateParcel by obj.
+        /// </summary>
+        /// <param name="parcel"></param>
         public void UpdateParcel(Parcel parcel)
         {
             List<Parcel> ListParcel = XMLTools.LoadListFromXMLSerializer<Parcel>(parcelPath);
@@ -231,6 +283,12 @@ namespace DAL
             ListParcel[index] = parcel;
             XMLTools.SaveListToXMLSerializer(ListParcel, parcelPath);
         }
+
+        /// <summary>
+        /// return parcel list by prdicate 
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
         public IEnumerable<Parcel> GetPackagesByPredicate(Predicate<Parcel> predicate = null)
         {
             List<Parcel> ListParcel = XMLTools.LoadListFromXMLSerializer<Parcel>(parcelPath);
@@ -239,6 +297,10 @@ namespace DAL
         }
         #endregion
 
+        /// <summary>
+        /// RemoveCustomer by id.
+        /// </summary>
+        /// <param name="customerId"></param>
         #region Customer
         public void RemoveCustomer(int customerId)
         {
@@ -252,6 +314,11 @@ namespace DAL
             ListCustomer.RemoveAt(index);
             XMLTools.SaveListToXMLSerializer(ListCustomer, customerPath);
         }
+
+        /// <summary>
+        /// Update Customer by obj.
+        /// </summary>
+        /// <param name="customer"></param>
         public void UpdateCustomer(Customer customer)
         {
             List<Customer> ListCustomer = XMLTools.LoadListFromXMLSerializer<Customer>(customerPath);
@@ -264,6 +331,11 @@ namespace DAL
             ListCustomer[index] = customer;
             XMLTools.SaveListToXMLSerializer(ListCustomer, customerPath);
         }
+
+        /// <summary>
+        /// AddCustomer by obj.
+        /// </summary>
+        /// <param name="newCustomer"></param>
         public void AddCustomer(Customer newCustomer)
         {
             List<Customer> ListCustomer = XMLTools.LoadListFromXMLSerializer<Customer>(customerPath);
@@ -272,6 +344,12 @@ namespace DAL
 
             XMLTools.SaveListToXMLSerializer(ListCustomer, customerPath);
         }
+
+        /// <summary>
+        /// GetCustomer by ID.
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         public Customer GetCustomer(int Id)
         {
             List<Customer> ListCustomer = XMLTools.LoadListFromXMLSerializer<Customer>(customerPath);
@@ -293,9 +371,15 @@ namespace DAL
         #endregion
 
         #region User 
+        /// <summary>
+        /// Add a user by object. (XMLElement use)
+        /// </summary>
+        /// <param name="newUser"></param>
         public void AddUser(User newUser)
         {
             XElement xElement = XMLTools.LoadListFromXMLElement(userPath);
+
+            //select correct user by Linq 
             XElement us = (from u in xElement.Elements()
                            where u.Element("UserId").Value == newUser.UserId
                            select u).FirstOrDefault();
@@ -314,6 +398,11 @@ namespace DAL
                 throw new UserException("User not found");
             }
         }
+        /// <summary>
+        /// Get user by object. (XMLElement use)
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
         public User GetUser(string userID)
         {
             XElement userRootElement = XMLTools.LoadListFromXMLElement(userPath);
@@ -329,7 +418,12 @@ namespace DAL
 
             return user.UserId == userID ? user : throw new CheckIdException("User not found");
         }
-        public void UpdateUser(User user)
+
+        /// <summary>
+        /// Get user by object (XMLElement use).
+        /// </summary>
+        /// <param name="user"></param>
+        public void C(User user)
         {
             XElement userRootElement = XMLTools.LoadListFromXMLElement(userPath);
 
@@ -349,6 +443,11 @@ namespace DAL
                 throw new UserException("User not found");
             }
         }
+
+        /// <summary>
+        /// Remove user (XMLElement use).
+        /// </summary>
+        /// <param name="UserID"></param>
         public void RemoveUser(string UserID)
         {
             XElement userRootElement = XMLTools.LoadListFromXMLElement(userPath);
@@ -369,6 +468,11 @@ namespace DAL
         }
         #endregion
 
+        /// <summary>
+        /// Set drone for parcel by parcel Id & drone Id
+        /// </summary>
+        /// <param name="parcelId"></param>
+        /// <param name="droneId"></param>
         #region Operations
         public bool SetDroneForParcel(int parcelId, int droneId)
         {
@@ -393,6 +497,10 @@ namespace DAL
             }
         }
 
+        /// <summary>
+        /// Collect parcel by parcel ID.
+        /// </summary>
+        /// <param name="parcelId"></param>
         public void PackageCollectionByDrone(int parcelId)
         {
             List<Parcel> ListParcel = XMLTools.LoadListFromXMLSerializer<Parcel>(parcelPath);
@@ -412,6 +520,11 @@ namespace DAL
             }
         }
 
+        /// <summary>
+        /// Delivered package to custumer by parcelId find.
+        /// </summary>
+        /// <param name="parcelId"></param>
+        /// <returns></returns>
         public bool DeliveredPackageToCustumer(int parcelId)
         {
             List<Parcel> ListParcel = XMLTools.LoadListFromXMLSerializer<Parcel>(parcelPath);
@@ -431,6 +544,12 @@ namespace DAL
             }
         }
 
+
+        /// <summary>
+        /// Releasing ChargeDrone by drone Id & baseStation Id find.
+        /// </summary>
+        /// <param name="droneId"></param>
+        /// <param name="baseStationId"></param>
         public void ReleasingChargeDrone(int droneId, int baseStationId)
         {
             List<DroneCharge> ListDroneCharge = XMLTools.LoadListFromXMLSerializer<DroneCharge>(droneChargesPath);
@@ -447,6 +566,11 @@ namespace DAL
             }
         }
 
+
+        /// <summary>
+        /// Reduce one drone charge.
+        /// </summary>
+        /// <param name="stationId"></param>
         public void MinusDroneCharge(int stationId)
         {
             List<BaseStation> ListBaseStation = XMLTools.LoadListFromXMLSerializer<BaseStation>(baseStationPath);
@@ -465,6 +589,10 @@ namespace DAL
             }
         }
 
+        /// <summary>
+        /// Plus one drone charge
+        /// </summary>
+        /// <param name="stationId"></param>
         public void PlusDroneCharge(int stationId)
         {
             List<BaseStation> ListBaseStation = XMLTools.LoadListFromXMLSerializer<BaseStation>(baseStationPath);
