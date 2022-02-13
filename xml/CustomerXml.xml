@@ -65,9 +65,16 @@
   </Customer>
   <Customer>
     <CustomerId>200996586</CustomerId>
-    <Name>משה הורוביץ</Name>
-    <Phone>051-1374633</Phone>
+    <Name>משה דוד לוי</Name>
+    <Phone>051-137463</Phone>
     <Longtitude>32.0948</Longtitude>
     <Latitude>34.8293</Latitude>
+  </Customer>
+  <Customer>
+    <CustomerId>30</CustomerId>
+    <Name>avi</Name>
+    <Phone>0532353640</Phone>
+    <Longtitude>35.2</Longtitude>
+    <Latitude>35.4</Latitude>
   </Customer>
 </ArrayOfCustomer>

@@ -16,8 +16,8 @@ namespace DO
         public int DroneId { get; set; }
         public DateTime Created { get; set; }
         public DateTime Assignment { get; set; }
-        public DateTime Delivered { get; set; }
         public DateTime PickedUp { get; set; }
+        public DateTime Delivered { get; set; }
         public override string ToString()
         {
             return $"Parcel: , Id:{ParcelId}, Senderld: {SenderId}" +
@@ -27,8 +27,8 @@ namespace DO
                     $", DroneId: {DroneId}" +
                     $", Scheduled: {Created}" +
                     $", Assignment: {Assignment}" +
-                    $", Delivered: {Delivered}" +
-                    $", PickedUp: {PickedUp}";
+                    $", PickedUp: {PickedUp}" +
+                    $", Delivered: { Delivered}";
         }
     }
 

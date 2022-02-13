@@ -30,7 +30,6 @@ namespace PLGui
         public IBL bL;
         private Drone drone;
         private DroneToList droneToList;
-        private DroneInParcel droneInParcel;
         BaseStation baseStation;
         private int StationID;
         public int Idrone;
@@ -105,7 +104,10 @@ namespace PLGui
                 FindParcel.Visibility = Visibility.Hidden;
                 btnSendDroneToDeliver.Visibility = Visibility.Hidden;
                 packageAssociated.Visibility = Visibility.Hidden;
-
+                drone = bL.GetDrone(droneToList.DroneID);
+                baseStation = bL.GetBaseStation(bL.GetTheIdOfCloseStation(drone.DroneID));
+                txbNameStation.Text = baseStation.ID.ToString();
+                txbLocationStation.Text = baseStation.location.ToString();
             }
 
             else if (drone.Status == BO.DroneStatus.busy)
@@ -148,6 +150,7 @@ namespace PLGui
                 mainWindow.GroupingDroneList();
             }
         }
+
         private void refreshThisWindow()
         {
 
@@ -156,10 +159,7 @@ namespace PLGui
             this.Close();
 
         }
-        private void DroneId_TextChanged(object sender, TextChangedEventArgs e)
-        {
 
-        }
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]$");
@@ -198,6 +198,7 @@ namespace PLGui
                     break;
             }
         }
+
         private void SendDroneToCharge(object sender, RoutedEventArgs e)
         {
             try
@@ -247,12 +248,6 @@ namespace PLGui
                 MessageBox.Show("הרחפן לא במצב תחזוקה", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-        //private void NumberOfStation_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    BaseStationToList stations = (BaseStationToList)NumberOfStations.SelectedItem;
-        //    StationID = stations.ID;
-        //}
 
         private void lvStations_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -352,11 +347,9 @@ namespace PLGui
                 }
                 else
                 {
-
                     drone = bL.GetDrone(drone.DroneID);
                     drone.Status = BO.DroneStatus.available;
                     DataContext = drone;
-                    //DroneVisibility();
                 }
 
             }
@@ -425,16 +418,11 @@ namespace PLGui
 
         private void CloseWindow_Click(object sender, RoutedEventArgs e)
         {
-            if (drone.Status == BO.DroneStatus.available)
-            {
                 mainWindow.lstDroneListView.Items.Refresh();
                 mainWindow.GroupingDroneList();
-                refreshThisWindow();
                 Close();
-            }
+          
         }
-
-
     }
 }
 

@@ -75,27 +75,28 @@ namespace PLGui
         public ParcelWindow(IBL bL, MainWindow _mainWindow, int _index)
         {
             InitializeComponent();
-            ParcelGrid.Visibility = Visibility.Visible;
             GetBL = bL;
             index = _index;
             mainWindow = _mainWindow;
             parcelToList = bL.GetParcelToListsByPredicate(x => x.Id == _index).FirstOrDefault();
             parcel = bL.GetParcel(_index);
             DataContext = parcel;
+            ParcelGrid.Visibility = Visibility.Visible;
             UpdateGridVisibility();
+            
         }
 
         private void UpdateGridVisibility()
         {
             ParcelGrid.Visibility = Visibility.Visible;
-            AddParcel.Visibility = Visibility.Hidden;
+            btnAddParcel.Visibility = Visibility.Hidden;
+            droneInParcelButton.Content = parcel.droneInParcel == null ? "אין עדיין רחפן משוייך" : parcel.droneInParcel.DroneID;
 
         }
 
         private void UpdateVisibility() // hidden Button - upgrade and remove
         {
-            //ParcelID.IsReadOnly = false;
-            //btnUpdateParcel.Visibility = Visibility.Hidden;
+            //btnAddParcel.Visibility = Visibility.Hidden;
             //btnRemoveStation.Visibility = Visibility.Hidden;
         }
 
@@ -104,38 +105,6 @@ namespace PLGui
             Regex regex = new Regex("[^0-9]$");
             e.Handled = regex.IsMatch(e.Text);
         }
-
-        //private void btnUpdateParcel_Click(object sender, RoutedEventArgs e)
-        //{
-        //    MessageBoxResult messageBoxResult = MessageBox.Show("האם אתה בטוח שאתה רוצה לעדכן את החבילה?"
-        //     , "הכנס חבילה", MessageBoxButton.YesNoCancel);
-
-        //    switch (messageBoxResult)
-        //    {
-        //        case MessageBoxResult.Yes:
-        //            try
-        //            {
-        //                GetBL.upd();
-        //                baseStationToList.Name = baseStation.Name;
-        //                mainWindow.baseStationToLists[index] = baseStationToList;
-        //                mainWindow.lstBaseStationListView.Items.Refresh();
-        //                MessageBox.Show(baseStation.ToString(), "החבילה עודכנה בהצלחה");
-        //                Close();
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                MessageBox.Show(ex.Message);
-        //            }
-        //            break;
-        //        case MessageBoxResult.Cancel:
-        //            Close();
-        //            break;
-        //        case MessageBoxResult.No:
-        //            break;
-        //        default:
-        //            break;
-        //    }
-        //}
 
         private void btnRemoveStation_Click(object sender, RoutedEventArgs e)
         {
@@ -201,8 +170,6 @@ namespace PLGui
             }
         }
 
-       
-
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
             Close();
@@ -210,9 +177,12 @@ namespace PLGui
 
         private void droneInParcelButton_Click_1(object sender, RoutedEventArgs e)
         {
-            int idDrone = parcel.droneInParcel.DroneID;
-            new DroneWindow(GetBL, mainWindow, idDrone).Show();
-            Close();
+            if (parcel.droneInParcel != null)
+            {
+                int idDrone = parcel.droneInParcel.DroneID;
+                new DroneWindow(GetBL, mainWindow, idDrone).Show();
+                Close();
+            }  
         }
     }
 }

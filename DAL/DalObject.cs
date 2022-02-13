@@ -103,14 +103,16 @@ namespace DAL
             User user = DataSource.users.Find(i => i.UserId == userId);
             return user.UserId != default ? user : throw new UserException("User not found");
         }
-        public void GetDroneChargeByStation(int baseStationId)
+        public DroneCharge GetDroneChargeByStation(int baseStationId)
         {
-            int index = DataSource.DroneCharges.ToList().FindIndex(i => i.StationID == baseStationId);
-            if (index != -1)
-            {
-                throw new Exception("The Station have not exists");
-            }
-            AddDroneCharge(new DroneCharge {StationID = baseStationId });
+            DroneCharge drone = DataSource.DroneCharges.Find(d => d.StationID == baseStationId);
+            return drone.StationID != default ? drone : throw new CheckIfIdNotException("he Station have not exists");
+            //int index = DataSource.DroneCharges.ToList().FindIndex(i => i.StationID == baseStationId);
+            //if (index != -1)
+            //{
+            //    throw new Exception("The Station have not exists");
+            //}
+            // AddDroneCharge(new DroneCharge {StationID = baseStationId });
         }
         public DroneCharge GetDroneChargeByDrone(int droneId)
         {

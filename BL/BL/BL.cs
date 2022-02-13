@@ -28,7 +28,6 @@ namespace BL
         internal static double PowerConsumptionMediumWeight;
         internal static double PowerConsumptionHeavyWeight;
         internal static double LoadingDrone;
-
         
         private BL()
         {

@@ -5,7 +5,7 @@
     <Name>B.S.R 4</Name>
     <Longtitude>34.8247</Longtitude>
     <Latitude>32.0931</Latitude>
-    <AvailableChargeSlots>51</AvailableChargeSlots>
+    <AvailableChargeSlots>396</AvailableChargeSlots>
   </BaseStation>
   <BaseStation>
     <StationID>54</StationID>
@@ -13,5 +13,32 @@
     <Longtitude>34.8377</Longtitude>
     <Latitude>32.0964</Latitude>
     <AvailableChargeSlots>81</AvailableChargeSlots>
+  </BaseStation>
+  <BaseStation>
+    <StationID>0</StationID>
+    <Longtitude>0</Longtitude>
+    <Latitude>0</Latitude>
+    <AvailableChargeSlots>0</AvailableChargeSlots>
+  </BaseStation>
+  <BaseStation>
+    <StationID>67</StationID>
+    <Name>hvf</Name>
+    <Longtitude>33.5</Longtitude>
+    <Latitude>34.7</Latitude>
+    <AvailableChargeSlots>500</AvailableChargeSlots>
+  </BaseStation>
+  <BaseStation>
+    <StationID>99</StationID>
+    <Name>hvf</Name>
+    <Longtitude>33.5</Longtitude>
+    <Latitude>34.7</Latitude>
+    <AvailableChargeSlots>500</AvailableChargeSlots>
+  </BaseStation>
+  <BaseStation>
+    <StationID>50</StationID>
+    <Name>mnn</Name>
+    <Longtitude>0</Longtitude>
+    <Latitude>0</Latitude>
+    <AvailableChargeSlots>20</AvailableChargeSlots>
   </BaseStation>
 </ArrayOfBaseStation>

@@ -97,17 +97,18 @@ namespace DAL
             XMLTools.SaveListToXMLSerializer(ListdroneCharge, droneChargesPath);
         }
 
-        public void GetDroneChargeByStation(int baseStationId)
+        public DroneCharge GetDroneChargeByStation(int baseStationId)
         {
 
             List<DroneCharge> ListDroneCharge = XMLTools.LoadListFromXMLSerializer<DroneCharge>(droneChargesPath);
 
-            int index = ListDroneCharge.ToList().FindIndex(i => i.StationID == baseStationId);
-            if (index != -1)
-            {
-                throw new DroneChargeException("The Station have not exists");
-            }
-            AddDroneCharge(new DroneCharge { StationID = baseStationId });
+            DroneCharge drone = ListDroneCharge.Find(d => d.StationID == baseStationId);
+            return drone.StationID != default ? drone : throw new CheckIfIdNotException("he Station have not exists");
+            //if (drone != -1)
+            //{
+            //    throw new DroneChargeException("The Station have not exists");
+            //}
+            //AddDroneCharge(new DroneCharge { StationID = baseStationId });
         }
         public DroneCharge GetDroneChargeByDrone(int droneId)
         {
@@ -133,7 +134,7 @@ namespace DAL
             List<BaseStation> ListBaseStation = XMLTools.LoadListFromXMLSerializer<BaseStation>(baseStationPath);
 
             ListBaseStation.Add(ListBaseStation.FindIndex(i => i.StationID == new_baseStation.StationID) == -1 ?
-                           new_baseStation : throw new BaseStationException($"This id{new_baseStation.StationID}already exist"));
+                           new_baseStation : throw new BaseStationException($"This id{new_baseStation.StationID} already exist"));
 
             XMLTools.SaveListToXMLSerializer(ListBaseStation, baseStationPath);
         }
@@ -166,8 +167,10 @@ namespace DAL
             List<BaseStation> ListBaseStation = XMLTools.LoadListFromXMLSerializer<BaseStation>(baseStationPath);
 
             BaseStation station = ListBaseStation.Find(i => i.StationID == Id);
-            return station.StationID != default ? station : throw new BaseStationException("Station not found");
+            return (object)station != null ? station : throw new BaseStationException("Station not found");
         }
+
+
         public IEnumerable<BaseStation> GetBaseStationByPredicate(Predicate<BaseStation> predicate = null)
         {
             List<BaseStation> ListBaseStation = XMLTools.LoadListFromXMLSerializer<BaseStation>(baseStationPath);
@@ -272,10 +275,15 @@ namespace DAL
         public Customer GetCustomer(int Id)
         {
             List<Customer> ListCustomer = XMLTools.LoadListFromXMLSerializer<Customer>(customerPath);
-
-            Customer customer = ListCustomer.Find(i => i.CustomerId == Id);
-            return customer.CustomerId != default ? customer : throw new CustumerException("Customer not found");
+            object obj = ListCustomer.Find(i => i.CustomerId == Id);
+            if (obj != null)
+            {
+                return (Customer)obj;
+            }
+            throw new CustumerException("Customer not found");
         }
+
+
         public IEnumerable<Customer> GetCustomersByPredicate(Predicate<Customer> predicate = null)
         {
             List<Customer> ListCustomer = XMLTools.LoadListFromXMLSerializer<Customer>(customerPath);

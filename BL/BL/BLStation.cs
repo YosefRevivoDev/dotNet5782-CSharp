@@ -29,7 +29,9 @@ namespace BL
             {
                 dal.AddBaseStation(baseStation);
             }
-            catch { }
+            catch(DO.CheckIdException ex)  {
+                throw new CheckIdException("Error", ex);
+            }
         }
 
 
@@ -71,9 +73,9 @@ namespace BL
             }
 
         }
+
         public void RemoveBaseStationBL(int id)
         {
-            //IDAL.DO.BaseStation baseStationRemove = dal.GetBaseStation(id);
             dal.RemoveBaseStation(id);
         }
 
@@ -82,12 +84,12 @@ namespace BL
             try
             {
                 DO.BaseStation baseStation = dal.GetBaseStation(stationId);
-                BaseStation station = new();
+               
 
                 baseStation.Name = newNameStation;
 
                 //check sum of available ChargeSlots + sum of unavailable ChargeSlots
-                int numberOfNotAvailableChargeSlots = dal.GetBaseStationByPredicate(x => x.StationID == stationId).Count();
+                int numberOfNotAvailableChargeSlots = dal.GetDroneChargesByPredicate(x => x.StationID == stationId).Count();
                 if (sumOfChargestation > (numberOfNotAvailableChargeSlots + baseStation.AvailableChargeSlots))
                     baseStation.AvailableChargeSlots = sumOfChargestation - numberOfNotAvailableChargeSlots;
 

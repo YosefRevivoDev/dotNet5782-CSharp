@@ -56,17 +56,17 @@ namespace PLGui
         /// <param name="_mainWindow"></param>
         /// <param name="_customer"></param>
         /// <param name="_index"></param>
-        public CustomerWindow(IBL bL, MainWindow _mainWindow, int _index)
+        public CustomerWindow(IBL bL, MainWindow _mainWindow, CustomerToList customerToList, int index)
         {
             InitializeComponent();
-            Updating.Visibility = Visibility.Visible;
-            indexCustomer = _index;
+            indexCustomer = index;
             GetBL = bL;
             mainWindow = _mainWindow;
-            customerToList = bL.GetCustomerToList(x => x.CustomerId == _index).FirstOrDefault();
-            customer = bL.GetCustomer(_index);
-            ItemsSourceParcels();
+            this.customerToList = customerToList;
+            customer = bL.GetCustomer(customerToList.CustomerId);
             DataContext = customer;
+            Updating.Visibility = Visibility.Visible;
+            ItemsSourceParcels();
             UpdateGridVisibility();
         }
 
@@ -85,11 +85,10 @@ namespace PLGui
             }
             catch (BO.CheckIfIdNotExceptions ex)
             {
-                MessageBox.Show(ex.Message, "שגיאה פנימית", MessageBoxButton.OK, MessageBoxImage.Error,
+                MessageBox.Show(ex.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error,
                     MessageBoxResult.None, MessageBoxOptions.RightAlign);
                 return;
             }
-           // Drones.ItemsSource = baseStation.droneCharges.ToList();
             DataContext = customer;
         }
 
@@ -102,6 +101,7 @@ namespace PLGui
         {
             btnUpdateCustomer.Visibility = Visibility.Hidden;
         }
+
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]$");
@@ -119,8 +119,8 @@ namespace PLGui
                     try
                     {
                         GetBL.UpdateCustomr(customer.CustomerId, customer.NameCustomer, customer.PhoneCustomer);
-
-                        mainWindow.customerToLists[index] = GetBL.GetCustomerToList(i => i.CustomerId == customer.CustomerId).First();
+                        customerToList = GetBL.GetCustomerToList(i => i.CustomerId == customer.CustomerId).First();
+                        mainWindow.customerToLists[indexCustomer] = customerToList;
                         mainWindow.lstBaseStationListView.Items.Refresh();
                         MessageBox.Show("הלקוח עודכן בהצלחה");
                         Close();
@@ -193,32 +193,7 @@ namespace PLGui
             int parcelID = ((ParcelAtCustomer)toCustomer.SelectedItem).Id;
             new ParcelWindow(GetBL, mainWindow, parcelID).Show();
             Close();
-        }
-
-        private void onlyNumbersForID(object sender, TextCompositionEventArgs e)
-        {
-
-        }
-
-        private void onlyAlphaBeta(object sender, TextCompositionEventArgs e)
-        {
-
-        }
-
-        private void phonePattren(object sender, TextCompositionEventArgs e)
-        {
-
-        }
-
-        private void lungetudePattren(object sender, TextCompositionEventArgs e)
-        {
-
-        }
-
-        private void lattitudePattren(object sender, TextCompositionEventArgs e)
-        {
-
-        }
+        }     
 
         private void btnAddCustomer_Click(object sender, RoutedEventArgs e)
         {
@@ -231,8 +206,13 @@ namespace PLGui
                     try
                     {
                         GetBL.AddNewCustomer(customer);
-                        mainWindow.customerToLists.Add(GetBL.GetCustomerToList()
-                            .First(i => i.CustomerId == customer.CustomerId));
+
+                        CustomerToList customerToList = GetBL.GetCustomerToList()
+                            .First(i => i.CustomerId == customer.CustomerId);
+
+                        mainWindow.customerToLists[index] = customerToList;
+
+                        mainWindow.customerToLists.Add(customerToList);
                         MessageBox.Show("הלקוח נוסף בהצלחה");
                         Close();
                     }

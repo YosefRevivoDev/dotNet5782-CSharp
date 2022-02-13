@@ -15,8 +15,7 @@ namespace BO
         public override string ToString()
         {
             return base.ToString() + $"CustomerInParcel: {Sender}, CustomerInParcel: {Target}, " +
-                $"DroneInParcel: {droneInParcel}, DateTime: {assigned}, DateTime: {PickedUp}, DateTime: {Delivered}, DateTime: {Requested} ";
+                $"DroneInParcel: {droneInParcel}, DateTime: {Requested}, DateTime: {assigned}, DateTime: {PickedUp}, DateTime: {Delivered} ";
         }
-
     }
 }

@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 
 using BO;
 using BlApi;
+using PL;
 
 namespace PLGui
 {
@@ -27,34 +28,30 @@ namespace PLGui
     public enum Priorities { הכל, רגיל, מהיר, דחוף };
     public enum ParcelStatus { הכל, נוצר, שוייך, נאסף, סופק };
 
-    
+
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        
+
         IBL getBL;
         public ObservableCollection<DroneToList> dronesToLists;
         public ObservableCollection<ParcelToList> parcelToLists;
         public ObservableCollection<CustomerToList> customerToLists;
         public ObservableCollection<BaseStationToList> baseStationToLists;
-        private BaseStation baseStation;
-        private Customer customer;
-        private Parcel parcel;
-        MainWindow parent;
+        public CustomerToList Customer;
 
         public MainWindow()
         {
             getBL = BlFactory.GetBl();
-            
+
             InitializeComponent();
             InitDrones();
             InitParcels();
             InitCustomer();
             InitBaseStation();
-
         }
 
 
@@ -72,8 +69,8 @@ namespace PLGui
             cmbStatusSelector.SelectedIndex = 0;
             dronesToLists.CollectionChanged += SortedDrones_CollectionChanged;
             lstDroneListView.ItemsSource = dronesToLists;
-
         }
+
         private void InitParcels()
         {
             parcelToLists = new();
@@ -89,6 +86,7 @@ namespace PLGui
             parcelToLists.CollectionChanged += SortedParcels_CollectionChanged;
             lstParcelListView.ItemsSource = parcelToLists;
         }
+
         private void InitCustomer()
         {
             customerToLists = new();
@@ -99,6 +97,7 @@ namespace PLGui
             }
             lstCustomerListView.ItemsSource = customerToLists;
         }
+
         private void InitBaseStation()
         {
             baseStationToLists = new();
@@ -121,7 +120,6 @@ namespace PLGui
             if (drones != null)
             {
                 new DroneWindow(getBL, this, drones.DroneID).Show();
-
             }
         }
 
@@ -130,8 +128,7 @@ namespace PLGui
             BaseStationToList basetation = (BaseStationToList)lstBaseStationListView.SelectedItem;
             if (basetation != null)
             {
-                int IndexBaseStation = lstBaseStationListView.SelectedIndex;
-                new BaseStationWindow(getBL, this, basetation, IndexBaseStation).Show();
+                new BaseStationWindow(getBL, this, basetation.ID, lstBaseStationListView.SelectedIndex).Show();
             }
         }
 
@@ -140,8 +137,7 @@ namespace PLGui
             CustomerToList customer = (CustomerToList)lstCustomerListView.SelectedItem;
             if (customer != null)
             {
-                int insexCustomer = lstCustomerListView.SelectedIndex;
-                new CustomerWindow(getBL, this, insexCustomer).Show();
+                new CustomerWindow(getBL, this, customer, lstCustomerListView.SelectedIndex).Show();
             }
         }
 
@@ -150,18 +146,11 @@ namespace PLGui
             ParcelToList parcelToList = (ParcelToList)lstParcelListView.SelectedItem;
             if (parcelToList != null)
             {
-                int indexParcel = lstParcelListView.SelectedIndex;
-                new ParcelWindow(getBL, this,  indexParcel).Show();
+                new ParcelWindow(getBL, this, parcelToList.Id).Show();
             }
         }
         #endregion
 
-
-        private void txtLable_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-      
         private void btnCloseWindow_Click(object sender, RoutedEventArgs e)
         {
             Close();
@@ -297,22 +286,49 @@ namespace PLGui
         }
 
         #region LOGIN
-        private void LoginApp_Click(object sender, RoutedEventArgs e)
+        private void btnEnterApp_Click(object sender, RoutedEventArgs e)
         {
-            new LoginApp(this, getBL).Show();
-            
+            if (txtUserId.Text == "" || txtPasswordBox1.Text == "")
+            {
+                MessageBox.Show("You must fill all the fildes");
+                return;
+            }
+            try
+            {
+                User user = getBL.GetUser(txtUserId.Text);
+                if (user.UserId == txtUserId.Text && user.Password == txtPasswordBox1.Text)
+                {
+                    CompanyManagement.Visibility = Visibility.Visible;
+                    txbEnterApp.Visibility = Visibility.Hidden;
+                    LoginManagement.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    MessageBox.Show("The Password not correct");
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("The User not exist");
+                return;
+            }
         }
 
-        private void LoginCustomer_Click(object sender, RoutedEventArgs e)
+        private void btnCustomerEnter_Click(object sender, RoutedEventArgs e)
         {
-            new LoginApp(this, getBL).Show();
+            List<CustomerToList> customers = getBL.GetCustomerToList().ToList();
+            var customerCombo = from item in customers
+                                select item.CustomerId;
+            int find = customerCombo.FirstOrDefault(i => i == int.Parse(txtUserIdCustomer.Text.ToString()));
+            if (find != default)
+            {
+                int IdCustomer = int.Parse(find.ToString());
+                new LoginCustomerWindow(getBL, IdCustomer).Show();
+            }
+            else
+                MessageBox.Show("מספר המשתמש אינו קיים\n אנא נסה שוב", "אישור");
         }
 
-        private void RegisterApp_Click(object sender, RoutedEventArgs e)
-        {
-            new LoginApp(this, getBL).Show();
-
-        }
         #endregion
 
         #region ADD Object Click
@@ -324,7 +340,6 @@ namespace PLGui
             x.Height = 450;
             x.Width = 500;
             x.Show();
-            //x.ShowDialog();
         }
 
         private void addBaseStation_Click(object sender, RoutedEventArgs e)
@@ -339,10 +354,10 @@ namespace PLGui
 
         private void addingCustomer_Click(object sender, RoutedEventArgs e)
         {
-            var x = new CustomerWindow (getBL, this);
+            var x = new CustomerWindow(getBL, this);
             x.GridAddCustomer.Visibility = Visibility.Visible;
             x.GridUpdateCustomer.Visibility = Visibility.Hidden;
-            x.Height = 550;
+            x.Height = 600;
             x.Width = 400;
             x.ShowDialog();
         }
@@ -356,8 +371,6 @@ namespace PLGui
             x.Width = 400;
             x.ShowDialog();
         }
-
-
 
         #endregion
 
@@ -400,7 +413,7 @@ namespace PLGui
             else
                 return;
         }
-        
+
         CollectionView baseStationView;
         /// <summary>
         /// grouping functaion by AvailableChargingStations.
@@ -418,10 +431,8 @@ namespace PLGui
             else
                 return;
         }
-
         #endregion
 
-       
     }
 }
 

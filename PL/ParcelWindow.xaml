@@ -47,6 +47,7 @@
                     <ComboBox Name="prioritiCombo"  FontWeight="Bold" Grid.Column="1"  Grid.Row="3" SelectedItem="{Binding Priority}"/>
                     <ComboBox x:Name="comboBoxOfsander" Grid.Row="0" Grid.Column="1"  SelectedIndex="0" />
                     <ComboBox x:Name="comboBoxOftarget" Grid.Row="1" Grid.Column="1"   SelectedIndex="1"  />
+                    
                 </Grid>
 
             </Grid>

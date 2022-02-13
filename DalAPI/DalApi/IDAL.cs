@@ -20,7 +20,7 @@ namespace DalApi
         User GetUser(string userName);
         Drone GetDrone(int Id);
         Customer GetCustomer(int Id);
-        void GetDroneChargeByStation(int baseStationId);
+        DroneCharge GetDroneChargeByStation(int baseStationId);
         DroneCharge GetDroneChargeByDrone(int droneId);
         #endregion
 

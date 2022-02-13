@@ -88,7 +88,7 @@
 
                     <Border BorderThickness="2" Grid.Row="1" BorderBrush="Yellow"  CornerRadius="5" Padding="20">
 
-                        <Grid  x:Name="NoFindParcel" Visibility="Hidden">
+                        <Grid  x:Name="NoFindParcel" Visibility="Visible">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="3*"/>
@@ -107,7 +107,7 @@
 
                     <Border BorderThickness="2" Grid.Row="1" BorderBrush="Yellow"  CornerRadius="5" Padding="20">
 
-                        <Grid x:Name="FindParcel" Grid.Row="1" Visibility="Visible">
+                        <Grid x:Name="FindParcel" Grid.Row="1" Visibility="Hidden">
 
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
@@ -194,8 +194,8 @@
                                 </Grid.RowDefinitions>
                                 <Label Grid.Column="1" Grid.Row="0" Content=":שם תחנה" />
                                 <Label Grid.Column="1" Grid.Row="1" Content=":מיקום תחנה"  />
-                                <TextBlock x:Name="stationIdltextBlock"  Grid.Column="0" Grid.Row="0" />
-                                <TextBlock x:Name="stationLoctionltextBlock" Grid.Column="0" Grid.Row="1" />
+                                <TextBlock x:Name="txbNameStation" Grid.Column="0" Grid.Row="0" />
+                                <TextBlock x:Name="txbLocationStation" Grid.Column="0" Grid.Row="1" />
                             </Grid>
                         </Grid>
 

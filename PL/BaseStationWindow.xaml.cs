@@ -30,14 +30,11 @@ namespace PLGui
         public ObservableCollection<BaseStationToList> baseStationToLists;
         public BaseStationToList baseStationToList;
         public BaseStation baseStation { set; get; }
-        DroneToList droneToList { set; get; }
         public int index;
         private MainWindow mainWindow;
-        private BaseStationToList basetation;
-        private int indexBaseStation;
-
+       
         /// <summary>
-        /// Constructor for add baseStation
+        /// Constructor for add base Station
         /// </summary>
         /// <param name = "getBL" ></ param >
         /// < param name="_mainWindow"></param>
@@ -51,21 +48,23 @@ namespace PLGui
             UpdateVisibility();
 
         }
+
         /// <summary>
-        /// Constructor for update drone
+        /// Constructor for update Base Station
         /// </summary>
         /// <param name="getBL"></param>
         /// <param name="_baseStation"></param>
         /// <param name="_mainWindow"></param>
         /// <param name="_index"></param>
-        public BaseStationWindow(IBL getBL, MainWindow _mainWindow, BaseStation _baseStation, int _index)
+        public BaseStationWindow(IBL getBL, MainWindow _mainWindow, int idBaseStation, int index)
         {
             InitializeComponent();
             Updating.Visibility = Visibility.Visible;
             GetBL = getBL;
-            index = _index;
+            this.index = index;
             mainWindow = _mainWindow;
-            baseStation = getBL.GetBaseStation(_baseStation.ID);
+            baseStationToList = getBL.GetBasetationToListsByPredicate(x => x.ID == idBaseStation).FirstOrDefault();
+            baseStation = getBL.GetBaseStation(idBaseStation);
             DataContext = baseStation;
             lstDronesCharge.ItemsSource = baseStation.droneCharges;
             UpdateGridVisibility();
@@ -211,11 +210,6 @@ namespace PLGui
             Close();
         }
 
-        private void SlutsSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
         private void StationListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             baseStationToList = (BaseStationToList)mainWindow.lstBaseStationListView.SelectedItem;
@@ -223,26 +217,6 @@ namespace PLGui
             {
                 UpdatingWindow(baseStationToList.ID);
             }
-        }
-
-        private void onlyNumbersForID(object sender, TextCompositionEventArgs e)
-        {
-
-        }
-
-        private void onlytwoNumbers(object sender, TextCompositionEventArgs e)
-        {
-
-        }
-
-        private void lungetudePattren(object sender, TextCompositionEventArgs e)
-        {
-
-        }
-
-        private void lattitudePattren(object sender, TextCompositionEventArgs e)
-        {
-
         }
 
         private void Drones_SelectionChanged(object sender, SelectionChangedEventArgs e)

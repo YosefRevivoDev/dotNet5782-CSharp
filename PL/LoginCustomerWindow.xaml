@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="LoginCustomerWindow" Height="600" Width="700">
     <Grid x:Name="GridUpdateCustomer" Visibility="Visible">
-        <!--<Grid.RowDefinitions>
+        <Grid.RowDefinitions>
             <RowDefinition Height="5*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
@@ -51,13 +51,14 @@
                     </Grid.RowDefinitions>
                     <Label Content="משלוחים שנשלחו" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontWeight="Bold"/>
                     <Grid Grid.Row="1">
-                        <ListView x:Name="fromCustomer" HorizontalAlignment="Right" Background="{x:Null}" SelectionChanged="fromCustomer_SelectionChanged" Grid.ColumnSpan="2"  Grid.RowSpan="2" >
+                        <ListView x:Name="fromCustomer" HorizontalAlignment="Right" Background="{x:Null}" DisplayMemberPath="{Binding PackagesFromCustomer}" 
+                                  SelectionChanged="fromCustomer_SelectionChanged" Grid.ColumnSpan="2"  Grid.RowSpan="2" >
                             <ListView.View>
                                 <GridView >
-                                    <GridViewColumn Header="מזהה משלוח" Width="150" DisplayMemberBinding="{Binding CustomerId}"/>
+                                    <GridViewColumn Header="מזהה משלוח" Width="150" DisplayMemberBinding="{Binding Id}"/>
                                     <GridViewColumn Header="מצב משלוח" Width="150" DisplayMemberBinding="{Binding ParcelStatus}"/>
-                                    <GridViewColumn Header="מזהה לקוח" Width="150" DisplayMemberBinding="{Binding CustomerInParcel.CustomerId}"/>
-                                    <GridViewColumn Header="שם לקוח" Width="150" DisplayMemberBinding="{Binding CustomerInParcel.NameCustomer}"/>
+                                    <GridViewColumn Header="מזהה לקוח" Width="150" DisplayMemberBinding="{Binding Sender.CustomerId}"/>
+                                    <GridViewColumn Header="שם לקוח" Width="150" DisplayMemberBinding="{Binding Sender.NameCustomer}"/>
                                 </GridView>
                             </ListView.View>
                         </ListView>
@@ -70,19 +71,20 @@
                     </Grid.RowDefinitions>
                     <Label Content="משלוחים שהתקבלו"  VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontWeight="Bold" />
                     <Grid Grid.Row="1">
-                        <ListView x:Name="toCustomer" HorizontalAlignment="Right" Background="{x:Null}" SelectionChanged="toCustomer_SelectionChanged" Grid.ColumnSpan="2"  Grid.RowSpan="2" >
+                        <ListView x:Name="toCustomer" HorizontalAlignment="Right" Background="{x:Null}" SelectionChanged="toCustomer_SelectionChanged"
+                                  DisplayMemberPath="{Binding PackagesToCustomer}" Grid.ColumnSpan="2"  Grid.RowSpan="2" >
                             <ListView.View>
                                 <GridView >
-                                    <GridViewColumn Header="מזהה משלוח" Width="150" DisplayMemberBinding="{Binding CustomerId}"/>
+                                    <GridViewColumn Header="מזהה משלוח" Width="150" DisplayMemberBinding="{Binding Id}"/>
                                     <GridViewColumn Header="מצב משלוח" Width="150" DisplayMemberBinding="{Binding ParcelStatus}"/>
-                                    <GridViewColumn Header="מזהה לקוח" Width="150" DisplayMemberBinding="{Binding CustomerInParcel.CustomerId}"/>
-                                    <GridViewColumn Header="שם לקוח" Width="150" DisplayMemberBinding="{Binding CustomerInParcel.NameCustomer}"/>
+                                    <GridViewColumn Header="מזהה לקוח" Width="150" DisplayMemberBinding="{Binding Sender.CustomerId}"/>
+                                    <GridViewColumn Header="שם לקוח" Width="150" DisplayMemberBinding="{Binding Sender.NameCustomer}"/>
                                 </GridView>
                             </ListView.View>
                         </ListView>
                     </Grid>
                 </Grid>
             </Grid>
-        </Border>-->
+        </Border>
     </Grid>
 </Window>

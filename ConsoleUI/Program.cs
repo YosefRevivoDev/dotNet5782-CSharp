@@ -332,18 +332,6 @@ namespace Console_Dal
             //לקרוא לפונקציה שמזירה את הרחפן עם ה ID הנל
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
         // Call PackageCollectionByDrone function by parcel ID & drone ID paramters
         private static void ReleaseDroneFromCharged(IDal dal)
         {

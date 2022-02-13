@@ -27,7 +27,7 @@ namespace BL
             };
 
             try
-            {  
+            {
                 return dal.AddParcel(parcel);
             }
             catch { }
@@ -43,23 +43,20 @@ namespace BL
                 Parcel BLParcel = new();
 
                 BLParcel.Id = DalParcel.ParcelId;
-                //BLParcel.Sender = GetCustomer(DalParcel.SenderId);
-                //BLParcel.Target = GetCustomer(DalParcel.TargetId);
                 BLParcel.Weight = (WeightCategories)DalParcel.ParcelWeight;
                 BLParcel.Priority = (Priorities)DalParcel.ParcelPriority;
-                BLParcel.assigned = DalParcel.Created;
-                BLParcel.Requested = DalParcel.Assignment;
+                BLParcel.Requested = DalParcel.Created;
+                BLParcel.assigned = DalParcel.Assignment;
                 BLParcel.PickedUp = DalParcel.PickedUp;
                 BLParcel.Delivered = DalParcel.Delivered;
 
                 BLParcel.Sender = GetCustomerInParcel(DalParcel.SenderId);
                 BLParcel.Target = GetCustomerInParcel(DalParcel.TargetId);
-
                 if (DalParcel.DroneId != 0)
                 {
                     DroneToList drone = DroneToList.Find(i => i.DroneID == DalParcel.DroneId);
 
-                    DroneInParcel droneInParcel = new DroneInParcel()
+                    BLParcel.droneInParcel = new DroneInParcel()
                     {
                         DroneID = drone.DroneID,
                         BattaryStatus = drone.BattaryStatus,
@@ -78,6 +75,7 @@ namespace BL
             }
 
         }
+
         public void RemoveParcelBL(int id)
         {
             //IDAL.DO.BaseStation baseStationRemove = dal.GetBaseStation(id);
@@ -109,6 +107,7 @@ namespace BL
                 throw new CheckIfIdNotExceptions("ERORR", Ex);
             }
         }
+
         public IEnumerable<ParcelToList> GetParcelToListsByPredicate(Predicate<ParcelToList> p = null)
         {
             List<ParcelToList> parcelToLists = new();
@@ -140,7 +139,7 @@ namespace BL
                 ParcelInDeliver ParcelInDeliverd = new()
                 {
                     ID = parcel.ParcelId,
-                    
+
                     Priorities = (Priorities)parcel.ParcelPriority,
                     WeightCategories = (WeightCategories)parcel.ParcelWeight,
 
@@ -191,6 +190,7 @@ namespace BL
             }
             return ParcelStatus.Defined;
         }
+
         public ParcelAtCustomer GetParcelAtCustomer(int parcelID, int customrID)
         {
             try
