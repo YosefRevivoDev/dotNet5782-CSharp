@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using BlApi;
 using BO;
+using PLGui;
 
 namespace PL
 {
@@ -26,11 +27,17 @@ namespace PL
 
         private Parcel parcel;
         private ParcelToList parcelToList;
+        private MainWindow mainWindow;
+        private DroneToList droneToList;
+        int Id;
+        private int index;
 
-        public CustomerInParcelWindow(IBL bL, int id)
+        public CustomerInParcelWindow(IBL bL, MainWindow _mainWindow, int id)
         {
             InitializeComponent();
             GetBL = bL;
+            mainWindow = _mainWindow;
+            Id = id;
             try
             {
                 parcelToList = GetBL.GetParcelToListsByPredicate(i => i.Id == id).First();
@@ -69,7 +76,62 @@ namespace PL
 
         private void droneInParcelButton_Click_1(object sender, RoutedEventArgs e)
         {
+            //if (parcel.droneInParcel != null)
+            //{
+            //    int idDrone = parcel.droneInParcel.DroneID;
+            //    new DroneWindow(GetBL, mainWindow, idDrone).Show();
+            //    Close();
+            //}
 
+        }
+
+        private void btnAssignParcel_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnRemoveParcelCustomer_Click(object sender, RoutedEventArgs e)
+        {
+            if (parcelToList.parcelStatus == BO.ParcelStatus.Defined)
+            {
+                MessageBoxResult messageBoxResult = MessageBox.Show("? האם אתה בטוח שאתה רוצה למחוק את חבילה"
+           , "", MessageBoxButton.YesNoCancel);
+
+                switch (messageBoxResult)
+                {
+                    case MessageBoxResult.Yes:
+                        try
+                        {
+                            GetBL.RemoveParcelBL(parcel.Id);
+
+                            mainWindow.parcelToLists.Remove(parcelToList);
+                            mainWindow.parcelToLists[index] = parcelToList;
+                            mainWindow.lstParcelListView.Items.Refresh();
+                            
+                            MessageBox.Show("החבילה נמחקה בהצלחה");
+                            Close();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+                        break;
+                    case MessageBoxResult.Cancel:
+                        Close();
+                        break;
+                    case MessageBoxResult.No:
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+            if (e.ChangedButton == MouseButton.Left)
+                DragMove();
         }
     }
 }

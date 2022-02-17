@@ -5,15 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="CustomerInParcelWindow" Height="450" Width="800">
+        Title="CustomerInParcelWindow" Height="450" Width="800" WindowStyle="None" ResizeMode="NoResize" MouseDown="Window_MouseDown"
+        AllowsTransparency="True" WindowStartupLocation="CenterOwner"
+        >
     <Grid x:Name="ParcelGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="5*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Button x:Name="btnClose" Content="סגור" Grid.Row="1" FontSize="16" VerticalAlignment="Bottom" FontWeight="Bold" Click="btnClose_Click" Height="35" />
 
-        <Border Name="GridUpdateDrone" Grid.Row="0" Visibility="Visible">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <Button x:Name="btnRemoveParcelCustomer" Visibility="Visible" Content="מחק חבילה" Width="340" FontSize="16" Grid.Column="1" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" Click="btnRemoveParcelCustomer_Click"/>
+        <Button x:Name="btnAssignParcel" Visibility="Visible" Content="שיוך חבילה לרחפן" Width="340" FontSize="16" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" Click="btnAssignParcel_Click"/>
+        <Button x:Name="btnClose" Content="סגור" Grid.Row="1" FontSize="16" Grid.ColumnSpan="2" VerticalAlignment="Bottom" FontWeight="Bold" Click="btnClose_Click" Height="35" />
+
+        <Border Name="GridUpdateDrone" Grid.Row="0" Visibility="Visible" Grid.ColumnSpan="2">
             <Grid  Margin="0,2,0,-2" Name="MainGrid1">
                 <Border  Name="BorderEnterNumber" BorderThickness="2" BorderBrush="Yellow" Background="{x:Null}"  CornerRadius="5" Padding="20" Visibility="Hidden">
                     <Grid>
@@ -151,5 +161,7 @@
                 </Grid>
             </Grid>
         </Border>
+        
+        
     </Grid>
 </Window>

@@ -29,7 +29,8 @@ namespace BL
             {
                 dal.AddBaseStation(baseStation);
             }
-            catch(DO.CheckIdException ex)  {
+            catch(DO.CheckIdException ex) 
+            {
                 throw new CheckIdException("Error", ex);
             }
         }
@@ -69,7 +70,7 @@ namespace BL
             catch (DO.CheckIfIdNotException ex)
             {
 
-                throw new CheckIfIdNotExceptions("ERORR", ex);
+                throw new CheckIfIdNotExceptions("ERROR", ex);
             }
 
         }
@@ -84,8 +85,16 @@ namespace BL
             try
             {
                 DO.BaseStation baseStation = dal.GetBaseStation(stationId);
-               
 
+                if (newNameStation != baseStation.Name && sumOfChargestation != baseStation.AvailableChargeSlots)
+                {
+                    baseStation.Name = newNameStation;
+                    baseStation.AvailableChargeSlots = sumOfChargestation;
+                }
+                else
+                {
+                    throw new BaseStationNotUpdate("Error");
+                }
                 baseStation.Name = newNameStation;
 
                 //check sum of available ChargeSlots + sum of unavailable ChargeSlots
@@ -95,10 +104,13 @@ namespace BL
 
                 dal.UpdateBaseStation(baseStation);
             }
-            catch (DO.BaseStationException)
+            catch (DO.CheckIdException Ex)
             {
-
-                throw new Exception(" ");
+                throw new CheckIdException("ERORR" + Ex);
+            }
+            catch (DO.CheckIfIdNotException Ex)
+            {
+                throw new CheckIfIdNotExceptions("ERORR", Ex);
             }
         }
 

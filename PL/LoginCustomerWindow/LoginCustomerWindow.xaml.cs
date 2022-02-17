@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using BlApi;
 using BO;
+using PLGui;
 
 namespace PL
 {
@@ -25,18 +26,20 @@ namespace PL
     {
         IBL GetBL;
         private Customer customer;
-
+        private MainWindow mainWindow;
+        int ID;
         /// <summary>
         /// Ctor for update customer
         /// </summary>
         /// <param name = "bL" ></ param >
-        /// < param name="_mainWindow"></param>
-        /// <param name = "_customer" ></ param >
-        /// < param name="_index"></param>
-        public LoginCustomerWindow(IBL bL, int Id)
+        /// < param name="Id"></param>
+
+        public LoginCustomerWindow(IBL bL, MainWindow _mainWindow,int Id)
         {
             InitializeComponent();
             GetBL = bL;
+            ID = Id;
+            mainWindow = _mainWindow;
             customer = new();
             customer.LocationCustomer = new();
             try
@@ -45,6 +48,7 @@ namespace PL
                 fromCustomer.ItemsSource = customer.PackagesFromCustomer.ToList();
                 toCustomer.ItemsSource = customer.PackagesToCustomer.ToList();
                 DataContext = customer;
+
             }
             catch (BO.CheckIfIdNotExceptions ex)
             {
@@ -71,16 +75,17 @@ namespace PL
             {
                 if (customer.NameCustomer != default && customer.PhoneCustomer != default)
                 {
-                    MessageBoxResult messageBoxResult = MessageBox.Show("האם אתה בטוח שאתה רוצה לעדכן את הלקוח?"
-                                     , "הכנס לקוח", MessageBoxButton.OKCancel);
+                    MessageBoxResult Result = MessageBox.Show("האם אתה בטוח שאתה רוצה לעדכן את הלקוח?"
+                                     , "הכנס לקוח", MessageBoxButton.YesNoCancel);
 
-                    switch (messageBoxResult)
+                    switch (Result)
                     {
                         case MessageBoxResult.Yes:
-
                             GetBL.UpdateCustomr(customer.CustomerId, customer.NameCustomer, customer.PhoneCustomer);
 
                             MessageBox.Show("הלקוח עודכן בהצלחה");
+                            break;
+                        case MessageBoxResult.No:
                             break;
                         case MessageBoxResult.Cancel:
                             break;
@@ -103,19 +108,40 @@ namespace PL
                     MessageBoxResult.None, MessageBoxOptions.RightAlign);
                 Close();
             }
-
-        } 
+        }
 
         private void fromCustomer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int parcel = ((ParcelAtCustomer)fromCustomer.SelectedItem).Id;
-            new CustomerInParcelWindow(GetBL, parcel).Show();
+            new CustomerInParcelWindow(GetBL, mainWindow, parcel).Show();
         }
 
         private void toCustomer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int parcelID = ((ParcelAtCustomer)toCustomer.SelectedItem).Id;
-            new CustomerInParcelWindow(GetBL, parcelID).Show();
+            new CustomerInParcelWindow(GetBL, mainWindow, parcelID).Show();
+        }
+
+        private void btnAddParcel_Click(object sender, RoutedEventArgs e)
+        {
+            var x = new ParcelWindow(GetBL, mainWindow);
+
+            //var currentId = GetBL.GetCustomerToList(x => x.CustomerId == txtUserIdCustomer.Text);
+            // var currentId = selectIdSender(GetBL.GetCustomerToList().ToList(),int.Parse( mainWindow.txtUserIdCustomer.Text));
+            x.comboBoxOfsander.SelectedItem = (GetBL.GetCustomerToList(x => x.CustomerId==ID).ToList(), int.Parse(mainWindow.txtUserIdCustomer.Text));
+            //x.comboBoxOfsander.IsEnabled = false;
+            x.BorderAddParcel.Visibility = Visibility.Visible;
+            x.GridUpdateParcel.Visibility = Visibility.Hidden;
+            x.Height = 500;
+            x.Width = 400;
+            x.ShowDialog();
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+            if (e.ChangedButton == MouseButton.Left)
+                DragMove();
         }
     }
 }

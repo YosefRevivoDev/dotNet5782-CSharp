@@ -11,7 +11,7 @@ namespace BlApi
         public IEnumerable<BaseStationToList> GetBasetationToListsByPredicate(Predicate<BaseStationToList> p = null);
         public IEnumerable<DroneToList> GetDroneToListsBLByPredicate(Predicate<DroneToList> predicate = null);
 
-        
+        public void newSimulator(int droneId, Action updateDrone, Func<bool> cancellationThreading);
 
         #region Operations of Drone
         void InitDroneToLists();
@@ -19,7 +19,7 @@ namespace BlApi
         bool SendDroneToCharge(int droneId);
         bool CollectParcelByDrone(int droneID);
         bool DeliveryParcelToCustomer(int droneID);
-        bool AssignmentOfPackageToDrone(int droneID);
+        void AssignmentOfPackageToDrone(int droneID);
         public ParcelAtCustomer GetParcelAtCustomer(int parcelID, int customrID);
         public CustomerInParcel GetCustomerInParcel(int customerID);
         public Location LocationOfTheNearestStation(Location customerLocation, List<DO.BaseStation> stations);

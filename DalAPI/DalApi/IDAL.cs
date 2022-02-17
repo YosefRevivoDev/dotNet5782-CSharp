@@ -26,7 +26,7 @@ namespace DalApi
 
         #region Update object
         void UpdateBaseStation(BaseStation baseStation);
-        void UpdateCustomer(Customer customer);
+        //void UpdateCustomer(Customer customer);
         void UpdateDrone(Drone drone);
         void UpdateParcel(Parcel parcrl);
        // void UpdateUser(User user);

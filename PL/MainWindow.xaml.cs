@@ -18,6 +18,8 @@ using System.Windows.Shapes;
 using BO;
 using BlApi;
 using PL;
+using System.ComponentModel;
+using System.Text.RegularExpressions;
 
 namespace PLGui
 {
@@ -28,20 +30,19 @@ namespace PLGui
     public enum Priorities { הכל, רגיל, מהיר, דחוף };
     public enum ParcelStatus { הכל, נוצר, שוייך, נאסף, סופק };
 
-
-
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-
         IBL getBL;
         public ObservableCollection<DroneToList> dronesToLists;
         public ObservableCollection<ParcelToList> parcelToLists;
         public ObservableCollection<CustomerToList> customerToLists;
         public ObservableCollection<BaseStationToList> baseStationToLists;
-        public CustomerToList Customer;
+        public CustomerToList customerToList;
+        public Customer customer;
+        public DroneToList droneToList;
 
         public MainWindow()
         {
@@ -52,8 +53,11 @@ namespace PLGui
             InitParcels();
             InitCustomer();
             InitBaseStation();
-        }
 
+
+            customer = new Customer() { LocationCustomer = new Location() };
+            DataContext = customer;
+        }
 
         #region Init Object
         public void InitDrones()
@@ -66,12 +70,16 @@ namespace PLGui
             }
             cmbStatusSelector.ItemsSource = Enum.GetValues(typeof(DroneStatus));
             cmbWeightSelector.ItemsSource = Enum.GetValues(typeof(WeightCategories));
+
             cmbStatusSelector.SelectedIndex = 0;
             dronesToLists.CollectionChanged += SortedDrones_CollectionChanged;
+
             lstDroneListView.ItemsSource = dronesToLists;
+
+            controlComboBoxesSortedDrone();
         }
 
-        private void InitParcels()
+        public void InitParcels()
         {
             parcelToLists = new();
             IEnumerable<ParcelToList> parcelTemp = getBL.GetParcelToListsByPredicate();
@@ -82,12 +90,16 @@ namespace PLGui
             cmbStatusSelectorParcel.ItemsSource = Enum.GetValues(typeof(ParcelStatus));
             cmbPrioritiSelectorParcel.ItemsSource = Enum.GetValues(typeof(Priorities));
             cmbWeightSelectorParcel.ItemsSource = Enum.GetValues(typeof(WeightCategories));
+
             cmbWeightSelectorParcel.SelectedIndex = 0;
             parcelToLists.CollectionChanged += SortedParcels_CollectionChanged;
+
             lstParcelListView.ItemsSource = parcelToLists;
+
+            controlComboBoxesSortedParcel();
         }
 
-        private void InitCustomer()
+        public void InitCustomer()
         {
             customerToLists = new();
             IEnumerable<CustomerToList> customerTemp = getBL.GetCustomerToList();
@@ -98,7 +110,7 @@ namespace PLGui
             lstCustomerListView.ItemsSource = customerToLists;
         }
 
-        private void InitBaseStation()
+        public void InitBaseStation()
         {
             baseStationToLists = new();
             IEnumerable<BaseStationToList> basetationTemp = getBL.GetBasetationToListsByPredicate();
@@ -109,11 +121,19 @@ namespace PLGui
             cmbFreeChrgeSelector.ItemsSource = Enum.GetValues(typeof(FreeChargeStatus));
 
             cmbFreeChrgeSelector.SelectedIndex = 0;
+            baseStationToLists.CollectionChanged += SortedCharges_CollectionChanged;
+
             lstBaseStationListView.ItemsSource = baseStationToLists;
+
+            cmbSortedCharges();
         }
+
+
+
         #endregion
 
         #region Double Click
+
         private void lstDroneListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             DroneToList drones = (DroneToList)lstDroneListView.SelectedItem;
@@ -166,6 +186,7 @@ namespace PLGui
         {
             controlComboBoxesSortedDrone();
         }
+
         private void controlComboBoxesSortedDrone()
         {
             if (cmbWeightSelector.SelectedIndex == -1)
@@ -193,6 +214,7 @@ namespace PLGui
                 && i.Status == (BO.DroneStatus)droneStatus);
             GroupingDroneList();
         }
+
         private void SortedDrones_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             controlComboBoxesSortedDrone();
@@ -270,7 +292,19 @@ namespace PLGui
 
         #endregion
 
+        #region ComboBox List BaseStation
+
         private void cmbFreeChrgeSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            cmbSortedCharges();
+        }
+
+        private void SortedCharges_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            cmbSortedCharges();
+        }
+
+        private void cmbSortedCharges()
         {
             FreeChargeStatus freeChargeSort = (FreeChargeStatus)cmbFreeChrgeSelector.SelectedItem;
 
@@ -282,40 +316,45 @@ namespace PLGui
 
             else if (freeChargeSort == FreeChargeStatus.מלא)
                 lstBaseStationListView.ItemsSource = baseStationToLists.ToList().FindAll(i => i.AvailableChargingStations <= 0);
-            GroupingBaseStationList();
         }
+        #endregion
 
         #region LOGIN
         private void btnEnterApp_Click(object sender, RoutedEventArgs e)
         {
-            if (txtUserId.Text == "" || txtPasswordBox1.Text == "")
+            if (txtUserId.Text == "" || txtPasswordBox1.Password == "")
             {
-                MessageBox.Show("You must fill all the fildes");
+                MessageBox.Show("נא הכנס שם משתמש וסיסמא");
                 return;
             }
             try
             {
                 User user = getBL.GetUser(txtUserId.Text);
-                if (user.UserId == txtUserId.Text && user.Password == txtPasswordBox1.Text)
+                if (user.UserId == txtUserId.Text && user.Password == txtPasswordBox1.Password)
                 {
                     CompanyManagement.Visibility = Visibility.Visible;
-                    txbEnterApp.Visibility = Visibility.Hidden;
                     LoginManagement.Visibility = Visibility.Collapsed;
                 }
                 else
                 {
-                    MessageBox.Show("The Password not correct");
+                    MessageBox.Show("הקוד שגוי");
                 }
             }
             catch (Exception)
             {
-                MessageBox.Show("The User not exist");
+                MessageBox.Show("המשתמש לא נמצא");
                 return;
             }
         }
 
         private void btnCustomerEnter_Click(object sender, RoutedEventArgs e)
         {
+            if (txtUserIdCustomer.Text == "")
+            {
+                MessageBox.Show("נא הכנס שם משתמש ");
+                return;
+            }
+
             List<CustomerToList> customers = getBL.GetCustomerToList().ToList();
             var customerCombo = from item in customers
                                 select item.CustomerId;
@@ -323,10 +362,42 @@ namespace PLGui
             if (find != default)
             {
                 int IdCustomer = int.Parse(find.ToString());
-                new LoginCustomerWindow(getBL, IdCustomer).Show();
+                new LoginCustomerWindow(getBL, this, IdCustomer).Show();
             }
             else
                 MessageBox.Show("מספר המשתמש אינו קיים\n אנא נסה שוב", "אישור");
+        }
+
+        private void txtRegisterApp_Click(object sender, RoutedEventArgs e)
+        {
+            if (customer.CustomerId != default && customer.NameCustomer != default && customer.PhoneCustomer != default && customer.LocationCustomer.Longtitude != default && customer.LocationCustomer.Latitude != default)
+            {
+                try
+                {
+
+                    MessageBoxResult messageBoxResult = MessageBox.Show("האם ברצונך לאשר הוספה זו", "אישור", MessageBoxButton.OKCancel);
+                    switch (messageBoxResult)
+                    {
+
+                        case MessageBoxResult.OK:
+                            getBL.AddNewCustomer(customer);
+                            MessageBox.Show("הלקוח נוצר  בהצלחה\n מיד יוצגו פרטי לקוח", "אישור");
+                            new LoginCustomerWindow(getBL,this ,customer.CustomerId).Show();
+                            break;
+                        case MessageBoxResult.Cancel:
+                            break;
+                        default:
+                            break;
+
+                    }
+                }
+                catch (BO.CustumerException)
+                {
+                    MessageBox.Show("לקוח זה כבר קיים", "אישור");
+                }
+            }
+            else
+                MessageBox.Show("נא השלם את השדות החסרים", "אישור");
         }
 
         #endregion
@@ -337,7 +408,7 @@ namespace PLGui
             var x = new DroneWindow(getBL, this);
             x.GridAddDrone.Visibility = Visibility.Visible;
             x.GridUpdateDrone.Visibility = Visibility.Hidden;
-            x.Height = 450;
+            x.Height = 500;
             x.Width = 500;
             x.Show();
         }
@@ -365,8 +436,8 @@ namespace PLGui
         private void btnAddParcel_Click(object sender, RoutedEventArgs e)
         {
             var x = new ParcelWindow(getBL, this);
-            x.GridAddDrone.Visibility = Visibility.Visible;
-            x.GridUpdateDrone.Visibility = Visibility.Hidden;
+            x.AddParcel.Visibility = Visibility.Visible;
+            x.GridUpdateParcel.Visibility = Visibility.Hidden;
             x.Height = 500;
             x.Width = 400;
             x.ShowDialog();
@@ -400,39 +471,98 @@ namespace PLGui
         /// <summary>
         /// grouping functaion by SenderName.
         /// </summary>
-        private void GroupingParcelList()
+        public void GroupingParcelList()
         {
             string choise = "SenderName";
             parcelView = (CollectionView)CollectionViewSource.GetDefaultView(lstParcelListView.ItemsSource);
+
             if (parcelView.CanGroup == true)
             {
                 PropertyGroupDescription groupDescription = new(choise);
                 parcelView.GroupDescriptions.Clear();
                 parcelView.GroupDescriptions.Add(groupDescription);
+                parcelView.SortDescriptions.Add(new SortDescription("Id", ListSortDirection.Descending));
             }
+
             else
                 return;
         }
 
-        CollectionView baseStationView;
-        /// <summary>
-        /// grouping functaion by AvailableChargingStations.
-        /// </summary>
-        private void GroupingBaseStationList()
-        {
-            string choise = "AvailableChargingStations";
-            baseStationView = (CollectionView)CollectionViewSource.GetDefaultView(lstBaseStationListView.ItemsSource);
-            if (baseStationView.CanGroup == true)
-            {
-                PropertyGroupDescription groupDescription = new(choise);
-                baseStationView.GroupDescriptions.Clear();
-                baseStationView.GroupDescriptions.Add(groupDescription);
-            }
-            else
-                return;
-        }
         #endregion
 
+        private void TabItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            CompanyManagement.Visibility = Visibility.Hidden;
+            LoginManagement.Visibility = Visibility.Visible;
+        }
+
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //string tabItem = ((sender as TabControl).SelectedItem as TabItem).Name;
+            //switch (tabItem)
+            //{
+
+            //    case "Drones":
+            //        InitDrones();
+            //        break;
+
+            //    case "Parcels":
+            //        InitParcels();
+            //        GroupingParcelList();
+            //        break;
+
+            //    case "Customers":
+            //        InitCustomer();
+            //        break;
+
+            //    case "Basetation":
+            //        InitBaseStation();
+            //        break;
+
+            //    case "undo":
+
+            //        break;
+            //    default:
+            //        break;
+            //}
+        }
+
+        private void onlyNumbersForID(object sender, TextCompositionEventArgs e)
+        {
+            string temp = ((TextBox)sender).Text + e.Text;
+            Regex regex = new("^[0-9]{0,9}$");
+            e.Handled = !regex.IsMatch(temp);
+        }
+
+        private void phonePattren(object sender, TextCompositionEventArgs e)
+        {
+            string temp = ((TextBox)sender).Text + e.Text;
+            Regex regex = new("^[0][0-9]{0,9}$");
+            e.Handled = !regex.IsMatch(temp);
+        }
+
+        private void onlyAlphaBeta(object sender, TextCompositionEventArgs e)
+        {
+
+            Regex regex = new("[^א-ת]$");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private void lungetudePattren(object sender, TextCompositionEventArgs e)
+        {
+            string temp = ((TextBox)sender).Text + e.Text;
+            Regex regexA = new("^[2-3]{1,2}[.]{0,1}$");
+            Regex regexB = new("^[2-3]{1,2}[.][0-9]{0,9}$");
+            e.Handled = !(regexA.IsMatch(temp) || regexB.IsMatch(temp));
+        }
+
+        private void lattitudePattren(object sender, TextCompositionEventArgs e)
+        {
+            string temp = ((TextBox)sender).Text + e.Text;
+            Regex regexA = new("^[3-4]{1,2}[.]{0,1}$");
+            Regex regexB = new("^[3-4]{1,2}[.][0-9]{0,9}$");
+            e.Handled = !(regexA.IsMatch(temp) || regexB.IsMatch(temp));
+        }
     }
 }
 

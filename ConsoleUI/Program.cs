@@ -394,7 +394,7 @@ namespace Console_Dal
 
             Console.WriteLine("Please enter drone ID that you what to associate with your parcel");
             int.TryParse(Console.ReadLine(), out droneIdAssociate);
-            dal.ReleasingChargeDrone(droneIdAssociate, baseStationId);
+            dal.ReleasingChargeDrone(droneIdAssociate);
         }
 
 

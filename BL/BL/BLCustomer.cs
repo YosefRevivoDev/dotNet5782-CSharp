@@ -29,9 +29,9 @@ namespace BL
                 };
                 dal.AddCustomer(customer);
             }
-            catch (DO.CheckIdException ex)
+            catch (DO.CustumerException)
             {
-                throw new CheckIdException("ERORR" , ex);
+                throw new CustumerException("ERORR");
             }
         }
 
@@ -44,8 +44,9 @@ namespace BL
         {
             try
             {
-                List<DO.Customer> customers = dal.GetCustomersByPredicate().ToList();
                 List<CustomerToList> BLCustomer = new();
+
+                List<DO.Customer> customers = dal.GetCustomersByPredicate().ToList();
 
                 foreach (DO.Customer item in customers)
                 {
@@ -53,9 +54,9 @@ namespace BL
                 }
                 return BLCustomer.Where(i => p == null ? true : p(i)).ToList();
             }
-            catch(DO.CheckIfIdNotException ex)
+            catch (DO.CheckIfIdNotException ex)
             {
-                throw new CheckIfIdNotExceptions("ERORR" , ex);
+                throw new CheckIfIdNotExceptions("ERORR", ex);
             }
         }
 
@@ -69,19 +70,21 @@ namespace BL
             try
             {
                 Customer customer = GetCustomer(customerID);
+
                 CustomerToList customerToList = new()
                 {
                     CustomerId = customer.CustomerId,
                     NameCustomer = customer.NameCustomer,
                     Phone = customer.PhoneCustomer
                 };
+
                 List<ParcelAtCustomer> parcelSupplied = customer.PackagesToCustomer.FindAll(i => i.ParcelStatus == ParcelStatus.provided);
                 customerToList.SendParcelAndSupplied = parcelSupplied.Count;
 
-                List<ParcelAtCustomer> parcelOnWayToCustomer = customer.PackagesToCustomer.FindAll(i => i.ParcelStatus == ParcelStatus.provided);
+                List<ParcelAtCustomer> parcelOnWayToCustomer = customer.PackagesToCustomer.FindAll(i => i.ParcelStatus == ParcelStatus.collected);
                 customerToList.ParcelOweyToCustomer = parcelOnWayToCustomer.Count;
 
-                List<ParcelAtCustomer> parcelThatNotDelivered = customer.PackagesFromCustomer.FindAll(i => i.ParcelStatus == ParcelStatus.provided);
+                List<ParcelAtCustomer> parcelThatNotDelivered = customer.PackagesFromCustomer.FindAll(i => i.ParcelStatus == ParcelStatus.collected);
                 customerToList.SendParcelAndNotSupplied = parcelThatNotDelivered.Count;
 
                 List<ParcelAtCustomer> parcelcRecieved = customer.PackagesFromCustomer.FindAll(i => i.ParcelStatus == ParcelStatus.provided);
@@ -93,7 +96,6 @@ namespace BL
             {
                 throw new CheckIfIdNotExceptions("ERORR", Ex);
             }
-
         }
 
         /// <summary>
@@ -155,14 +157,26 @@ namespace BL
             try
             {
                 DO.Customer customer = dal.GetCustomer(customerId);
-                customer.Name = newNameCustomer;
-                customer.Phone = newPhoneCustomer;
-                dal.UpdateCustomer(customer);
+                if (newNameCustomer != customer.Name && newNameCustomer != customer.Phone)
+                {
+                    customer.Name = newNameCustomer;
+                    customer.Phone = newPhoneCustomer;
+                }
+                else
+                {
+                    throw new CustomerNotUpdate("Error");
+                }
+                dal.RemoveCustomer(customerId);
+                dal.AddCustomer(customer);
             }
-            catch (DO.CustumerException)
+            
+            catch (DO.CheckIdException Ex)
             {
-
-                throw new Exception(" ");
+                throw new CheckIdException("ERORR" + Ex);
+            }
+            catch (DO.CheckIfIdNotException Ex)
+            {
+                throw new CheckIfIdNotExceptions("ERORR", Ex);
             }
         }
 
@@ -194,10 +208,9 @@ namespace BL
             }
             catch (DO.CheckIfIdNotException ex)
             {
-                throw new CheckIfIdNotExceptions("Error: " ,  ex);
+                throw new CheckIfIdNotExceptions("Error: ", ex);
             }
         }
-
 
     }
 }

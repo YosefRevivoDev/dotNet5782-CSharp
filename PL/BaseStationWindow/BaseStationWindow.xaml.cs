@@ -32,7 +32,7 @@ namespace PLGui
         public BaseStation baseStation { set; get; }
         public int index;
         private MainWindow mainWindow;
-       
+
         /// <summary>
         /// Constructor for add base Station
         /// </summary>
@@ -46,7 +46,6 @@ namespace PLGui
             DataContext = baseStation;
             mainWindow = _mainWindow;
             UpdateVisibility();
-
         }
 
         /// <summary>
@@ -112,34 +111,56 @@ namespace PLGui
 
         private void UpdateBaseStation_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult messageBoxResult = MessageBox.Show("האם אתה בטוח שאתה רוצה לעדכן את התחנה?", "עדכן", MessageBoxButton.YesNoCancel);
-
-            switch (messageBoxResult)
+            try
             {
-                case MessageBoxResult.Yes:
-                    try
-                    {
-                        GetBL.UpdateBaseStation(baseStation.ID, baseStation.Name, baseStation.AvailableChargingStations);
+                if (txtNameStation.Text != "" && txtNumCharge.Text != "")
+                {
+                    MessageBoxResult messageBoxResult = MessageBox.Show("האם אתה בטוח שאתה רוצה לעדכן את התחנה?", "עדכן", MessageBoxButton.YesNoCancel);
 
-                        mainWindow.baseStationToLists[index] = GetBL.GetBasetationToListsByPredicate(x => x.ID == baseStation.ID).First();
-                        mainWindow.lstBaseStationListView.Items.Refresh();
-
-                        MessageBox.Show("התחנה עודכנה בהצלחה");
-                        Close();
-                    }
-                    catch (Exception ex)
+                    switch (messageBoxResult)
                     {
-                        MessageBox.Show(ex.Message);
+                        case MessageBoxResult.Yes:
+
+                            GetBL.UpdateBaseStation(baseStation.ID, baseStation.Name, baseStation.AvailableChargingStations);
+
+                            mainWindow.baseStationToLists[index] = GetBL.GetBasetationToListsByPredicate(x => x.ID == baseStation.ID).First();
+                            mainWindow.lstBaseStationListView.Items.Refresh();
+
+                            MessageBox.Show("התחנה עודכנה בהצלחה");
+
+                            break;
+                        case MessageBoxResult.Cancel:
+                            Close();
+                            break;
+                        case MessageBoxResult.No:
+                            break;
+                        default:
+                            break;
                     }
-                    break;
-                case MessageBoxResult.Cancel:
-                    Close();
-                    break;
-                case MessageBoxResult.No:
-                    break;
-                default:
-                    break;
+                }
+                else
+                {
+                    MessageBox.Show("לא ניתן למחוק שדה זה", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
+            catch (BO.BaseStationNotUpdate)
+            {
+                MessageBox.Show("לא בוצעו שינויים", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error,
+                    MessageBoxResult.None, MessageBoxOptions.RightAlign);
+            }
+            catch (BO.CheckIdException ex)
+            {
+                MessageBox.Show(ex.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error,
+                    MessageBoxResult.None, MessageBoxOptions.RightAlign);
+                Close();
+            }
+            catch (BO.CheckIfIdNotExceptions ex)
+            {
+                MessageBox.Show(ex.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error,
+                    MessageBoxResult.None, MessageBoxOptions.RightAlign);
+                Close();
+            }
+
         }
 
         private void RemoveStation_Click(object sender, RoutedEventArgs e)
@@ -157,7 +178,6 @@ namespace PLGui
                         mainWindow.baseStationToLists[index] = baseStationToList;
                         mainWindow.lstBaseStationListView.Items.Refresh();
                         MessageBox.Show(baseStation.ToString(), "התחנה נמחקה בהצלחה");
-                        Close();
                     }
                     catch (Exception ex)
                     {
@@ -176,32 +196,43 @@ namespace PLGui
 
         private void btnAddStation_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult messageBoxResult = MessageBox.Show("האם אתה בטוח שאתה רוצה להוסיף את תחנה?"
+            if (baseStation.ID != default && baseStation.Name != default && baseStation.AvailableChargingStations != default
+               && baseStation.location.Latitude != default && baseStation.location.Longtitude != default)
+            {
+                MessageBoxResult messageBoxResult = MessageBox.Show("האם אתה בטוח שאתה רוצה להוסיף את תחנה?"
               , "הכנס תחנה", MessageBoxButton.YesNoCancel);
 
-            switch (messageBoxResult)
-            {
-                case MessageBoxResult.Yes:
-                    try
-                    {
-                        GetBL.AddBaseStation(baseStation);
-                        mainWindow.baseStationToLists.Add(GetBL.GetBasetationToListsByPredicate()
-                            .First(i => i.ID == baseStation.ID));
-                        MessageBox.Show( "התחנה נוספה בהצלחה");
+                switch (messageBoxResult)
+                {
+                    case MessageBoxResult.Yes:
+                        try
+                        {
+                            GetBL.AddBaseStation(baseStation);
+                            mainWindow.baseStationToLists.Add(GetBL.GetBasetationToListsByPredicate()
+                                .First(i => i.ID == baseStation.ID));
+                            MessageBox.Show("התחנה נוספה בהצלחה");
+                            Close();
+                        }
+                        catch (BO.CheckIdException ex)
+                        {
+                            MessageBox.Show(ex.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error,
+                                MessageBoxResult.None, MessageBoxOptions.RightAlign);
+                            Close();
+                            break;
+                        }
+                        break;
+                    case MessageBoxResult.Cancel:
                         Close();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
-                    break;
-                case MessageBoxResult.Cancel:
-                    Close();
-                    break;
-                case MessageBoxResult.No:
-                    break;
-                default:
-                    break;
+                        break;
+                    case MessageBoxResult.No:
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                MessageBox.Show("נא למלא את כל הפרטים", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -226,6 +257,64 @@ namespace PLGui
             new DroneWindow(GetBL, mainWindow, Idrone).Show();
             Close();
 
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+            if (e.ChangedButton == MouseButton.Left)
+                DragMove();
+        }
+
+        /// <summary>
+        /// regular expration funcation.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void onlyNumbersForID(object sender, TextCompositionEventArgs e)
+        {
+
+            string temp = ((TextBox)sender).Text + e.Text;
+            Regex regex = new("^[0-9]{0,9}$");
+            e.Handled = !regex.IsMatch(temp);
+        }
+
+        /// <summary>
+        /// regular expration funcation.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void onlytwoNumbers(object sender, TextCompositionEventArgs e)
+        {
+            string temp = ((TextBox)sender).Text + e.Text;
+            Regex regex = new("^[0-9]{1,2}$");
+            e.Handled = !regex.IsMatch(temp);
+        }
+
+        /// <summary>
+        /// regular expration funcation.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void lungetudePattren(object sender, TextCompositionEventArgs e)
+        {
+            string temp = ((TextBox)sender).Text + e.Text;
+            Regex regexA = new("^[2-3]{1,2}[.]{0,1}$");
+            Regex regexB = new("^[2-3]{1,2}[.][0-9]{0,9}$");
+            e.Handled = !(regexA.IsMatch(temp) || regexB.IsMatch(temp));
+        }
+
+        /// <summary>
+        /// regular expration funcation.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void lattitudePattren(object sender, TextCompositionEventArgs e)
+        {
+            string temp = ((TextBox)sender).Text + e.Text;
+            Regex regexA = new("^[3-4]{1,2}[.]{0,1}$");
+            Regex regexB = new("^[3-4]{1,2}[.][0-9]{0,9}$");
+            e.Handled = !(regexA.IsMatch(temp) || regexB.IsMatch(temp));
         }
     }
 }

@@ -2,7 +2,7 @@
 <ArrayOfCustomer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Customer>
     <CustomerId>200532406</CustomerId>
-    <Name>רביבו</Name>
+    <Name>יוסף רביבו</Name>
     <Phone>057-1117665</Phone>
     <Longtitude>32.0932</Longtitude>
     <Latitude>34.8306</Latitude>
@@ -20,13 +20,6 @@
     <Phone>054-4376615</Phone>
     <Longtitude>32.0937</Longtitude>
     <Latitude>34.8364</Latitude>
-  </Customer>
-  <Customer>
-    <CustomerId>349927608</CustomerId>
-    <Name>דניאל שרם</Name>
-    <Phone>053-7557467</Phone>
-    <Longtitude>32.0878</Longtitude>
-    <Latitude>34.8901</Latitude>
   </Customer>
   <Customer>
     <CustomerId>200786113</CustomerId>
@@ -57,11 +50,51 @@
     <Latitude>34.8227</Latitude>
   </Customer>
   <Customer>
+    <CustomerId>3334</CustomerId>
+    <Name>Mo</Name>
+    <Longtitude>32.0988</Longtitude>
+    <Latitude>34.6544</Latitude>
+  </Customer>
+  <Customer>
+    <CustomerId>100</CustomerId>
+    <Name>ERT</Name>
+    <Longtitude>32.0043</Longtitude>
+    <Latitude>34.7742</Latitude>
+  </Customer>
+  <Customer>
+    <CustomerId>30</CustomerId>
+    <Name>avi</Name>
+    <Phone>0532353640</Phone>
+    <Longtitude>32.1143</Longtitude>
+    <Latitude>34.6699</Latitude>
+  </Customer>
+  <Customer>
+    <CustomerId>31</CustomerId>
+    <Name>GG</Name>
+    <Phone>058-998877</Phone>
+    <Longtitude>32.7988</Longtitude>
+    <Latitude>34.5119</Latitude>
+  </Customer>
+  <Customer>
+    <CustomerId>12</CustomerId>
+    <Name>RRR</Name>
+    <Phone>0589887665</Phone>
+    <Longtitude>32.2943</Longtitude>
+    <Latitude>34.9912</Latitude>
+  </Customer>
+  <Customer>
     <CustomerId>311890522</CustomerId>
     <Name>יענקי סלוד</Name>
-    <Phone>052-6540832</Phone>
+    <Phone>052-65408</Phone>
     <Longtitude>32.0963</Longtitude>
     <Latitude>34.8322</Latitude>
+  </Customer>
+  <Customer>
+    <CustomerId>349927608</CustomerId>
+    <Name>דניאל שרם</Name>
+    <Phone>054-4222215</Phone>
+    <Longtitude>32.0878</Longtitude>
+    <Latitude>34.89014</Latitude>
   </Customer>
   <Customer>
     <CustomerId>200996586</CustomerId>
@@ -71,10 +104,10 @@
     <Latitude>34.8293</Latitude>
   </Customer>
   <Customer>
-    <CustomerId>30</CustomerId>
-    <Name>avi</Name>
-    <Phone>0532353640</Phone>
-    <Longtitude>35.2</Longtitude>
-    <Latitude>35.4</Latitude>
+    <CustomerId>222</CustomerId>
+    <Name>T</Name>
+    <Phone>0646464</Phone>
+    <Longtitude>32.3344</Longtitude>
+    <Latitude>34.5558</Latitude>
   </Customer>
 </ArrayOfCustomer>

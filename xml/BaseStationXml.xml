@@ -15,30 +15,10 @@
     <AvailableChargeSlots>85</AvailableChargeSlots>
   </BaseStation>
   <BaseStation>
-    <StationID>0</StationID>
-    <Longtitude>0</Longtitude>
-    <Latitude>0</Latitude>
-    <AvailableChargeSlots>0</AvailableChargeSlots>
-  </BaseStation>
-  <BaseStation>
-    <StationID>67</StationID>
-    <Name>hvf</Name>
-    <Longtitude>33.5</Longtitude>
-    <Latitude>34.7</Latitude>
-    <AvailableChargeSlots>499</AvailableChargeSlots>
-  </BaseStation>
-  <BaseStation>
-    <StationID>99</StationID>
-    <Name>hvf</Name>
-    <Longtitude>33.5</Longtitude>
-    <Latitude>34.7</Latitude>
-    <AvailableChargeSlots>500</AvailableChargeSlots>
-  </BaseStation>
-  <BaseStation>
-    <StationID>50</StationID>
-    <Name>mnn</Name>
-    <Longtitude>0</Longtitude>
-    <Latitude>0</Latitude>
-    <AvailableChargeSlots>20</AvailableChargeSlots>
+    <StationID>200</StationID>
+    <Name>MainBase</Name>
+    <Longtitude>34.8567</Longtitude>
+    <Latitude>32.0678</Latitude>
+    <AvailableChargeSlots>59</AvailableChargeSlots>
   </BaseStation>
 </ArrayOfBaseStation>

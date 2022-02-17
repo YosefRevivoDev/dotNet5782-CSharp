@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:PLGui"
 
         mc:Ignorable="d"
-        Title="BaseStationWindow" Height="450" Width="640">
+        Title="BaseStationWindow" Height="450" Width="640" WindowStyle="None" ResizeMode="NoResize" MouseDown="Window_MouseDown"
+        AllowsTransparency="True" WindowStartupLocation="CenterOwner">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -17,7 +18,7 @@
         <Button x:Name="btnAddStation" Content="הוסף" FontSize="16" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" Click="btnAddStation_Click"/>
         <Button x:Name="btnClose" Content="סגור" FontSize="16" Grid.Row="1" VerticalAlignment="Bottom" FontWeight="Bold" Click="btnClose_Click"/>
 
-        <Border Name="GridAddStation" Grid.Row="0" Visibility="Visible">
+        <Border Name="GridAddStation" Grid.Row="0" Visibility="Hidden" BorderBrush="Yellow" CornerRadius="5" Padding="20">
             <Grid x:Name="AddStation" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="0.2*"/>
@@ -49,11 +50,11 @@
                     <Label Grid.Row="3" Content="מיקום התחנה" FontWeight="Bold" Grid.ColumnSpan="3" HorizontalAlignment="Center" Background="{x:Null}"/>
                     <Label Grid.Column="2" Grid.Row="4" Content=":קו אורך" FontWeight="Bold"  Background="{x:Null}"/>
                     <Label Grid.Column="2" Grid.Row="5" Content=":קו רוחב" FontWeight="Bold"  Background="{x:Null}"/>
-                    <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding ID}" Background="{x:Null}"  />
+                    <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding ID}" Background="{x:Null}" PreviewTextInput="onlyNumbersForID" />
                     <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Name}" Background="{x:Null}"/>
-                    <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding AvailableChargingStations}" Background="{x:Null}" />
-                    <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding location.Longtitude}" Background="{x:Null}" />
-                    <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding location.Latitude}" Background="{x:Null}" />
+                    <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding AvailableChargingStations}" Background="{x:Null}" PreviewTextInput="onlytwoNumbers" />
+                    <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding location.Longtitude}" Background="{x:Null}" PreviewTextInput="lungetudePattren" />
+                    <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding location.Latitude}" Background="{x:Null}" PreviewTextInput="lattitudePattren" />
                     
 
                 </Grid>
@@ -61,7 +62,7 @@
             </Grid>
         </Border>
 
-        <Border Name="Updating" Grid.Row="0" Visibility="Hidden">
+        <Border Name="Updating" Grid.Row="0" Visibility="Visible">
 
             <Grid  Margin="0,2,0,-2" Name="MainGrid1">
                 
@@ -94,8 +95,8 @@
                             <Label Grid.Column="1" Grid.Row="4" Content=":מיקום"  />
 
                             <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding ID}"  />
-                            <TextBox Grid.Column="0" Grid.Row="2" Text="{Binding Name}" />
-                            <TextBox Grid.Column="0" Grid.Row="3" Text="{Binding AvailableChargingStations}" Background="{x:Null}"/>
+                            <TextBox x:Name="txtNameStation" Grid.Column="0" Grid.Row="2" Text="{Binding Name}" />
+                            <TextBox x:Name="txtNumCharge" Grid.Column="0" Grid.Row="3" Text="{Binding AvailableChargingStations}" Background="{x:Null}"/>
                             <TextBlock Grid.Column="0" Grid.Row="6" Text="{Binding location}" />
                         </Grid>
                     </Border>

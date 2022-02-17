@@ -21,19 +21,19 @@ namespace BL
         List<DO.Customer> customers;
         List<DO.Drone> drones;
         List<DO.Parcel> ParcelOfDelivery;
-        HelpFunction helpFunction; 
+        HelpFunction helpFunction;
 
         internal static double PowerConsumptionAvailable;
         internal static double PowerConsumptionLightWeight;
         internal static double PowerConsumptionMediumWeight;
         internal static double PowerConsumptionHeavyWeight;
         internal static double LoadingDrone;
-        
+
         private BL()
         {
             try
             {
-                dal = DalFactory.GetDal(); 
+                dal = DalFactory.GetDal();
                 DroneToList = new List<DroneToList>();
                 helpFunction = new();
                 random = new Random(DateTime.Now.Millisecond);
@@ -53,7 +53,7 @@ namespace BL
                     });
                 }
 
-                InitDroneToLists(); 
+                InitDroneToLists();
             }
             catch (DO.CheckIdException Ex)
             {
@@ -87,6 +87,6 @@ namespace BL
                 throw new Exception("The User not exist");
             }
         }
-      
+
     }
 }

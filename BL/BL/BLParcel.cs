@@ -11,27 +11,29 @@ namespace BL
 {
     public partial class BL : IBL
     {
+        [MethodImpl(MethodImplOptions.Synchronized)]
+
         public int AddNewParcel(Parcel newParcel, int SenderId, int TargetId)
         {
-            newParcel.droneInParcel = null;
-            DO.Parcel parcel = new()
-            {
-                SenderId = SenderId,
-                TargetId = TargetId,
-                ParcelWeight = (DO.WeightCategories)newParcel.Weight,
-                ParcelPriority = (DO.Priorities)newParcel.Priority,
-                Created = DateTime.Now,
-                Assignment = DateTime.MinValue,
-                PickedUp = DateTime.MinValue,
-                Delivered = DateTime.MinValue
-            };
 
             try
             {
+                newParcel.droneInParcel = null;
+
+                DO.Parcel parcel = new();
+                parcel.SenderId = SenderId;
+                parcel.TargetId = TargetId;
+                parcel.ParcelWeight = (DO.WeightCategories)newParcel.Weight;
+                parcel.ParcelPriority = (DO.Priorities)newParcel.Priority;
+                parcel.Created = DateTime.Now;
+
                 return dal.AddParcel(parcel);
+
             }
-            catch { }
-            return -1;
+            catch (DO.CheckIdException Ex)
+            {
+                throw new CheckIdException("ERORR", Ex);
+            }
         }
 
         public Parcel GetParcel(int id)
@@ -40,15 +42,17 @@ namespace BL
             {
                 DO.Parcel DalParcel = dal.GetParcel(id);
 
-                Parcel BLParcel = new();
+                Parcel BLParcel = new()
+                {
+                    Id = DalParcel.ParcelId,
+                    Weight = (WeightCategories)DalParcel.ParcelWeight,
+                    Priority = (Priorities)DalParcel.ParcelPriority,
+                    Requested = DalParcel.Created,
+                    assigned = DalParcel.Assignment,
+                    PickedUp = DalParcel.PickedUp,
+                    Delivered = DalParcel.Delivered
+                };
 
-                BLParcel.Id = DalParcel.ParcelId;
-                BLParcel.Weight = (WeightCategories)DalParcel.ParcelWeight;
-                BLParcel.Priority = (Priorities)DalParcel.ParcelPriority;
-                BLParcel.Requested = DalParcel.Created;
-                BLParcel.assigned = DalParcel.Assignment;
-                BLParcel.PickedUp = DalParcel.PickedUp;
-                BLParcel.Delivered = DalParcel.Delivered;
 
                 BLParcel.Sender = GetCustomerInParcel(DalParcel.SenderId);
                 BLParcel.Target = GetCustomerInParcel(DalParcel.TargetId);
@@ -78,8 +82,19 @@ namespace BL
 
         public void RemoveParcelBL(int id)
         {
-            //IDAL.DO.BaseStation baseStationRemove = dal.GetBaseStation(id);
-            dal.RemoveParcel(id);
+            try
+            {
+                Parcel parcel = GetParcel(id);
+                if (parcel.assigned == DateTime.MinValue)
+                {
+                    dal.RemoveParcel(id);
+                }
+            }
+
+            catch (DO.CheckIfIdNotException Ex)
+            {
+                throw new CheckIfIdNotExceptions("ERORR", Ex);
+            }
         }
 
         public ParcelToList GetParcelToList(int parcelID)
@@ -117,9 +132,7 @@ namespace BL
             {
                 parcelToLists.Add(GetParcelToList(item.ParcelId));
             }
-            return parcelToLists.Where(i => p == null ? true : p(i)).ToList();
-
-
+            return parcelToLists.FindAll(i => p == null ? true : p(i));
         }
 
 

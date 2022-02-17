@@ -27,9 +27,44 @@ namespace DAL
 
         public static IDal Instance { get => instance; }
 
-        private DalXml() { }
+        private DalXml()  {
 
-        
+            //var p = Task.Factory.StartNew(() =>
+            //{
+
+            //    var c = GetCustomersByPredicate();
+
+            //    List<Parcel> parcels = new List<Parcel>();
+            //    Random random = new Random();
+            //    for (int i = 200; i < 250; i++)
+            //    {
+            //        Parcel parcel = new Parcel();
+            //        parcel.ParcelId = i;
+            //        parcel.Created =  DateTime.Now;
+            //        parcel.Assignment = parcel.Created.AddDays(1);
+            //        parcel.PickedUp = parcel.Assignment.AddDays(1);
+            //        parcel.Delivered = parcel.PickedUp.AddDays(1);
+            //        parcel.ParcelPriority = (Priorities)random.Next(1, 4);
+            //        parcel.ParcelWeight = (WeightCategories)random.Next(1, 4);
+            //        var p = 0;
+            //        var t = 0;
+            //        do
+            //        {
+            //            p = c.ToList()[random.Next(0, c.Count())].CustomerId;
+            //            t = c.ToList()[random.Next(0, c.Count())].CustomerId;
+            //        } while (p == t);
+
+            //        parcel.SenderId = p;
+            //        parcel.TargetId = t;
+            //        parcels.Add(parcel);
+            //    }
+
+            //    XMLTools.SaveListToXMLSerializer(parcels, parcelPath);
+            //});
+
+            //p.Wait();
+        }
+
         [MethodImpl(MethodImplOptions.Synchronized)]
 
         #region Drone
@@ -40,7 +75,7 @@ namespace DAL
             int index = drones.FindIndex(i => i.DroneID == drone.DroneID);
             if (index == -1)
             {
-                throw new DroneException($"This Drone have not exist, Please try again.");
+                throw new CheckIdException($"לא נמצא רחפן תואם, אנא נסה שוב");
             }
             drones[index] = drone;
             XMLTools.SaveListToXMLSerializer(drones, dronePath);
@@ -57,7 +92,7 @@ namespace DAL
             }
             else
             {
-                throw new CheckIdException("Sorry, i have already a drone with this id:" + newDrone.DroneID);
+                throw new CheckIdException("רחפן זה כבר קיים, אנא נסה שוב:" + newDrone.DroneID);
             }
         }
         public void RemoveDrone(int droneID)
@@ -79,7 +114,7 @@ namespace DAL
             List<Drone> drones = XMLTools.LoadListFromXMLSerializer<Drone>(dronePath);
 
             Drone drone = drones.Find(i => i.DroneID == Id);
-            return drone.DroneID != default ? drone : throw new CheckIfIdNotException("Drone not found");
+            return drone.DroneID != default ? drone : throw new CheckIfIdNotException("לא נמצא רחפן תואם");
         }
         public IEnumerable<Drone> GetDronesByPredicate(Predicate<Drone> predicate = null)
         {
@@ -108,7 +143,7 @@ namespace DAL
             List<DroneCharge> ListDroneCharge = XMLTools.LoadListFromXMLSerializer<DroneCharge>(droneChargesPath);
 
             DroneCharge drone = ListDroneCharge.Find(d => d.StationID == baseStationId);
-            return drone.StationID != default ? drone : throw new CheckIfIdNotException("he Station have not exists");
+            return drone.StationID != default ? drone : throw new CheckIfIdNotException("לא נמצאה תחנה מתאימה");
             //if (drone != -1)
             //{
             //    throw new DroneChargeException("The Station have not exists");
@@ -120,7 +155,7 @@ namespace DAL
             List<DroneCharge> ListDroneCharge = XMLTools.LoadListFromXMLSerializer<DroneCharge>(droneChargesPath);
 
             DroneCharge droneCharge = ListDroneCharge.Find(i => i.DroneID == droneId);
-            return droneCharge.StationID != default ? droneCharge : throw new CheckIfIdNotException("sorry, this Drone is not found.");
+            return droneCharge.StationID != default ? droneCharge : throw new CheckIfIdNotException("לא נמצא רחפן תואם, אנא נסה שוב");
 
         }
 
@@ -149,11 +184,10 @@ namespace DAL
             List<BaseStation> ListBaseStation = XMLTools.LoadListFromXMLSerializer<BaseStation>(baseStationPath);
 
             ListBaseStation.Add(ListBaseStation.FindIndex(i => i.StationID == new_baseStation.StationID) == -1 ?
-                           new_baseStation : throw new BaseStationException($"This id{new_baseStation.StationID} already exist"));
+                           new_baseStation : throw new CheckIdException($"תחנה זו{new_baseStation.StationID} כבר קיימת במערכת"));
 
             XMLTools.SaveListToXMLSerializer(ListBaseStation, baseStationPath);
         }
-
 
         /// <summary>
         /// This function deletes an object by ID
@@ -168,10 +202,9 @@ namespace DAL
                 ListBaseStation.RemoveAt(index);
                 XMLTools.SaveListToXMLSerializer(ListBaseStation, baseStationPath);
             }
-            throw new CheckIfIdNotException($"This station have not exist, Please try again.");
+            throw new CheckIfIdNotException($"תחנה לא נמצאה , אנא נסה שוב");
 
         }
-
 
         /// <summary>
         /// This function update a baseStation
@@ -183,12 +216,11 @@ namespace DAL
             int index = ListBaseStation.FindIndex(i => i.StationID == baseStation.StationID);
             if (index == -1)
             {
-                throw new BaseStationException($"This BaseStation have not exist, Please Try again.");
+                throw new CheckIdException($"תחנה זו כבר קיימת במערכת, אנא נסה שוב");
             }
             ListBaseStation[index] = baseStation;
             XMLTools.SaveListToXMLSerializer(ListBaseStation, baseStationPath);
         }
-
 
         /// <summary>
         /// GetBaseStation by id
@@ -200,7 +232,7 @@ namespace DAL
             List<BaseStation> ListBaseStation = XMLTools.LoadListFromXMLSerializer<BaseStation>(baseStationPath);
 
             BaseStation station = ListBaseStation.Find(i => i.StationID == Id);
-            return (object)station != null ? station : throw new BaseStationException("Station not found");
+            return (object)station != null ? station : throw new CheckIfIdNotException("לא נמצאה תחנה מתאימה");
         }
 
 
@@ -221,13 +253,16 @@ namespace DAL
         public int AddParcel(Parcel newParcel)
         {
             XElement xElement = XMLTools.LoadListFromXMLElement(runNumbers);
-            newParcel.ParcelId = int.Parse(xElement.Element("RunNumberParcel").Value) + 1;
-            xElement.Element("RunNumberParcel").Value = newParcel.ParcelId.ToString();
+
+            newParcel.ParcelId = int.Parse(xElement.Element("RunNumberParcel").Value);
+
+            xElement.Element("RunNumberParcel").Value = (newParcel.ParcelId + 1).ToString();
+
             XMLTools.SaveListToXMLElement(xElement, runNumbers);
 
             List<Parcel> ListParcel = XMLTools.LoadListFromXMLSerializer<Parcel>(parcelPath);
             ListParcel.Add(ListParcel.FindIndex(i => i.ParcelId == newParcel.ParcelId) == -1 ?
-                           newParcel : throw new ParcelException($"This id {newParcel.ParcelId} already exist"));
+                           newParcel : throw new ParcelException($"חבילה זו {newParcel.ParcelId} כבר קיימת במערכת"));
 
             XMLTools.SaveListToXMLSerializer(ListParcel, parcelPath);
 
@@ -249,7 +284,10 @@ namespace DAL
                 ListParcel.RemoveAt(index);
                 XMLTools.SaveListToXMLSerializer(ListParcel, parcelPath);
             }
-            throw new ParcelException($"This parcel have not exist, Please try again.");
+            //else
+            //{
+            //    throw new ParcelException($"This parcel have not exist, Please try again.");
+            //}
         }
 
         /// <summary>
@@ -260,15 +298,9 @@ namespace DAL
         public Parcel GetParcel(int Id)
         {
             List<Parcel> ListParcel = XMLTools.LoadListFromXMLSerializer<Parcel>(parcelPath);
-            object obj = ListParcel.Find(i => i.ParcelId == Id);
-
-            if (obj != null)
-            {
-                return (Parcel)obj;
-            }
-            throw new ParcelException("Parcel not found");
+            Parcel parcel = ListParcel.Find(i => i.ParcelId == Id);
+            return (object)parcel != null ? parcel : throw new CheckIfIdNotException("Parcel not found");
         }
-
 
         /// <summary>
         /// UpdateParcel by obj.
@@ -296,7 +328,7 @@ namespace DAL
         {
             List<Parcel> ListParcel = XMLTools.LoadListFromXMLSerializer<Parcel>(parcelPath);
 
-            return ListParcel.Where(i => predicate == null ? true : predicate(i)).ToList();
+            return ListParcel.FindAll(i => predicate == null ? true : predicate(i));
         }
         #endregion
 
@@ -316,7 +348,7 @@ namespace DAL
                 ListCustomer.RemoveAt(index);
                 XMLTools.SaveListToXMLSerializer(ListCustomer, customerPath);
             }
-            throw new CustumerException($"This customer have not exist, Please try again.");
+            //throw new CheckIdException($"This customer have not exist, Please try again.");
 
         }
 
@@ -324,18 +356,18 @@ namespace DAL
         /// Update Customer by obj.
         /// </summary>
         /// <param name="customer"></param>
-        public void UpdateCustomer(Customer customer)
-        {
-            List<Customer> ListCustomer = XMLTools.LoadListFromXMLSerializer<Customer>(customerPath);
+        //public void UpdateCustomer(Customer customer)
+        //{
+        //    List<Customer> ListCustomer = XMLTools.LoadListFromXMLSerializer<Customer>(customerPath);
 
-            int index = ListCustomer.FindIndex(i => i.CustomerId == customer.CustomerId);
-            if (index == -1)
-            {
-                throw new CustumerException($"This Customer have not exist, Please try again.");
-            }
-            ListCustomer[index] = customer;
-            XMLTools.SaveListToXMLSerializer(ListCustomer, customerPath);
-        }
+        //    int index = ListCustomer.FindIndex(i => i.CustomerId == customer.CustomerId);
+        //    if (index == -1)
+        //    {
+        //        throw new CustumerException($"This Customer have not exist, Please try again.");
+        //    }
+        //    ListCustomer[index] = customer;
+        //    XMLTools.SaveListToXMLSerializer(ListCustomer, customerPath);
+        //}
 
         /// <summary>
         /// AddCustomer by obj.
@@ -345,7 +377,7 @@ namespace DAL
         {
             List<Customer> ListCustomer = XMLTools.LoadListFromXMLSerializer<Customer>(customerPath);
             ListCustomer.Add(ListCustomer.FindIndex(i => i.CustomerId == newCustomer.CustomerId) == -1 ?
-                           newCustomer : throw new CustumerException($"This id {newCustomer.CustomerId} already exist"));
+                           newCustomer : throw new CustumerException($"לקוח זה {newCustomer.CustomerId} כבר קיים במערכת"));
 
             XMLTools.SaveListToXMLSerializer(ListCustomer, customerPath);
         }
@@ -363,9 +395,8 @@ namespace DAL
             {
                 return (Customer)obj;
             }
-            throw new CustumerException("Customer not found");
+            throw new CheckIfIdNotException("לקוח לא קיים");
         }
-
 
         public IEnumerable<Customer> GetCustomersByPredicate(Predicate<Customer> predicate = null)
         {
@@ -400,7 +431,7 @@ namespace DAL
             }
             else
             {
-                throw new UserException("User not found");
+                throw new CheckIdException("משתמש לא קיים במערכת");
             }
         }
         /// <summary>
@@ -421,7 +452,7 @@ namespace DAL
                          }
                         ).FirstOrDefault();
 
-            return user.UserId == userID ? user : throw new CheckIdException("User not found");
+            return user.UserId == userID ? user : throw new CheckIdException("משתמש לא קיים, אנא נסה שוב");
         }
 
         /// <summary>
@@ -473,7 +504,6 @@ namespace DAL
         }
         #endregion
 
-
         #region Operations
         /// <summary>
         /// Set drone for parcel by parcel Id & drone Id
@@ -499,7 +529,7 @@ namespace DAL
             }
             else
             {
-                throw new CheckIdException("There is no match between the package and the drone");
+                throw new CheckIdException("לא נמצאה חבילה מתאימה לשיוך");
             }
         }
 
@@ -522,7 +552,7 @@ namespace DAL
             }
             else
             {
-                throw new CheckIdException("Parcel not found");
+                throw new CheckIdException("החבילה לא נמצאה");
             }
         }
 
@@ -547,7 +577,7 @@ namespace DAL
             }
             else
             {
-                throw new CheckIdException("Parcel not found");
+                throw new CheckIdException("החבילה לא נמצאה");
             }
         }
 
@@ -569,7 +599,7 @@ namespace DAL
             }
             else
             {
-                throw new CheckIdException("Drone not found");
+                throw new CheckIdException("הרחפן לא נמצא");
             }
         }
 
@@ -591,7 +621,7 @@ namespace DAL
             }
             else
             {
-                throw new CheckIdException("Station not found");
+                throw new CheckIdException("התחנה לא נמצאה");
             }
         }
 
@@ -613,7 +643,7 @@ namespace DAL
             }
             else
             {
-                throw new CheckIdException("Station not found");
+                throw new CheckIdException("התחנה לא נמצאה");
             }
         }
 
@@ -630,7 +660,6 @@ namespace DAL
         }
         #endregion
     }
-
     public static class Config
     {
         public static double PowerConsumptionAvailable = 0.07;
@@ -640,3 +669,408 @@ namespace DAL
         public static double LoadingDrone = 2;
     }
 }
+
+
+//< p >
+//   < Parcel >
+//     < ParcelId > 6 </ ParcelId >
+//     < SenderId > 349927608 </ SenderId >
+//     < TargetId > 309865341 </ TargetId >
+//     < ParcelWeight > medium </ ParcelWeight >
+//     < ParcelPriority > fast </ ParcelPriority >
+//     < DroneId > 4 </ DroneId >
+//     < Created > 2022 - 01 - 25T10: 32:15.2526439 + 02:00 </ Created >
+
+//               < Assignment > 2022 - 01 - 27T10: 32:15.2522151 + 02:00 </ Assignment >
+
+//                         < PickedUp > 2022 - 02 - 13T17: 33:11.0868411 + 02:00 </ PickedUp >
+
+//                                   < Delivered > 2022 - 02 - 09T13: 42:26.485767 + 02:00 </ Delivered >
+
+//                                           </ Parcel >
+
+//                                           < Parcel >
+
+//                                             < ParcelId > 35 </ ParcelId >
+
+//                                             < SenderId > 200786113 </ SenderId >
+
+//                                             < TargetId > 203548976 </ TargetId >
+
+//                                             < ParcelWeight > medium </ ParcelWeight >
+
+//                                             < ParcelPriority > emergency </ ParcelPriority >
+
+//                                             < DroneId > 3 </ DroneId >
+
+//                                             < Created > 2022 - 01 - 25T10: 32:15.2522151 + 02:00 </ Created >
+
+//                                                       < Assignment > 2022 - 02 - 13T01: 01:53.4615899 + 02:00 </ Assignment >
+
+//                                                                 < PickedUp > 2022 - 02 - 09T13: 40:33.34183 + 02:00 </ PickedUp >
+
+//                                                                           < Delivered > 2022 - 02 - 09T12: 53:15.6735575 + 02:00 </ Delivered >
+
+//                                                                                   </ Parcel >
+
+//                                                                                   < Parcel >
+
+//                                                                                     < ParcelId > 1 </ ParcelId >
+
+//                                                                                     < SenderId > 201344879 </ SenderId >
+
+//                                                                                     < TargetId > 203548976 </ TargetId >
+
+//                                                                                     < ParcelWeight > light </ ParcelWeight >
+
+//                                                                                     < ParcelPriority > emergency </ ParcelPriority >
+
+//                                                                                     < DroneId > 14 </ DroneId >
+
+//                                                                                     < Created > 2022 - 01 - 25T10: 32:15.2526393 + 02:00 </ Created >
+
+//                                                                                               < Assignment > 2022 - 02 - 13T17: 40:41.6184472 + 02:00 </ Assignment >
+
+//                                                                                                         < PickedUp > 2022 - 02 - 13T17: 40:44.7497471 + 02:00 </ PickedUp >
+
+//                                                                                                                   < Delivered > 2022 - 02 - 13T17: 40:58.0755171 + 02:00 </ Delivered >
+
+//                                                                                                                           </ Parcel >
+
+//                                                                                                                           < Parcel >
+
+//                                                                                                                             < ParcelId > 2 </ ParcelId >
+
+//                                                                                                                             < SenderId > 200996586 </ SenderId >
+
+//                                                                                                                             < TargetId > 200786113 </ TargetId >
+
+//                                                                                                                             < ParcelWeight > medium </ ParcelWeight >
+
+//                                                                                                                             < ParcelPriority > regular </ ParcelPriority >
+
+//                                                                                                                             < DroneId > 10 </ DroneId >
+
+//                                                                                                                             < Created > 2022 - 01 - 25T10: 32:15.2526414 + 02:00 </ Created >
+
+//                                                                                                                                       < Assignment > 2022 - 02 - 05T20: 25:56.4167653 + 02:00 </ Assignment >
+
+//                                                                                                                                                 < PickedUp > 2022 - 02 - 07T20: 25:56.4167653 + 02:00 </ PickedUp >
+
+//                                                                                                                                                           < Delivered > 2022 - 02 - 09T13: 50:46.4117676 + 02:00 </ Delivered >
+
+//                                                                                                                                                                   </ Parcel >
+
+//                                                                                                                                                                   < Parcel >
+
+//                                                                                                                                                                     < ParcelId > 4 </ ParcelId >
+
+//                                                                                                                                                                     < SenderId > 309865341 </ SenderId >
+
+//                                                                                                                                                                     < TargetId > 200532406 </ TargetId >
+
+//                                                                                                                                                                     < ParcelWeight > light </ ParcelWeight >
+
+//                                                                                                                                                                     < ParcelPriority > emergency </ ParcelPriority >
+
+//                                                                                                                                                                     < DroneId > 7 </ DroneId >
+
+//                                                                                                                                                                     < Created > 2022 - 01 - 25T10: 32:15.2526426 + 02:00 </ Created >
+
+//                                                                                                                                                                               < Assignment > 2022 - 02 - 13T21: 06:00.8547032 + 02:00 </ Assignment >
+
+//                                                                                                                                                                                         < PickedUp > 2022 - 02 - 13T21: 06:08.6124737 + 02:00 </ PickedUp >
+
+//                                                                                                                                                                                                   < Delivered > 2022 - 02 - 13T21: 06:25.5466145 + 02:00 </ Delivered >
+
+//                                                                                                                                                                                                           </ Parcel >
+
+//                                                                                                                                                                                                           < Parcel >
+
+//                                                                                                                                                                                                             < ParcelId > 5 </ ParcelId >
+
+//                                                                                                                                                                                                             < SenderId > 349927608 </ SenderId >
+
+//                                                                                                                                                                                                             < TargetId > 309865341 </ TargetId >
+
+//                                                                                                                                                                                                             < ParcelWeight > light </ ParcelWeight >
+
+//                                                                                                                                                                                                             < ParcelPriority > regular </ ParcelPriority >
+
+//                                                                                                                                                                                                             < DroneId > 10 </ DroneId >
+
+//                                                                                                                                                                                                             < Created > 2022 - 01 - 25T10: 32:15.2526434 + 02:00 </ Created >
+
+//                                                                                                                                                                                                                       < Assignment > 2022 - 02 - 13T21: 42:56.14156 + 02:00 </ Assignment >
+
+//                                                                                                                                                                                                                                 < PickedUp > 2022 - 02 - 14T15: 39:40.5927063 + 02:00 </ PickedUp >
+
+//                                                                                                                                                                                                                                           < Delivered > 0001 - 01 - 01T00: 00:00 </ Delivered >
+
+//                                                                                                                                                                                                                                                 </ Parcel >
+
+//                                                                                                                                                                                                                                                 < Parcel >
+
+//                                                                                                                                                                                                                                                   < ParcelId > 7 </ ParcelId >
+
+//                                                                                                                                                                                                                                                   < SenderId > 203548976 </ SenderId >
+
+//                                                                                                                                                                                                                                                   < TargetId > 309865341 </ TargetId >
+
+//                                                                                                                                                                                                                                                   < ParcelWeight > medium </ ParcelWeight >
+
+//                                                                                                                                                                                                                                                   < ParcelPriority > emergency </ ParcelPriority >
+
+//                                                                                                                                                                                                                                                   < DroneId > 9 </ DroneId >
+
+//                                                                                                                                                                                                                                                   < Created > 2022 - 01 - 25T10: 32:15.2526445 + 02:00 </ Created >
+
+//                                                                                                                                                                                                                                                             < Assignment > 2022 - 02 - 13T21: 31:27.334908 + 02:00 </ Assignment >
+
+//                                                                                                                                                                                                                                                                       < PickedUp > 2022 - 02 - 13T21: 31:30.82565 + 02:00 </ PickedUp >
+
+//                                                                                                                                                                                                                                                                                 < Delivered > 2022 - 02 - 13T21: 31:43.3442452 + 02:00 </ Delivered >
+
+//                                                                                                                                                                                                                                                                                         </ Parcel >
+
+//                                                                                                                                                                                                                                                                                         < Parcel >
+
+//                                                                                                                                                                                                                                                                                           < ParcelId > 8 </ ParcelId >
+
+//                                                                                                                                                                                                                                                                                           < SenderId > 311890522 </ SenderId >
+
+//                                                                                                                                                                                                                                                                                           < TargetId > 200786113 </ TargetId >
+
+//                                                                                                                                                                                                                                                                                           < ParcelWeight > medium </ ParcelWeight >
+
+//                                                                                                                                                                                                                                                                                           < ParcelPriority > fast </ ParcelPriority >
+
+//                                                                                                                                                                                                                                                                                           < DroneId > 3 </ DroneId >
+
+//                                                                                                                                                                                                                                                                                           < Created > 2022 - 01 - 25T10: 32:15.252645 + 02:00 </ Created >
+
+//                                                                                                                                                                                                                                                                                                     < Assignment > 2022 - 02 - 13T11: 39:41.6765284 + 02:00 </ Assignment >
+
+//                                                                                                                                                                                                                                                                                                               < PickedUp > 2022 - 02 - 14T15: 37:43.1493631 + 02:00 </ PickedUp >
+
+//                                                                                                                                                                                                                                                                                                                         < Delivered > 2022 - 02 - 13T11: 40:51.8355765 + 02:00 </ Delivered >
+
+//                                                                                                                                                                                                                                                                                                                                 </ Parcel >
+
+//                                                                                                                                                                                                                                                                                                                                 < Parcel >
+
+//                                                                                                                                                                                                                                                                                                                                   < ParcelId > 9 </ ParcelId >
+
+//                                                                                                                                                                                                                                                                                                                                   < SenderId > 200996586 </ SenderId >
+
+//                                                                                                                                                                                                                                                                                                                                   < TargetId > 200786113 </ TargetId >
+
+//                                                                                                                                                                                                                                                                                                                                   < ParcelWeight > medium </ ParcelWeight >
+
+//                                                                                                                                                                                                                                                                                                                                   < ParcelPriority > regular </ ParcelPriority >
+
+//                                                                                                                                                                                                                                                                                                                                   < DroneId > 7 </ DroneId >
+
+//                                                                                                                                                                                                                                                                                                                                   < Created > 2022 - 01 - 25T10: 32:15.2526456 + 02:00 </ Created >
+
+//                                                                                                                                                                                                                                                                                                                                             < Assignment > 2022 - 02 - 13T11: 42:46.2373053 + 02:00 </ Assignment >
+
+//                                                                                                                                                                                                                                                                                                                                                       < PickedUp > 2022 - 02 - 13T21: 31:30.824678 + 02:00 </ PickedUp >
+
+//                                                                                                                                                                                                                                                                                                                                                                 < Delivered > 2022 - 02 - 13T11: 42:54.5434244 + 02:00 </ Delivered >
+
+//                                                                                                                                                                                                                                                                                                                                                                         </ Parcel >
+
+//                                                                                                                                                                                                                                                                                                                                                                         < Parcel >
+
+//                                                                                                                                                                                                                                                                                                                                                                           < ParcelId > 11 </ ParcelId >
+
+//                                                                                                                                                                                                                                                                                                                                                                           < SenderId > 301242853 </ SenderId >
+
+//                                                                                                                                                                                                                                                                                                                                                                           < TargetId > 349927608 </ TargetId >
+
+//                                                                                                                                                                                                                                                                                                                                                                           < ParcelWeight > medium </ ParcelWeight >
+
+//                                                                                                                                                                                                                                                                                                                                                                           < ParcelPriority > emergency </ ParcelPriority >
+
+//                                                                                                                                                                                                                                                                                                                                                                           < DroneId > 6 </ DroneId >
+
+//                                                                                                                                                                                                                                                                                                                                                                           < Created > 2022 - 01 - 25T10: 32:15.2526467 + 02:00 </ Created >
+
+//                                                                                                                                                                                                                                                                                                                                                                                     < Assignment > 2022 - 02 - 13T01: 09:16.2161336 + 02:00 </ Assignment >
+
+//                                                                                                                                                                                                                                                                                                                                                                                               < PickedUp > 2022 - 02 - 13T17: 33:11.1077973 + 02:00 </ PickedUp >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                         < Delivered > 0001 - 01 - 01T00: 00:00 </ Delivered >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                               </ Parcel >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                               < Parcel >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                 < ParcelId > 13 </ ParcelId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                 < SenderId > 200786113 </ SenderId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                 < TargetId > 203548976 </ TargetId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                 < ParcelWeight > light </ ParcelWeight >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                 < ParcelPriority > regular </ ParcelPriority >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                 < DroneId > 3 </ DroneId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                 < Created > 2022 - 01 - 25T10: 32:15.2526478 + 02:00 </ Created >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                           < Assignment > 2022 - 02 - 14T13: 32:50.4123897 + 02:00 </ Assignment >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                     < PickedUp > 0001 - 01 - 01T00: 00:00 </ PickedUp >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                             < Delivered > 0001 - 01 - 01T00: 00:00 </ Delivered >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                   </ Parcel >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                   < Parcel >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                     < ParcelId > 14 </ ParcelId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                     < SenderId > 200532406 </ SenderId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                     < TargetId > 200786113 </ TargetId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                     < ParcelWeight > light </ ParcelWeight >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                     < ParcelPriority > regular </ ParcelPriority >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                     < DroneId > 8 </ DroneId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                     < Created > 2022 - 01 - 25T10: 32:15.2526483 + 02:00 </ Created >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                               < Assignment > 2022 - 02 - 14T15: 19:57.6463861 + 02:00 </ Assignment >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                         < PickedUp > 2022 - 02 - 14T15: 37:43.1540273 + 02:00 </ PickedUp >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   < Delivered > 2022 - 02 - 14T15: 37:45.9406709 + 02:00 </ Delivered >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           </ Parcel >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           < Parcel >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             < ParcelId > 15 </ ParcelId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             < SenderId > 301242853 </ SenderId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             < TargetId > 349927608 </ TargetId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             < ParcelWeight > light </ ParcelWeight >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             < ParcelPriority > fast </ ParcelPriority >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             < DroneId > 3 </ DroneId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             < Created > 2022 - 01 - 25T10: 32:15.2526488 + 02:00 </ Created >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       < Assignment > 2022 - 02 - 13T21: 13:06.3898276 + 02:00 </ Assignment >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 < PickedUp > 2022 - 02 - 13T21: 13:13.0396208 + 02:00 </ PickedUp >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           < Delivered > 2022 - 02 - 13T21: 13:14.1561475 + 02:00 </ Delivered >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   </ Parcel >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   < Parcel >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     < ParcelId > 16 </ ParcelId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     < SenderId > 301242853 </ SenderId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     < TargetId > 349927608 </ TargetId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     < ParcelWeight > light </ ParcelWeight >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     < ParcelPriority > fast </ ParcelPriority >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     < DroneId > 8 </ DroneId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     < Created > 2022 - 01 - 25T10: 32:15.2526493 + 02:00 </ Created >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               < Assignment > 2022 - 02 - 13T21: 14:21.4815838 + 02:00 </ Assignment >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         < PickedUp > 2022 - 02 - 13T21: 31:08.3951776 + 02:00 </ PickedUp >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   < Delivered > 2022 - 02 - 13T21: 31:10.8158786 + 02:00 </ Delivered >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           </ Parcel >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           < Parcel >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             < ParcelId > 17 </ ParcelId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             < SenderId > 309865341 </ SenderId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             < TargetId > 200532406 </ TargetId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             < ParcelWeight > light </ ParcelWeight >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             < ParcelPriority > regular </ ParcelPriority >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             < DroneId > 5 </ DroneId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             < Created > 2022 - 01 - 25T10: 32:15.2526499 + 02:00 </ Created >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       < Assignment > 2022 - 02 - 14T15: 37:02.7687641 + 02:00 </ Assignment >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 < PickedUp > 2022 - 02 - 14T15: 39:40.6002418 + 02:00 </ PickedUp >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           < Delivered > 2022 - 02 - 14T15: 39:41.7536347 + 02:00 </ Delivered >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   </ Parcel >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   < Parcel >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     < ParcelId > 19 </ ParcelId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     < SenderId > 209433871 </ SenderId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     < TargetId > 349927608 </ TargetId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     < ParcelWeight > light </ ParcelWeight >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     < ParcelPriority > fast </ ParcelPriority >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     < DroneId > 34 </ DroneId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     < Created > 2022 - 01 - 25T10: 32:15.2526509 + 02:00 </ Created >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               < Assignment > 2022 - 02 - 13T21: 16:30.7825749 + 02:00 </ Assignment >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         < PickedUp > 0001 - 01 - 01T00: 00:00 </ PickedUp >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 < Delivered > 0001 - 01 - 01T00: 00:00 </ Delivered >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       </ Parcel >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       < Parcel >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         < ParcelId > 27 </ ParcelId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         < SenderId > 0 </ SenderId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         < TargetId > 0 </ TargetId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         < ParcelWeight > medium </ ParcelWeight >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         < ParcelPriority > regular </ ParcelPriority >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         < DroneId > 0 </ DroneId >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         < Created > 2022 - 02 - 14T13: 19:24.5080942 + 02:00 </ Created >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   < Assignment > 0001 - 01 - 01T00: 00:00 </ Assignment >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           < PickedUp > 0001 - 01 - 01T00: 00:00 </ PickedUp >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   < Delivered > 0001 - 01 - 01T00: 00:00 </ Delivered >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         </ Parcel >
+
+//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       </ p >
